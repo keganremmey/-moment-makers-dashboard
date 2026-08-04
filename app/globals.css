@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #0b0b0d;
+  --ink-raised: #16151a;
+  --ink-line: #2a2830;
+  --paper: #f4efe6;
+  --paper-dim: #b9b4ab;
+  --brass: #c9a15c;
+  --brass-dim: #8a713f;
+
+  --belt-white: #f2efe6;
+  --belt-gray: #9aa0a8;
+  --belt-blue: #3f7fd6;
+  --belt-purple: #8b5cd6;
+  --belt-brown: #8a5a2e;
+  --belt-black: #1c1b1f;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-raised: var(--ink-raised);
+  --color-ink-line: var(--ink-line);
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-brass: var(--brass);
+  --color-brass-dim: var(--brass-dim);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  background: var(--ink);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+}
+
+/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout. */
+.forte-mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--brass);
+}
+
+.card {
+  background: var(--ink-raised);
+  border: 1px solid var(--ink-line);
+  border-radius: 0.75rem;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+}
+
+.belt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink-line);
+  color: var(--paper);
+}
+
+.belt-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(244, 239, 230, 0.25);
+  flex: none;
+}
