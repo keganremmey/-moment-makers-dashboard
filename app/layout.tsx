@@ -28,6 +28,10 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "Moment Makers",
   description: "Private client coaching dashboards.",
+  // Defense in depth alongside app/robots.ts — every page here is gated
+  // only by an unguessable token in the URL, so nothing should ever be
+  // crawled, indexed, or unfurled by a link-preview bot.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

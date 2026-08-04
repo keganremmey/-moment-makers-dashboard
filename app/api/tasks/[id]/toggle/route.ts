@@ -1,5 +1,18 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
+
+// Plain !== leaks a timing signal proportional to how many leading
+// characters match. This token is the entire auth mechanism for this app,
+// so it's compared in constant time instead. Length is checked first (and
+// short-circuits false on mismatch) since timingSafeEqual requires equal
+// buffer lengths, and length itself isn't the secret being protected here.
+function tokensMatch(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
 
 // This is the only write path in the whole app, and there is no session or
 // cookie auth anywhere else — the per-client access_token IS the
@@ -44,7 +57,7 @@ export async function POST(
     .maybeSingle();
   const client = clientData as { id: string; access_token: string } | null;
 
-  if (clientError || !client || client.access_token !== token) {
+  if (clientError || !client || !tokensMatch(client.access_token, token)) {
     return NextResponse.json({ error: "Not authorized." }, { status: 403 });
   }
 

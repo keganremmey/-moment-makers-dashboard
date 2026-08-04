@@ -204,11 +204,18 @@ export async function getFrameworks(): Promise<Framework[]> {
 }
 
 export async function getQuotes(clientId: string): Promise<Quote[]> {
+  // Deliberately client-scoped only, even though `quotes.client_id` is
+  // nullable in the schema (a future "shared coaching wisdom" quote could
+  // exist with no client). Matching on `client_id.is.null` here would mean
+  // a quote someone adds directly in Supabase Studio without setting
+  // client_id — meant privately for one client — silently appears on every
+  // client's dashboard. If a genuinely shared quote is ever wanted, that
+  // should be an explicit opt-in, not a fallback of "forgot to set a field."
   const supabase = supabaseServer();
   const { data, error } = await supabase
     .from("quotes")
     .select("*")
-    .or(`client_id.eq.${clientId},client_id.is.null`);
+    .eq("client_id", clientId);
 
   if (error) {
     console.error("getQuotes error", error);
