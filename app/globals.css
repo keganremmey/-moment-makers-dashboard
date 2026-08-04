@@ -77,6 +77,14 @@ body {
   color: var(--paper);
 }
 
+/* The one deliberate per-client flourish: a client's identity word, colored
+   with their own accent_hex (set inline as --client-accent), falling back to
+   the shared brass token when a client has none set. Nothing else on the
+   page is tinted per-client. */
+.flourish {
+  color: var(--client-accent, var(--brass));
+}
+
 .belt-dot {
   width: 0.6rem;
   height: 0.6rem;

@@ -9,6 +9,7 @@ export type Client = {
   identity_names: string[];
   default_self_names: string[];
   north_star: string | null;
+  accent_hex: string | null;
   access_token: string;
   created_at: string;
 };

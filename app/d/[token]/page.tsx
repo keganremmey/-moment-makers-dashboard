@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -31,8 +32,25 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   const slippedTaskCount = tasks.filter((t) => t.status === "slipped").length;
   const mostRecentWin = wins[0];
 
+  const identityWord = client.identity_names?.[0];
+
   return (
     <div className="flex flex-col gap-8">
+      {identityWord && (
+        <section
+          style={
+            client.accent_hex
+              ? ({ "--client-accent": client.accent_hex } as CSSProperties)
+              : undefined
+          }
+        >
+          <p className="label">Identity</p>
+          <p className="flourish mt-2 font-display text-4xl italic leading-tight">
+            {identityWord}
+          </p>
+        </section>
+      )}
+
       {client.north_star && (
         <section className="card p-5">
           <p className="label">North Star</p>

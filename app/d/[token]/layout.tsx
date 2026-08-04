@@ -1,6 +1,22 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getClientByToken } from "@/lib/data";
 import { DashboardNav } from "@/components/DashboardNav";
+
+export async function generateMetadata(
+  props: LayoutProps<"/d/[token]">
+): Promise<Metadata> {
+  const { token } = await props.params;
+  const client = await getClientByToken(token);
+
+  if (!client) {
+    return { title: "Moment Makers" };
+  }
+
+  return {
+    title: `${client.identity_names?.[0] ?? client.name} — Moment Makers`,
+  };
+}
 
 export default async function DashboardLayout(
   props: LayoutProps<"/d/[token]">

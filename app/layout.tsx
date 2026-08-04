@@ -12,10 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Fraunces: a heavy, expressive display serif for the "Fortissimo" identity —
-// dynamic-marking weight for headlines, contrasted against Geist's quiet
-// sans/mono for data. This is the one deliberate aesthetic risk of the
-// build: a bold-self coaching brand shouldn't read like a SaaS dashboard.
+// Fraunces: a heavy, expressive display serif for headlines, contrasted
+// against Geist's quiet sans/mono for data. This is the one deliberate
+// aesthetic risk of the shared Moment Makers design system — a bold-self
+// coaching brand shouldn't read like a SaaS dashboard. Every client shares
+// this same type/palette/component system; only a per-client identity word
+// and accent color (see app/d/[token]) vary.
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
@@ -24,8 +26,8 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Fortissimo — Ian Lynch",
-  description: "Private coaching dashboard.",
+  title: "Moment Makers",
+  description: "Private client coaching dashboards.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

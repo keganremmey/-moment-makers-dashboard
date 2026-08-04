@@ -60,6 +60,7 @@ async function upsertClient(clientSeed) {
     identity_names: clientSeed.identity_names ?? [],
     default_self_names: clientSeed.default_self_names ?? [],
     north_star: clientSeed.north_star ?? null,
+    accent_hex: clientSeed.accent_hex ?? null,
   };
 
   if (existing) {

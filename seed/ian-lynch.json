@@ -5,7 +5,8 @@
     "program": "Executive Track (6-month, 24 sessions)",
     "identity_names": ["Fortissimo", "Majestic"],
     "default_self_names": ["normal", "average", "a commoner"],
-    "north_star": "By September: the most direct, trustworthy voice at work; proactively facilitating/speaking monthly; running a donation-based coaching practice; hosting monthly dinner parties as leadership practice."
+    "north_star": "By September: the most direct, trustworthy voice at work; proactively facilitating/speaking monthly; running a donation-based coaching practice; hosting monthly dinner parties as leadership practice.",
+    "accent_hex": "#c9a227"
   },
 
   "sessions": [
