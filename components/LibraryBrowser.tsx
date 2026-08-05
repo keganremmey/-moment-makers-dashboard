@@ -39,7 +39,7 @@ export function LibraryBrowser({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search frameworks and quotes…"
-        className="rounded-lg border border-ink-line bg-ink-raised px-4 py-2.5 text-base text-paper placeholder:text-paper-dim focus:border-brass-dim focus:outline-none"
+        className="rounded-lg border border-ink-line bg-ink-raised px-4 py-2.5 text-base text-paper placeholder:text-paper-dim focus:outline-none focus:ring-2 focus:ring-brass focus:ring-offset-2 focus:ring-offset-ink"
       />
 
       <section>
@@ -53,7 +53,9 @@ export function LibraryBrowser({
           data as the map above.
         </p>
         {filteredFrameworks.length === 0 ? (
-          <p className="text-base text-paper-dim">No matching frameworks.</p>
+          <p className="text-base text-paper-dim">
+            {query.trim() === "" ? "No frameworks yet." : "No matching frameworks."}
+          </p>
         ) : (
           <div className="flex flex-col gap-4">
             {filteredFrameworks.map((framework) => (
@@ -87,7 +89,9 @@ export function LibraryBrowser({
       <section>
         <p className="label mb-3">Quotes</p>
         {filteredQuotes.length === 0 ? (
-          <p className="text-base text-paper-dim">No matching quotes.</p>
+          <p className="text-base text-paper-dim">
+            {query.trim() === "" ? "No quotes yet." : "No matching quotes."}
+          </p>
         ) : (
           <div className="flex flex-col gap-4">
             {filteredQuotes.map((quote) => (
@@ -95,7 +99,7 @@ export function LibraryBrowser({
                 key={quote.id}
                 className="card border-l-2 border-l-brass p-5"
               >
-                <p className="font-accent text-xl italic leading-snug text-paper">
+                <p className="max-w-[65ch] text-pretty font-accent text-xl italic leading-snug text-paper">
                   “{quote.text}”
                 </p>
                 <footer className="mt-2 text-xs text-paper-dim">

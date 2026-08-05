@@ -30,7 +30,7 @@ export default async function WinsPage(props: PageProps<"/d/[token]/wins">) {
               {win.title}
             </h2>
             {win.description && (
-              <p className="mt-2 text-base leading-relaxed text-paper-dim">
+              <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-paper-dim">
                 {win.description}
               </p>
             )}

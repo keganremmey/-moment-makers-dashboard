@@ -37,6 +37,12 @@ export default async function DashboardLayout(
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-6 focus:z-50 focus:rounded-md focus:bg-ink-raised focus:px-4 focus:py-2 focus:text-base focus:text-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-brass"
+      >
+        Skip to content
+      </a>
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 py-10">
         <header className="flex flex-col gap-4">
           <div className="flex items-baseline gap-3">
@@ -71,7 +77,7 @@ export default async function DashboardLayout(
 
           <DashboardNav token={token} />
         </header>
-        <main className="flex-1">{props.children}</main>
+        <main id="main-content" className="flex-1">{props.children}</main>
       </div>
 
       {/* Signature valley-floor scene: full-bleed, normal document flow, so

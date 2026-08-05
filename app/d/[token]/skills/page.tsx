@@ -24,6 +24,9 @@ export default async function SkillsPage(
 
   return (
     <div className="flex flex-col gap-6">
+      {skills.length === 0 && (
+        <p className="text-base text-paper-dim">No skills tracked yet.</p>
+      )}
       {skills.map((skill) => {
         const skillReps = repsBySkill.get(skill.id) ?? [];
         const status = beltStatusForReps(skillReps.length);

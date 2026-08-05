@@ -43,7 +43,7 @@ export default async function SessionsPage(
           )}
           {session.summary_md && (
             <p
-              className="mt-3 text-base leading-relaxed text-paper"
+              className="mt-3 max-w-[65ch] text-base leading-relaxed text-paper"
               dangerouslySetInnerHTML={{
                 __html: renderInlineMarkdown(session.summary_md),
               }}

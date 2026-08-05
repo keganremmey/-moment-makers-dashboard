@@ -72,7 +72,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
         {client.north_star && (
           <section className="card p-5">
             <p className="label">North Star</p>
-            <p className="mt-2 font-display text-lg leading-snug text-paper">
+            <p className="mt-2 text-pretty font-display text-lg leading-snug text-paper">
               {client.north_star}
             </p>
           </section>
@@ -106,22 +106,28 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
 
         <section className="card p-5">
           <p className="label">Skills at a Glance</p>
-          <ul className="mt-4 flex flex-col gap-3">
-            {skillStatuses.map(({ skill, status }) => (
-              <li
-                key={skill.id}
-                className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-line pb-3 last:border-none last:pb-0"
-              >
-                <div>
-                  <p className="text-base text-paper">{skill.name}</p>
-                  <p className="text-sm text-paper-dim">
-                    {status.reps} rep{status.reps === 1 ? "" : "s"} logged
-                  </p>
-                </div>
-                <BeltChip status={status} />
-              </li>
-            ))}
-          </ul>
+          {skillStatuses.length === 0 ? (
+            <p className="mt-4 text-base text-paper-dim">
+              No skills tracked yet.
+            </p>
+          ) : (
+            <ul className="mt-4 flex flex-col gap-3">
+              {skillStatuses.map(({ skill, status }) => (
+                <li
+                  key={skill.id}
+                  className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-line pb-3 last:border-none last:pb-0"
+                >
+                  <div>
+                    <p className="text-base text-paper">{skill.name}</p>
+                    <p className="text-sm text-paper-dim">
+                      {status.reps} rep{status.reps === 1 ? "" : "s"} logged
+                    </p>
+                  </div>
+                  <BeltChip status={status} />
+                </li>
+              ))}
+            </ul>
+          )}
           <Link
             href={`/d/${token}/skills`}
             className="mt-4 inline-block text-sm text-brass hover:underline"
