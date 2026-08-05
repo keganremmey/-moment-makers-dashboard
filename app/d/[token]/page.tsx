@@ -65,7 +65,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           <p className="label">Open Tasks</p>
           <p className="mt-2 font-display text-3xl text-paper">{openTaskCount}</p>
           {slippedTaskCount > 0 && (
-            <p className="mt-1 text-xs text-brass">
+            <p className="mt-1 text-sm text-brass">
               {slippedTaskCount} slipped — worth a look
             </p>
           )}
@@ -78,10 +78,10 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
               <p className="mt-2 font-display text-lg leading-snug text-paper">
                 {mostRecentWin.title}
               </p>
-              <p className="mt-1 text-xs text-paper-dim">{mostRecentWin.date}</p>
+              <p className="mt-1 text-sm text-paper-dim">{mostRecentWin.date}</p>
             </>
           ) : (
-            <p className="mt-2 text-sm text-paper-dim">Nothing logged yet.</p>
+            <p className="mt-2 text-base text-paper-dim">Nothing logged yet.</p>
           )}
         </Link>
       </section>
@@ -97,19 +97,19 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
                 className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-line pb-3 last:border-none last:pb-0"
               >
                 <div>
-                  <p className="text-sm text-paper">{skill.name}</p>
-                  <p className="text-xs text-paper-dim">
+                  <p className="text-base text-paper">{skill.name}</p>
+                  <p className="text-sm text-paper-dim">
                     {status.reps} rep{status.reps === 1 ? "" : "s"} logged
                   </p>
                 </div>
-                <BeltChip belt={status.belt.name} />
+                <BeltChip status={status} />
               </li>
             );
           })}
         </ul>
         <Link
           href={`/d/${token}/skills`}
-          className="mt-4 inline-block text-xs text-brass hover:underline"
+          className="mt-4 inline-block text-sm text-brass hover:underline"
         >
           Full skill map →
         </Link>

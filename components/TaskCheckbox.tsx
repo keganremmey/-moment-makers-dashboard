@@ -44,7 +44,7 @@ export function TaskCheckbox({
         className="h-4 w-4 accent-[var(--brass)]"
         aria-label={done ? "Mark task open" : "Mark task done"}
       />
-      {error && <span className="text-xs text-red-400">{error}</span>}
+      {error && <span className="text-sm text-red-400">{error}</span>}
     </div>
   );
 }

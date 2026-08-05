@@ -19,7 +19,7 @@ function TaskGroup({
     <section className="card p-5">
       <p className="label">{title}</p>
       {tasks.length === 0 ? (
-        <p className="mt-3 text-sm text-paper-dim">{emptyLabel}</p>
+        <p className="mt-3 text-base text-paper-dim">{emptyLabel}</p>
       ) : (
         <ul className="mt-3 flex flex-col gap-3">
           {tasks.map((task) => (
@@ -35,9 +35,9 @@ function TaskGroup({
                 done={task.status === "done"}
               />
               <div>
-                <p className="text-sm leading-snug">{task.title}</p>
+                <p className="text-base leading-snug">{task.title}</p>
                 {task.note && (
-                  <p className="mt-1 text-xs text-paper-dim">{task.note}</p>
+                  <p className="mt-1 text-sm text-paper-dim">{task.note}</p>
                 )}
                 {task.assigned_date && (
                   <p className="mt-1 text-xs text-paper-dim">

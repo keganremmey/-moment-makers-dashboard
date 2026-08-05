@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Work_Sans, Space_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const workSans = Work_Sans({
+  variable: "--font-work-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 // Fraunces: a heavy, expressive display serif for headlines, contrasted
-// against Geist's quiet sans/mono for data. This is the one deliberate
-// aesthetic risk of the shared Moment Makers design system — a bold-self
-// coaching brand shouldn't read like a SaaS dashboard. Every client shares
-// this same type/palette/component system; only a per-client identity word
-// and accent color (see app/d/[token]) vary.
+// against Work Sans's warmer body text and Space Mono's stamped-ledger
+// utility type. This is the one deliberate aesthetic risk of the shared
+// Moment Makers design system — a bold-self coaching brand shouldn't read
+// like a SaaS dashboard. Every client shares this same type/palette/
+// component system; only a per-client identity word and accent color
+// (see app/d/[token]) vary.
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
@@ -38,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${workSans.variable} ${spaceMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ink text-paper">
         {children}

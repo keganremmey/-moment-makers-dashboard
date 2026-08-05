@@ -27,7 +27,7 @@ export function DashboardNav({ token }: { token: string }) {
           <Link
             key={tab.href}
             href={href}
-            className={`rounded-t-md px-3 py-2 text-sm transition-colors ${
+            className={`rounded-t-md px-3 py-2 text-base transition-colors ${
               isActive
                 ? "bg-ink-raised text-brass"
                 : "text-paper-dim hover:text-paper"

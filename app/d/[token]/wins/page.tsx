@@ -16,7 +16,7 @@ export default async function WinsPage(props: PageProps<"/d/[token]/wins">) {
   return (
     <div className="flex flex-col gap-4">
       {wins.length === 0 && (
-        <p className="text-sm text-paper-dim">No wins logged yet.</p>
+        <p className="text-base text-paper-dim">No wins logged yet.</p>
       )}
       {wins.map((win) => {
         const session = win.source_session_fathom_id
@@ -30,12 +30,12 @@ export default async function WinsPage(props: PageProps<"/d/[token]/wins">) {
               {win.title}
             </h2>
             {win.description && (
-              <p className="mt-2 text-sm leading-relaxed text-paper-dim">
+              <p className="mt-2 text-base leading-relaxed text-paper-dim">
                 {win.description}
               </p>
             )}
             {session && (
-              <p className="mt-3 text-xs text-brass">
+              <p className="mt-3 text-sm text-brass">
                 From: {session.title} ({session.date})
               </p>
             )}

@@ -38,13 +38,13 @@ export function LibraryBrowser({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search frameworks and quotes…"
-        className="rounded-lg border border-ink-line bg-ink-raised px-4 py-2.5 text-sm text-paper placeholder:text-paper-dim focus:border-brass-dim focus:outline-none"
+        className="rounded-lg border border-ink-line bg-ink-raised px-4 py-2.5 text-base text-paper placeholder:text-paper-dim focus:border-brass-dim focus:outline-none"
       />
 
       <section>
         <p className="label mb-3">Frameworks</p>
         {filteredFrameworks.length === 0 ? (
-          <p className="text-sm text-paper-dim">No matching frameworks.</p>
+          <p className="text-base text-paper-dim">No matching frameworks.</p>
         ) : (
           <div className="flex flex-col gap-4">
             {filteredFrameworks.map((framework) => (
@@ -53,15 +53,15 @@ export function LibraryBrowser({
                   {framework.name}
                 </h3>
                 {framework.summary && (
-                  <p className="mt-1 text-sm text-paper-dim">
+                  <p className="mt-1 text-base text-paper-dim">
                     {framework.summary}
                   </p>
                 )}
                 {framework.steps.length > 0 && (
                   <ol className="mt-3 flex flex-col gap-1.5">
                     {framework.steps.map((step, i) => (
-                      <li key={i} className="text-sm text-paper">
-                        <span className="mr-2 font-mono text-xs text-brass">
+                      <li key={i} className="text-base text-paper">
+                        <span className="mr-2 font-mono text-sm text-brass">
                           {i + 1}
                         </span>
                         {step}
@@ -78,7 +78,7 @@ export function LibraryBrowser({
       <section>
         <p className="label mb-3">Quotes</p>
         {filteredQuotes.length === 0 ? (
-          <p className="text-sm text-paper-dim">No matching quotes.</p>
+          <p className="text-base text-paper-dim">No matching quotes.</p>
         ) : (
           <div className="flex flex-col gap-4">
             {filteredQuotes.map((quote) => (

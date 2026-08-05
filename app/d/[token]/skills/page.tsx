@@ -36,15 +36,15 @@ export default async function SkillsPage(
                   {skill.name}
                 </h2>
                 {skill.description && (
-                  <p className="mt-1 text-sm text-paper-dim">
+                  <p className="mt-1 text-base text-paper-dim">
                     {skill.description}
                   </p>
                 )}
               </div>
-              <BeltChip belt={status.belt.name} />
+              <BeltChip status={status} />
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-paper-dim">
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-paper-dim">
               <span>
                 {status.reps} rep{status.reps === 1 ? "" : "s"} logged
               </span>
@@ -60,7 +60,7 @@ export default async function SkillsPage(
             {skillReps.length > 0 && (
               <ul className="mt-4 flex flex-col gap-2 border-t border-ink-line pt-4">
                 {skillReps.map((rep) => (
-                  <li key={rep.id} className="text-sm">
+                  <li key={rep.id} className="text-base">
                     <span className="label mr-2">{rep.date}</span>
                     <span className="text-paper">{rep.note}</span>
                   </li>
