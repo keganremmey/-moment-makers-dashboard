@@ -2,11 +2,12 @@
   "client": {
     "slug": "ian-lynch",
     "name": "Ian Lynch",
-    "program": "Executive Track (6-month, 24 sessions)",
+    "program": "Executive Track",
     "identity_names": ["Fortissimo", "Majestic"],
     "default_self_names": ["normal", "average", "a commoner"],
     "north_star": "By September: the most direct, trustworthy voice at work; proactively facilitating/speaking monthly; running a donation-based coaching practice; hosting monthly dinner parties as leadership practice.",
-    "accent_hex": "#c9a227"
+    "accent_hex": "#c9a227",
+    "target_date": "2026-09-30"
   },
 
   "sessions": [

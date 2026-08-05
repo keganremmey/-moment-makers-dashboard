@@ -10,6 +10,7 @@ export type Client = {
   default_self_names: string[];
   north_star: string | null;
   accent_hex: string | null;
+  target_date: string | null;
   access_token: string;
   created_at: string;
 };
@@ -123,6 +124,28 @@ export async function getSessions(clientId: string): Promise<Session[]> {
   }
 
   return (data as Session[]) ?? [];
+}
+
+/** The date of a client's earliest recorded session — used as the "started"
+ * point for the mission timeline. Deliberately derived from real session
+ * data rather than stored as its own client field, so it can never drift
+ * out of sync with what actually happened. */
+export async function getFirstSessionDate(clientId: string): Promise<string | null> {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("date")
+    .eq("client_id", clientId)
+    .order("date", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("getFirstSessionDate error", error);
+    return null;
+  }
+
+  return (data as { date: string } | null)?.date ?? null;
 }
 
 export async function getWins(clientId: string): Promise<Win[]> {

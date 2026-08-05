@@ -415,3 +415,34 @@ a.card:hover {
 .flourish {
   color: var(--client-accent, var(--brass));
 }
+
+/* Mission timeline: real elapsed time toward a client's stated deadline,
+   in the header of every page. A thin track (unfilled = ink-line) with a
+   brass fill for days already walked — same visual grammar as the belt
+   strap's progress fill, so "time" and "reps" read as the same kind of
+   progress in this system. */
+.mission-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mission-timeline-track {
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--ink-line);
+  overflow: hidden;
+}
+
+.mission-timeline-fill {
+  height: 100%;
+  background: var(--brass);
+  border-radius: 999px;
+}
+
+.mission-timeline-caption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  color: var(--paper-dim);
+}
