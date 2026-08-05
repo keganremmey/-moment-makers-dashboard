@@ -245,6 +245,169 @@ a.card:hover {
   color: var(--paper-dim);
 }
 
+/* ---- Framework terrain map (Library page) ----
+   Flat hand-drawn hills + one true peak (Fortissimo Summit), in the same
+   walnut/moss/brass, no-gradient illustration language as bamboo.svg. */
+
+.terrain-scroll {
+  background: var(--ink-raised);
+}
+
+.terrain-hill {
+  fill: var(--moss);
+  opacity: 0.4;
+}
+
+.terrain-contour {
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.terrain-contour-mid {
+  stroke: var(--brass-dim);
+  opacity: 0.35;
+}
+
+.terrain-contour-inner {
+  stroke: var(--brass);
+  opacity: 0.45;
+}
+
+.terrain-ambient-trail {
+  fill: none;
+  stroke: var(--brass-dim);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 14;
+  opacity: 0.4;
+}
+
+.terrain-summit-back {
+  fill: var(--moss);
+  opacity: 0.45;
+}
+
+.terrain-summit-front {
+  fill: var(--moss);
+  opacity: 0.85;
+}
+
+.terrain-summit-cap {
+  fill: var(--brass);
+  opacity: 0.8;
+}
+
+.terrain-summit-line {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  opacity: 0.3;
+}
+
+.terrain-route {
+  fill: none;
+  stroke: var(--ink-line);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.terrain-route.is-active {
+  stroke: var(--brass);
+  stroke-width: 3;
+  opacity: 1;
+}
+
+.terrain-label {
+  transform: translate(-50%, -100%);
+  text-align: center;
+  width: 12rem;
+}
+
+.terrain-label-name {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--brass);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.terrain-label-blurb {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: var(--paper-dim);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.map-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  padding: 0.35rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.map-node-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--brass);
+  border: 2px solid var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.map-node.is-summit .map-node-dot {
+  width: 16px;
+  height: 16px;
+  background: var(--paper);
+}
+
+.map-node-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  text-align: center;
+  max-width: 6.75rem;
+  line-height: 1.15;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.map-node:hover .map-node-dot,
+.map-node.is-active .map-node-dot {
+  background: var(--moss);
+}
+
+.map-node:hover .map-node-label,
+.map-node.is-active .map-node-label {
+  color: var(--paper);
+}
+
+.map-node:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .map-node-dot,
+  .map-node-label,
+  .terrain-route {
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      stroke 0.15s ease,
+      stroke-width 0.15s ease,
+      opacity 0.15s ease;
+  }
+}
+
 /* The one deliberate per-client flourish: a client's identity word, colored
    with their own accent_hex (set inline as --client-accent), falling back to
    the shared brass token when a client has none set. Nothing else on the

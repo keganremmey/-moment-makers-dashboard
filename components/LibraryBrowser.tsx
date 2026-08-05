@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Framework, Quote } from "@/lib/data";
+import { FrameworkTerrainMap } from "@/components/FrameworkTerrainMap";
 
 export function LibraryBrowser({
   frameworks,
@@ -42,7 +43,15 @@ export function LibraryBrowser({
       />
 
       <section>
-        <p className="label mb-3">Frameworks</p>
+        <FrameworkTerrainMap frameworks={frameworks} />
+      </section>
+
+      <section>
+        <p className="label mb-3">Framework Index</p>
+        <p className="mb-3 text-sm text-paper-dim">
+          Every framework, plain-text — a reference list for searching, same
+          data as the map above.
+        </p>
         {filteredFrameworks.length === 0 ? (
           <p className="text-base text-paper-dim">No matching frameworks.</p>
         ) : (
