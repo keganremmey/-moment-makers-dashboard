@@ -40,8 +40,16 @@ export function BeltChip({ status }: { status: BeltStatus }) {
           />
         )}
         <span className="belt-strap-stitch" />
+        <span className="belt-strap-hem" />
       </span>
-      <span className="belt-label">{belt.name}</span>
+      <span className="flex items-baseline gap-2">
+        <span className="belt-label">{belt.name}</span>
+        <span className="belt-caption">
+          {nextBelt
+            ? `${repsToNext} to ${nextBelt.name}`
+            : "top rank"}
+        </span>
+      </span>
     </span>
   );
 }

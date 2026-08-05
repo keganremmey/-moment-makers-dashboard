@@ -45,7 +45,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           }
         >
           <p className="label">Identity</p>
-          <p className="flourish mt-2 font-display text-4xl italic leading-tight">
+          <p className="flourish mt-2 font-display text-6xl uppercase tracking-tight leading-none">
             {identityWord}
           </p>
         </section>

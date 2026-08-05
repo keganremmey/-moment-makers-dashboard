@@ -34,7 +34,7 @@ export default async function DashboardLayout(
         <div className="flex items-baseline gap-3">
           <span className="forte-mark text-3xl">𝑓𝑓</span>
           <div>
-            <h1 className="font-display text-2xl leading-tight text-paper">
+            <h1 className="font-display text-3xl uppercase tracking-tight leading-none text-paper">
               {client.identity_names?.[0] ?? client.name}
             </h1>
             <p className="label">{client.program}</p>

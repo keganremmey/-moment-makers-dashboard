@@ -28,7 +28,8 @@
   --color-brass: var(--brass);
   --color-brass-dim: var(--brass-dim);
   --color-moss: var(--moss);
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-anton);
+  --font-accent: var(--font-fraunces);
   --font-sans: var(--font-work-sans);
   --font-mono: var(--font-space-mono);
 }
@@ -38,24 +39,28 @@ html {
   color-scheme: dark;
 }
 
-/* Fixed grain/fiber texture — a low-opacity feTurbulence noise filter reads
-   as worn wood/paper grain rather than a visible pattern, layered with a
-   barely-there moss wash in one corner for ambient warmth. */
+/* Dojo surface: a visible wood-grain streak layer (elongated, directional
+   turbulence — reads as timber, not static) plus a fine paper-fiber grain,
+   both stacked over a real jungle-moss glow in two corners. This needed to
+   read clearly at a glance, not as a barely-there tint. */
 body {
   background-color: var(--ink);
   background-image:
-    radial-gradient(ellipse at top left, rgba(79, 107, 69, 0.1), transparent 60%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, repeat;
-  background-size: cover, 300px 300px;
-  background-attachment: fixed, fixed;
+    radial-gradient(ellipse at top left, rgba(79, 107, 69, 0.32), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(79, 107, 69, 0.22), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='fiber'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fiber)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+  background-size: cover, cover, 500px 500px, 300px 300px;
+  background-attachment: fixed, fixed, fixed, fixed;
   color: var(--paper);
   font-family: var(--font-sans);
 }
 
-/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout. */
+/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout — kept in
+   the accent serif, not the poster face, so this one mark stays soft. */
 .forte-mark {
-  font-family: var(--font-display);
+  font-family: var(--font-accent);
   font-style: italic;
   font-weight: 600;
   color: var(--brass);
@@ -80,29 +85,45 @@ body {
   color: var(--paper-dim);
 }
 
-/* Signature element: a cloth belt laid flat, colored in rank, with stitch
-   marks along its length and a progress fill toward the next rank creeping
-   in from the tip — mirroring how a real BJJ belt gains stripes at the tip
-   as a student progresses within a rank. */
+/* Signature element: an actual cloth belt laid flat — a woven strap with a
+   folded, overlapping tip (like the loose end of a tied belt), a twill
+   weave texture so even White reads as fabric rather than a flat swatch,
+   and a next-rank color creeping in from the tip as reps accrue, mirroring
+   how a real belt earns stripes at the tip on the way to a promotion. Sized
+   to read as an object across the room, not a UI sliver. */
 .belt {
   display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
 }
 
 .belt-strap {
   position: relative;
-  width: 4.5rem;
-  height: 0.9rem;
+  width: 8.5rem;
+  height: 1.75rem;
   flex: none;
-  border-radius: 999px;
+  border-radius: 0.2rem;
   overflow: hidden;
-  /* A parchment-tinted ring (not --ink-line) so dark ranks like Black and
-     Brown still read as a distinct shape against the equally-dark card. */
-  border: 1px solid rgba(238, 224, 196, 0.18);
+  /* A dark woven edge on every rank (even White) so the belt always reads
+     as a distinct object against the card, never just a color swatch. */
+  border: 1px solid rgba(0, 0, 0, 0.45);
   box-shadow:
-    inset 0 1px 1px rgba(0, 0, 0, 0.4),
-    inset 0 -1px 0 rgba(238, 224, 196, 0.08);
+    inset 0 2px 2px rgba(0, 0, 0, 0.35),
+    inset 0 -2px 0 rgba(238, 224, 196, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Folded belt tip: a darker overlapping triangle at the left end, like the
+   loose end of a tied belt doubling back over itself. */
+.belt-strap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 1.1rem;
+  background: rgba(0, 0, 0, 0.28);
+  clip-path: polygon(0 0, 100% 0, 40% 50%, 100% 100%, 0 100%);
+  z-index: 2;
 }
 
 .belt-strap-progress {
@@ -110,28 +131,67 @@ body {
   inset: 0 0 0 auto;
   right: 0;
   height: 100%;
-  border-radius: 0 999px 999px 0;
 }
 
+/* Twill weave texture — a crosshatch of two diagonal stripe sets, present
+   on every belt regardless of rank color, so the shape reads as cloth. */
 .belt-strap-stitch {
   position: absolute;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.3) 0,
-    rgba(0, 0, 0, 0.3) 1px,
-    transparent 1px,
-    transparent 7px
-  );
+  z-index: 1;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.22) 0,
+      rgba(0, 0, 0, 0.22) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 4px
+    );
   mix-blend-mode: multiply;
+}
+
+/* Stitched hem along the top and bottom edge, like a real belt's seam. */
+.belt-strap-hem {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.4) 0,
+      rgba(0, 0, 0, 0.4) 2px,
+      transparent 2px,
+      transparent 6px
+    );
+  background-size: 100% 2px;
+  background-repeat: repeat-x;
+  background-position:
+    0 3px,
+    0 calc(100% - 3px);
+  background-position: 0 3px, 0 calc(100% - 3px);
 }
 
 .belt-label {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--paper);
+}
+
+.belt-caption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--paper-dim);
 }
 
 /* The one deliberate per-client flourish: a client's identity word, colored

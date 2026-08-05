@@ -86,7 +86,7 @@ export function LibraryBrowser({
                 key={quote.id}
                 className="card border-l-2 border-l-brass p-5"
               >
-                <p className="font-display text-lg italic leading-snug text-paper">
+                <p className="font-accent text-xl italic leading-snug text-paper">
                   “{quote.text}”
                 </p>
                 <footer className="mt-2 text-xs text-paper-dim">
