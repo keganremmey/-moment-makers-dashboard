@@ -10,6 +10,7 @@
   --brass: #c9a15c;
   --brass-dim: #8a713f;
   --moss: #4f6b45;
+  --moss-dark: #33452c;
 
   --belt-white: #f2efe6;
   --belt-gray: #9aa0a8;
@@ -28,6 +29,7 @@
   --color-brass: var(--brass);
   --color-brass-dim: var(--brass-dim);
   --color-moss: var(--moss);
+  --color-moss-dark: var(--moss-dark);
   --font-display: var(--font-anton);
   --font-accent: var(--font-fraunces);
   --font-sans: var(--font-work-sans);
@@ -39,10 +41,11 @@ html {
   color-scheme: dark;
 }
 
-/* Dojo surface: a visible wood-grain streak layer (elongated, directional
-   turbulence — reads as timber, not static), a fine paper-fiber grain, and
-   now real horizontal plank seams so the grain reads as floorboards, not
-   an abstract smear — all stacked over a jungle-moss glow in two corners. */
+/* Dojo surface: real horizontal plank seams so the wood reads as
+   floorboards, plus a hand-drawn diagonal fiber-hatch tile (a few static
+   strokes, no runtime filter) — all stacked over a jungle-moss glow in two
+   corners. This layer uses the default (scroll) background attachment, so
+   the browser never has to recomposite it on every scroll frame. */
 body {
   background-color: var(--ink);
   background-image:
@@ -55,41 +58,18 @@ body {
       rgba(0, 0, 0, 0.35) 118px,
       rgba(0, 0, 0, 0.35) 120px
     ),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='fiber'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fiber)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat, repeat, repeat, repeat;
-  background-size: cover, cover, 100% 120px, 500px 500px, 300px 300px;
-  background-attachment: fixed, fixed, fixed, fixed, fixed;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cg stroke='%233a2f22' stroke-width='1' opacity='0.4'%3E%3Cline x1='0' y1='56' x2='56' y2='0'/%3E%3Cline x1='-14' y1='42' x2='42' y2='-14'/%3E%3Cline x1='14' y1='70' x2='70' y2='14'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+  background-size: cover, cover, 100% 120px, 56px 56px;
   color: var(--paper);
   font-family: var(--font-sans);
   position: relative;
 }
 
-/* Bamboo grove accent — a hand-drawn SVG, not a photo, growing up from the
-   bottom-left corner of every page. Its own independent opacity (the body
-   background-image stack can't vary opacity per layer) keeps it as
-   atmosphere, never competing with real content for attention. */
-body::before {
-  content: "";
-  position: fixed;
-  left: -20px;
-  bottom: 0;
-  width: 260px;
-  height: 100vh;
-  background-image: url("/bamboo.svg");
-  background-repeat: no-repeat;
-  background-position: bottom left;
-  background-size: 260px auto;
-  opacity: 0.4;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Everything else needs to sit above the bamboo layer. */
-body > * {
-  position: relative;
-  z-index: 1;
-}
+/* The near-invisible fixed bamboo corner accent that used to live here as
+   `body::before` is gone — replaced by the visible, full-width valley-floor
+   scene rendered in normal document flow at the bottom of dashboard pages
+   (see .valley-floor below and app/d/[token]/layout.tsx). */
 
 /* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout — kept in
    the accent serif, not the poster face, so this one mark stays soft. */
@@ -101,31 +81,50 @@ body > * {
 }
 
 .card {
+  position: relative;
   background: var(--ink-raised);
   border: 1px solid var(--ink-line);
   border-radius: 0.75rem;
   /* Soft inset highlight along the top edge (light catching a carved wood
      panel) plus a real drop shadow beneath, so the panel sits ABOVE the
      grain rather than being painted flush onto it — actual depth, not a
-     flat div with a border. Transform+shadow both transition so clickable
-     cards lift toward the viewer on hover instead of just tinting. */
+     flat div with a border. Only `transform` transitions here (a cheap,
+     compositor-only property) — the hover-only deeper shadow below is a
+     separate pseudo-element whose `opacity` transitions instead, so no
+     frame ever has to repaint a changing box-shadow. */
   box-shadow:
     inset 0 1px 0 rgba(238, 224, 196, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.2),
     0 6px 16px rgba(0, 0, 0, 0.35),
     0 1px 3px rgba(0, 0, 0, 0.3);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease;
+}
+
+/* The deeper "lifted" shadow, pre-painted at opacity 0 and faded in on
+   hover instead of animating box-shadow directly. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 1px 0 rgba(238, 224, 196, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 12px 28px rgba(0, 0, 0, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
 }
 
 /* Only clickable cards lift on hover — never the static ones (North Star,
    Skills at a Glance) — so the motion means something: this is a door. */
 a.card:hover {
   transform: translateY(-3px);
-  box-shadow:
-    inset 0 1px 0 rgba(238, 224, 196, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-    0 12px 28px rgba(0, 0, 0, 0.45),
-    0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+a.card:hover::after {
+  opacity: 1;
 }
 
 .label {
@@ -136,12 +135,10 @@ a.card:hover {
   color: var(--paper-dim);
 }
 
-/* Signature element: an actual cloth belt laid flat — a woven strap with a
-   folded, overlapping tip (like the loose end of a tied belt), a twill
-   weave texture so even White reads as fabric rather than a flat swatch,
-   and a next-rank color creeping in from the tip as reps accrue, mirroring
-   how a real belt earns stripes at the tip on the way to a promotion. Sized
-   to read as an object across the room, not a UI sliver. */
+/* Signature element: an actual tied belt laid flat, drawn as a real SVG
+   belt-silhouette (see components/BeltChip.tsx) — a wrap strip with a
+   folded knot and two tapered tails crossing at the fold, colored in rank.
+   Sized to read as an object across the room, not a UI sliver. */
 .belt {
   display: inline-flex;
   flex-direction: column;
@@ -149,84 +146,9 @@ a.card:hover {
   gap: 0.4rem;
 }
 
-.belt-strap {
-  position: relative;
-  width: 8.5rem;
-  height: 1.75rem;
+.belt-svg {
   flex: none;
-  border-radius: 0.2rem;
-  overflow: hidden;
-  /* A dark woven edge on every rank (even White) so the belt always reads
-     as a distinct object against the card, never just a color swatch. */
-  border: 1px solid rgba(0, 0, 0, 0.45);
-  box-shadow:
-    inset 0 2px 2px rgba(0, 0, 0, 0.35),
-    inset 0 -2px 0 rgba(238, 224, 196, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-/* Folded belt tip: a darker overlapping triangle at the left end, like the
-   loose end of a tied belt doubling back over itself. */
-.belt-strap::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: 1.1rem;
-  background: rgba(0, 0, 0, 0.28);
-  clip-path: polygon(0 0, 100% 0, 40% 50%, 100% 100%, 0 100%);
-  z-index: 2;
-}
-
-.belt-strap-progress {
-  position: absolute;
-  inset: 0 0 0 auto;
-  right: 0;
-  height: 100%;
-}
-
-/* Twill weave texture — a crosshatch of two diagonal stripe sets, present
-   on every belt regardless of rank color, so the shape reads as cloth. */
-.belt-strap-stitch {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(0, 0, 0, 0.22) 0,
-      rgba(0, 0, 0, 0.22) 1px,
-      transparent 1px,
-      transparent 4px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(255, 255, 255, 0.08) 0,
-      rgba(255, 255, 255, 0.08) 1px,
-      transparent 1px,
-      transparent 4px
-    );
-  mix-blend-mode: multiply;
-}
-
-/* Stitched hem along the top and bottom edge, like a real belt's seam. */
-.belt-strap-hem {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.4) 0,
-      rgba(0, 0, 0, 0.4) 2px,
-      transparent 2px,
-      transparent 6px
-    );
-  background-size: 100% 2px;
-  background-repeat: repeat-x;
-  background-position:
-    0 3px,
-    0 calc(100% - 3px);
-  background-position: 0 3px, 0 calc(100% - 3px);
+  display: block;
 }
 
 .belt-label {
@@ -445,4 +367,22 @@ a.card:hover {
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   color: var(--paper-dim);
+}
+
+/* Valley floor: the full-bleed signature scene at the bottom of every
+   dashboard page — layered mountain silhouettes echoing Fortissimo Summit
+   plus bamboo clusters at the base (see public/valley-floor.svg). Sits in
+   normal document flow (never `position: fixed`) so it fills the page
+   instead of floating over it, and scales by width so it never creates its
+   own empty gap on tall viewports. */
+.valley-floor {
+  width: 100%;
+  margin-top: 1rem;
+  line-height: 0;
+}
+
+.valley-floor-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }

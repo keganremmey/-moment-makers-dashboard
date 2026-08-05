@@ -11,13 +11,13 @@
 // Summit, the one shared destination.
 
 export const TERRITORIES = [
-  { id: "swamp", name: "The Swamp of Over-Explaining", blurb: "Stuck justifying, hedging, drowning in words before the point lands." },
-  { id: "fog", name: "The Fog of the Inner Critic", blurb: "Shame and self-judgment thick enough to hide in." },
-  { id: "frozen-lake", name: "The Frozen Lake", blurb: "Nervous-system freeze — shutting down right when it counts." },
-  { id: "valley", name: "The Quiet Valley", blurb: "Wants that never get said out loud." },
-  { id: "flatlands", name: "The Flatlands", blurb: "A story with no rise in it — nothing at stake, nothing pulling anyone in." },
-  { id: "crossroads", name: "The Crossroads", blurb: "Scanning for approval instead of deciding where to stand." },
-  { id: "summit", name: "Fortissimo Summit", blurb: "Where the ask actually lands." },
+  { id: "swamp", name: "Waffle Swamp", blurb: "For when you keep explaining the explanation instead of just landing the point." },
+  { id: "fog", name: "Self-Doubt Fog", blurb: "For when the voice in your head won't let the honest thing out." },
+  { id: "frozen-lake", name: "Lonely Lake", blurb: "For when you freeze up and don't know what to say next." },
+  { id: "valley", name: "The Shrinking Valley", blurb: "For when your real want gets talked down to something ‘reasonable.’" },
+  { id: "flatlands", name: "The Flatlands", blurb: "For when you tell the story but it never actually lands." },
+  { id: "crossroads", name: "The Crossroads", blurb: "For when you're waiting on the room to give you permission." },
+  { id: "summit", name: "Fortissimo Summit", blurb: "Where the ask finally lands — clean, direct, no apology." },
 ] as const;
 
 export const FRAMEWORK_TERRITORY: Record<string, typeof TERRITORIES[number]["id"]> = {
