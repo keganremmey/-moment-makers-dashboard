@@ -40,21 +40,55 @@ html {
 }
 
 /* Dojo surface: a visible wood-grain streak layer (elongated, directional
-   turbulence — reads as timber, not static) plus a fine paper-fiber grain,
-   both stacked over a real jungle-moss glow in two corners. This needed to
-   read clearly at a glance, not as a barely-there tint. */
+   turbulence — reads as timber, not static), a fine paper-fiber grain, and
+   now real horizontal plank seams so the grain reads as floorboards, not
+   an abstract smear — all stacked over a jungle-moss glow in two corners. */
 body {
   background-color: var(--ink);
   background-image:
     radial-gradient(ellipse at top left, rgba(79, 107, 69, 0.32), transparent 55%),
     radial-gradient(ellipse at bottom right, rgba(79, 107, 69, 0.22), transparent 50%),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 118px,
+      rgba(0, 0, 0, 0.35) 118px,
+      rgba(0, 0, 0, 0.35) 120px
+    ),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='fiber'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fiber)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat, repeat, repeat;
-  background-size: cover, cover, 500px 500px, 300px 300px;
-  background-attachment: fixed, fixed, fixed, fixed;
+  background-repeat: no-repeat, no-repeat, repeat, repeat, repeat;
+  background-size: cover, cover, 100% 120px, 500px 500px, 300px 300px;
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
   color: var(--paper);
   font-family: var(--font-sans);
+  position: relative;
+}
+
+/* Bamboo grove accent — a hand-drawn SVG, not a photo, growing up from the
+   bottom-left corner of every page. Its own independent opacity (the body
+   background-image stack can't vary opacity per layer) keeps it as
+   atmosphere, never competing with real content for attention. */
+body::before {
+  content: "";
+  position: fixed;
+  left: -20px;
+  bottom: 0;
+  width: 260px;
+  height: 100vh;
+  background-image: url("/bamboo.svg");
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-size: 260px auto;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Everything else needs to sit above the bamboo layer. */
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout — kept in
@@ -70,11 +104,28 @@ body {
   background: var(--ink-raised);
   border: 1px solid var(--ink-line);
   border-radius: 0.75rem;
-  /* Soft inset highlight along the top edge, like light catching a carved
-     wood panel — reads as a physical object rather than a flat div. */
+  /* Soft inset highlight along the top edge (light catching a carved wood
+     panel) plus a real drop shadow beneath, so the panel sits ABOVE the
+     grain rather than being painted flush onto it — actual depth, not a
+     flat div with a border. Transform+shadow both transition so clickable
+     cards lift toward the viewer on hover instead of just tinting. */
   box-shadow:
     inset 0 1px 0 rgba(238, 224, 196, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 6px 16px rgba(0, 0, 0, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Only clickable cards lift on hover — never the static ones (North Star,
+   Skills at a Glance) — so the motion means something: this is a door. */
+a.card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(238, 224, 196, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 12px 28px rgba(0, 0, 0, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
 .label {
