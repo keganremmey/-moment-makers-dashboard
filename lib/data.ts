@@ -12,6 +12,7 @@ export type Client = {
   accent_hex: string | null;
   target_date: string | null;
   access_token: string;
+  vision_board_path: string | null;
   created_at: string;
 };
 
@@ -85,7 +86,18 @@ export type Quote = {
   client_id: string | null;
 };
 
-/** Look up a client by their access token (the entire auth mechanism — a
+export type JournalEntry = {
+  id: string;
+  client_id: string;
+  created_at: string;
+  audio_path: string;
+  duration_seconds: number | null;
+  transcript: string | null;
+  word_count: number | null;
+  transcribed_at: string | null;
+};
+
+/** Look up a client by their access token (the entire auth mechanism , a
  * long random string in the URL path). Returns null if no match.
  * Wrapped in React `cache()` so every page/layout under /d/[token] that
  * calls this during the same request shares one lookup instead of hitting
@@ -126,7 +138,7 @@ export async function getSessions(clientId: string): Promise<Session[]> {
   return (data as Session[]) ?? [];
 }
 
-/** The date of a client's earliest recorded session — used as the "started"
+/** The date of a client's earliest recorded session , used as the "started"
  * point for the mission timeline. Deliberately derived from real session
  * data rather than stored as its own client field, so it can never drift
  * out of sync with what actually happened. */
@@ -226,12 +238,28 @@ export async function getFrameworks(): Promise<Framework[]> {
   return (data as Framework[]) ?? [];
 }
 
+export async function getJournalEntries(clientId: string): Promise<JournalEntry[]> {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase
+    .from("journal_entries")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("getJournalEntries error", error);
+    return [];
+  }
+
+  return (data as JournalEntry[]) ?? [];
+}
+
 export async function getQuotes(clientId: string): Promise<Quote[]> {
   // Deliberately client-scoped only, even though `quotes.client_id` is
   // nullable in the schema (a future "shared coaching wisdom" quote could
   // exist with no client). Matching on `client_id.is.null` here would mean
   // a quote someone adds directly in Supabase Studio without setting
-  // client_id — meant privately for one client — silently appears on every
+  // client_id , meant privately for one client , silently appears on every
   // client's dashboard. If a genuinely shared quote is ever wanted, that
   // should be an explicit opt-in, not a fallback of "forgot to set a field."
   const supabase = supabaseServer();

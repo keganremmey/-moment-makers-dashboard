@@ -2,46 +2,46 @@
   <!-- Hand-drawn bamboo grove accent: three stalks of varying height and
        weight, each with node rings and a few blade-leaf clusters. Flat,
        stylized silhouettes (not photoreal) to match the rest of the
-       system's flat card/belt language. Colored in the moss token at low
-       opacity so it reads as atmosphere growing up from the page edge,
-       not a decoration competing with real content. -->
+       system's flat card/belt language. Colored in the jade token at low
+       opacity so it reads as atmosphere — used both as a small header
+       accent and layered into the base of public/valley-floor.svg. -->
 
   <!-- back stalk, tallest, faintest -->
   <g opacity="0.5">
-    <path d="M60 820 L60 90 Q60 70 72 70 Q84 70 84 90 L84 820 Z" fill="#4f6b45"/>
-    <rect x="58" y="150" width="28" height="6" rx="3" fill="#16120c" opacity="0.35"/>
-    <rect x="58" y="240" width="28" height="6" rx="3" fill="#16120c" opacity="0.35"/>
-    <rect x="58" y="330" width="28" height="6" rx="3" fill="#16120c" opacity="0.35"/>
-    <rect x="58" y="420" width="28" height="6" rx="3" fill="#16120c" opacity="0.35"/>
-    <rect x="58" y="510" width="28" height="6" rx="3" fill="#16120c" opacity="0.35"/>
-    <rect x="58" y="600" width="28" height="6" rx="3" fill="#16120c" opacity="0.35"/>
-    <path d="M72 100 Q10 60 4 10 Q56 30 72 100Z" fill="#4f6b45"/>
-    <path d="M84 130 Q150 100 165 55 Q105 70 84 130Z" fill="#4f6b45"/>
+    <path d="M60 820 L60 90 Q60 70 72 70 Q84 70 84 90 L84 820 Z" fill="#1F7A53"/>
+    <rect x="58" y="150" width="28" height="6" rx="3" fill="#2A1B12" opacity="0.35"/>
+    <rect x="58" y="240" width="28" height="6" rx="3" fill="#2A1B12" opacity="0.35"/>
+    <rect x="58" y="330" width="28" height="6" rx="3" fill="#2A1B12" opacity="0.35"/>
+    <rect x="58" y="420" width="28" height="6" rx="3" fill="#2A1B12" opacity="0.35"/>
+    <rect x="58" y="510" width="28" height="6" rx="3" fill="#2A1B12" opacity="0.35"/>
+    <rect x="58" y="600" width="28" height="6" rx="3" fill="#2A1B12" opacity="0.35"/>
+    <path d="M72 100 Q10 60 4 10 Q56 30 72 100Z" fill="#1F7A53"/>
+    <path d="M84 130 Q150 100 165 55 Q105 70 84 130Z" fill="#1F7A53"/>
   </g>
 
   <!-- middle stalk -->
   <g opacity="0.72">
-    <path d="M150 820 L150 220 Q150 198 165 198 Q180 198 180 220 L180 820 Z" fill="#4f6b45"/>
-    <rect x="148" y="270" width="34" height="7" rx="3.5" fill="#16120c" opacity="0.4"/>
-    <rect x="148" y="360" width="34" height="7" rx="3.5" fill="#16120c" opacity="0.4"/>
-    <rect x="148" y="450" width="34" height="7" rx="3.5" fill="#16120c" opacity="0.4"/>
-    <rect x="148" y="540" width="34" height="7" rx="3.5" fill="#16120c" opacity="0.4"/>
-    <rect x="148" y="630" width="34" height="7" rx="3.5" fill="#16120c" opacity="0.4"/>
-    <path d="M165 230 Q95 190 82 140 Q150 155 165 230Z" fill="#4f6b45"/>
-    <path d="M180 260 Q255 235 272 190 Q205 200 180 260Z" fill="#4f6b45"/>
-    <path d="M165 300 Q110 285 95 250 Q150 250 165 300Z" fill="#4f6b45"/>
+    <path d="M150 820 L150 220 Q150 198 165 198 Q180 198 180 220 L180 820 Z" fill="#1F7A53"/>
+    <rect x="148" y="270" width="34" height="7" rx="3.5" fill="#2A1B12" opacity="0.4"/>
+    <rect x="148" y="360" width="34" height="7" rx="3.5" fill="#2A1B12" opacity="0.4"/>
+    <rect x="148" y="450" width="34" height="7" rx="3.5" fill="#2A1B12" opacity="0.4"/>
+    <rect x="148" y="540" width="34" height="7" rx="3.5" fill="#2A1B12" opacity="0.4"/>
+    <rect x="148" y="630" width="34" height="7" rx="3.5" fill="#2A1B12" opacity="0.4"/>
+    <path d="M165 230 Q95 190 82 140 Q150 155 165 230Z" fill="#1F7A53"/>
+    <path d="M180 260 Q255 235 272 190 Q205 200 180 260Z" fill="#1F7A53"/>
+    <path d="M165 300 Q110 285 95 250 Q150 250 165 300Z" fill="#1F7A53"/>
   </g>
 
   <!-- front stalk, shortest, boldest -->
   <g opacity="0.95">
-    <path d="M260 820 L260 400 Q260 375 278 375 Q296 375 296 400 L296 820 Z" fill="#4f6b45"/>
-    <rect x="257" y="440" width="42" height="8" rx="4" fill="#16120c" opacity="0.45"/>
-    <rect x="257" y="530" width="42" height="8" rx="4" fill="#16120c" opacity="0.45"/>
-    <rect x="257" y="620" width="42" height="8" rx="4" fill="#16120c" opacity="0.45"/>
-    <rect x="257" y="710" width="42" height="8" rx="4" fill="#16120c" opacity="0.45"/>
-    <path d="M278 410 Q195 365 178 305 Q255 320 278 410Z" fill="#4f6b45"/>
-    <path d="M296 445 Q385 415 405 360 Q325 375 296 445Z" fill="#4f6b45"/>
-    <path d="M278 480 Q210 460 192 415 Q255 420 278 480Z" fill="#4f6b45"/>
-    <path d="M296 500 Q365 490 385 450 Q325 455 296 500Z" fill="#4f6b45"/>
+    <path d="M260 820 L260 400 Q260 375 278 375 Q296 375 296 400 L296 820 Z" fill="#1F7A53"/>
+    <rect x="257" y="440" width="42" height="8" rx="4" fill="#2A1B12" opacity="0.45"/>
+    <rect x="257" y="530" width="42" height="8" rx="4" fill="#2A1B12" opacity="0.45"/>
+    <rect x="257" y="620" width="42" height="8" rx="4" fill="#2A1B12" opacity="0.45"/>
+    <rect x="257" y="710" width="42" height="8" rx="4" fill="#2A1B12" opacity="0.45"/>
+    <path d="M278 410 Q195 365 178 305 Q255 320 278 410Z" fill="#1F7A53"/>
+    <path d="M296 445 Q385 415 405 360 Q325 375 296 445Z" fill="#1F7A53"/>
+    <path d="M278 480 Q210 460 192 415 Q255 420 278 480Z" fill="#1F7A53"/>
+    <path d="M296 500 Q365 490 385 450 Q325 455 296 500Z" fill="#1F7A53"/>
   </g>
 </svg>

@@ -1,12 +1,12 @@
-// Presentation-layer structure for the Library "terrain map" — how the
+// Presentation-layer structure for the Library "terrain map" , how the
 // frameworks fetched from Supabase relate to each other spatially and
 // sequentially. This is coaching methodology (grouping + wayfinding),
-// not client data, so it lives in code rather than a database table —
+// not client data, so it lives in code rather than a database table ,
 // same reasoning as lib/belts.ts for belt thresholds.
 //
 // Non-hierarchical among the six ground-level regions: no stuck-state
 // terrain feature here is "worse" than another. Routes mean "if you're
-// here, use this to get there," not "this comes before that" — except
+// here, use this to get there," not "this comes before that" , except
 // that every route in the graph eventually climbs toward Fortissimo
 // Summit, the one shared destination.
 
@@ -17,7 +17,7 @@ export const TERRITORIES = [
   { id: "valley", name: "The Shrinking Valley", blurb: "For when your real want gets talked down to something ‘reasonable.’" },
   { id: "flatlands", name: "The Flatlands", blurb: "For when you tell the story but it never actually lands." },
   { id: "crossroads", name: "The Crossroads", blurb: "For when you're waiting on the room to give you permission." },
-  { id: "summit", name: "Fortissimo Summit", blurb: "Where the ask finally lands — clean, direct, no apology." },
+  { id: "summit", name: "Fortissimo Summit", blurb: "Where the ask finally lands, clean, direct, no apology." },
 ] as const;
 
 export const FRAMEWORK_TERRITORY: Record<string, typeof TERRITORIES[number]["id"]> = {

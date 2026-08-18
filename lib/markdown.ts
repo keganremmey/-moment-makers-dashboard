@@ -1,5 +1,5 @@
-// Session summaries in the seed use a tiny subset of markdown — **bold**
-// and *italic* only, no links/lists/headings — so a full markdown
+// Session summaries in the seed use a tiny subset of markdown , **bold**
+// and *italic* only, no links/lists/headings , so a full markdown
 // dependency would be overkill. This escapes HTML first (defense in depth;
 // the data is our own seed, not arbitrary user input) then converts just
 // those two inline forms to HTML for use with dangerouslySetInnerHTML.

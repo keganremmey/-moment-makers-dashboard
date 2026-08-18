@@ -39,7 +39,7 @@ export function LibraryBrowser({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search frameworks and quotes…"
-        className="rounded-lg border border-ink-line bg-ink-raised px-4 py-2.5 text-base text-paper placeholder:text-paper-dim focus:outline-none focus:ring-2 focus:ring-brass focus:ring-offset-2 focus:ring-offset-ink"
+        className="rounded-lg border border-paper-line bg-paper-raised px-4 py-2.5 text-base text-ink placeholder:text-ink-dim focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2 focus:ring-offset-paper"
       />
 
       <section>
@@ -48,31 +48,35 @@ export function LibraryBrowser({
 
       <section>
         <p className="label mb-3">Framework Index</p>
-        <p className="mb-3 text-sm text-paper-dim">
-          Every framework, plain-text — a reference list for searching, same
+        <p className="mb-3 text-sm text-ink-dim">
+          Every framework, plain-text , a reference list for searching, same
           data as the map above.
         </p>
         {filteredFrameworks.length === 0 ? (
-          <p className="text-base text-paper-dim">
+          <p className="text-base text-ink-dim">
             {query.trim() === "" ? "No frameworks yet." : "No matching frameworks."}
           </p>
         ) : (
           <div className="flex flex-col gap-4">
             {filteredFrameworks.map((framework) => (
-              <article key={framework.id} className="card p-5">
-                <h3 className="font-display text-lg text-paper">
+              <article
+                key={framework.id}
+                id={`framework-index-${framework.slug}`}
+                className="card p-5"
+              >
+                <h3 className="font-display text-lg text-ink">
                   {framework.name}
                 </h3>
                 {framework.summary && (
-                  <p className="mt-1 text-base text-paper-dim">
+                  <p className="mt-1 text-base text-ink-dim">
                     {framework.summary}
                   </p>
                 )}
                 {framework.steps.length > 0 && (
                   <ol className="mt-3 flex flex-col gap-1.5">
                     {framework.steps.map((step, i) => (
-                      <li key={i} className="text-base text-paper">
-                        <span className="mr-2 font-mono text-sm text-brass">
+                      <li key={i} className="text-base text-ink">
+                        <span className="mr-2 font-mono text-sm text-gold">
                           {i + 1}
                         </span>
                         {step}
@@ -89,7 +93,7 @@ export function LibraryBrowser({
       <section>
         <p className="label mb-3">Quotes</p>
         {filteredQuotes.length === 0 ? (
-          <p className="text-base text-paper-dim">
+          <p className="text-base text-ink-dim">
             {query.trim() === "" ? "No quotes yet." : "No matching quotes."}
           </p>
         ) : (
@@ -97,13 +101,13 @@ export function LibraryBrowser({
             {filteredQuotes.map((quote) => (
               <blockquote
                 key={quote.id}
-                className="card border-l-2 border-l-brass p-5"
+                className="card border-l-2 border-l-gold p-5"
               >
-                <p className="max-w-[65ch] text-pretty font-accent text-xl italic leading-snug text-paper">
+                <p className="max-w-[65ch] text-pretty font-accent text-xl italic leading-snug text-ink">
                   “{quote.text}”
                 </p>
-                <footer className="mt-2 text-xs text-paper-dim">
-                  {quote.attributed_to && <span>— {quote.attributed_to}</span>}
+                <footer className="mt-2 text-xs text-ink-dim">
+                  {quote.attributed_to && <span>{quote.attributed_to}</span>}
                   {quote.context && <span> · {quote.context}</span>}
                 </footer>
               </blockquote>

@@ -5,7 +5,7 @@ import { supabaseServer } from "@/lib/supabase-server";
 // This route lets Fathom automatically create a `sessions` row when a new
 // coaching-call recording is ready, instead of Kegan asking Claude Code to
 // do it by hand. It deliberately does NOT extract wins/tasks/skill-reps/
-// frameworks from the transcript — that stays a human+Claude-Code step for
+// frameworks from the transcript , that stays a human+Claude-Code step for
 // now (see the dispatch contract this was built from).
 
 // --- Signature verification (Svix-style, per Fathom's webhook spec) ---
@@ -18,7 +18,7 @@ import { supabaseServer } from "@/lib/supabase-server";
 const SIGNATURE_TOLERANCE_SECONDS = 5 * 60;
 
 // Same constant-time comparison pattern as
-// app/api/tasks/[id]/toggle/route.ts's `tokensMatch` — a plain !== would
+// app/api/tasks/[id]/toggle/route.ts's `tokensMatch` , a plain !== would
 // leak a timing signal proportional to how many leading characters match,
 // which defeats the point of signing the payload in the first place.
 function signaturesMatch(a: string, b: string): boolean {
@@ -57,7 +57,7 @@ function verifyFathomSignature(
     .digest("base64");
 
   // Fathom may send multiple `v1,<sig>` tokens (space-delimited) during key
-  // rotation — a match on any one of them is valid.
+  // rotation , a match on any one of them is valid.
   const candidates = webhookSignature.split(" ").filter(Boolean);
   return candidates.some((candidate) => {
     const [version, value] = candidate.split(",");
@@ -202,7 +202,7 @@ function parseFathomPayload(payload: unknown): ParsedMeeting | null {
 }
 
 export async function POST(request: Request) {
-  // Raw body text MUST be read before any JSON.parse — the signature is
+  // Raw body text MUST be read before any JSON.parse , the signature is
   // computed over the exact bytes Fathom sent, and a re-serialized JSON
   // body will not byte-match even if it's semantically identical.
   const rawBody = await request.text();
@@ -266,8 +266,8 @@ export async function POST(request: Request) {
     .map((n) => n.toLowerCase());
 
   // v1 matching: does a client's name appear as a case-insensitive
-  // substring of any invitee's display name? This is deliberately naive —
-  // no email matching, no fuzzy matching — because Fathom's payload
+  // substring of any invitee's display name? This is deliberately naive ,
+  // no email matching, no fuzzy matching , because Fathom's payload
   // doesn't reliably give us a stable client identifier (no stored client
   // email to match against yet). If this ever misfires (wrong match, or a
   // client's first name colliding with another invitee), the natural next
@@ -286,14 +286,14 @@ export async function POST(request: Request) {
 
   const client = matches[0];
 
-  // session_number and purpose are left null — there's no reliable way to
+  // session_number and purpose are left null , there's no reliable way to
   // derive either automatically, and the sessions page already renders
   // both fields gracefully when null.
   const row = {
     client_id: client.id,
     fathom_id: fathomIdNumber,
     fathom_url: parsed.url,
-    // Fall back to "now" if Fathom didn't send a parseable date — better
+    // Fall back to "now" if Fathom didn't send a parseable date , better
     // than dropping a real session, though this is an approximation.
     date: parsed.date ?? new Date().toISOString(),
     title: parsed.title,

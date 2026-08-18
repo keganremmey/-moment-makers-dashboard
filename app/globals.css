@@ -1,103 +1,118 @@
 @import "tailwindcss";
 
 :root {
-  /* Warm walnut-wood dojo palette — deliberately warm/brown, never cool gray. */
-  --ink: #16120c;
-  --ink-raised: #221b13;
-  --ink-line: #3a2f22;
-  --paper: #eee0c4;
-  --paper-dim: #c2b190;
-  --brass: #c9a15c;
-  --brass-dim: #8a713f;
-  --moss: #4f6b45;
-  --moss-dark: #33452c;
+  /* Chinese-temple-dojo palette , vivid, dimensional rice paper + lacquer
+     red + jade + gold. A light, warm, saturated base now, not a dark one:
+     --paper is the main surface color, --ink is dark warm-brown text sitting
+     on top of it. */
+  --paper: #f3e9d2;
+  --paper-raised: #fbf4e3;
+  --paper-line: #d8c9a3;
+  --ink: #2a1b12;
+  --ink-dim: #6b5a45;
+  --lacquer: #b3122b;
+  --lacquer-dark: #7a0e1e;
+  --jade: #1f7a53;
+  --jade-dark: #145c3d;
+  --gold: #c9a227;
+  --gold-bright: #e8c558;
 
-  --belt-white: #f2efe6;
-  --belt-gray: #9aa0a8;
-  --belt-blue: #3f7fd6;
-  --belt-purple: #8b5cd6;
-  --belt-brown: #8a5a2e;
-  --belt-black: #1c1b1f;
+  --belt-white: #fbf4e3;
+  --belt-gray: #8fa3ae;
+  --belt-blue: #1e6fb3;
+  --belt-purple: #6a3fa0;
+  --belt-brown: #8b4a1f;
+  --belt-black: #1f1712;
 }
 
 @theme inline {
   --color-ink: var(--ink);
-  --color-ink-raised: var(--ink-raised);
-  --color-ink-line: var(--ink-line);
+  --color-ink-dim: var(--ink-dim);
   --color-paper: var(--paper);
-  --color-paper-dim: var(--paper-dim);
-  --color-brass: var(--brass);
-  --color-brass-dim: var(--brass-dim);
-  --color-moss: var(--moss);
-  --color-moss-dark: var(--moss-dark);
-  --font-display: var(--font-anton);
-  --font-accent: var(--font-fraunces);
-  --font-sans: var(--font-work-sans);
-  --font-mono: var(--font-space-mono);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-line: var(--paper-line);
+  --color-lacquer: var(--lacquer);
+  --color-lacquer-dark: var(--lacquer-dark);
+  --color-jade: var(--jade);
+  --color-jade-dark: var(--jade-dark);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-belt-white: var(--belt-white);
+  --color-belt-gray: var(--belt-gray);
+  --color-belt-blue: var(--belt-blue);
+  --color-belt-purple: var(--belt-purple);
+  --color-belt-brown: var(--belt-brown);
+  --color-belt-black: var(--belt-black);
+  --font-display: var(--font-ibm-plex-sans);
+  --font-accent: var(--font-ibm-plex-sans);
+  --font-sans: var(--font-ibm-plex-sans);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 html {
-  background: var(--ink);
-  color-scheme: dark;
+  background: var(--paper);
+  color-scheme: light;
 }
 
-/* Dojo surface: real horizontal plank seams so the wood reads as
-   floorboards, plus a hand-drawn diagonal fiber-hatch tile (a few static
-   strokes, no runtime filter) — all stacked over a jungle-moss glow in two
-   corners. This layer uses the default (scroll) background attachment, so
-   the browser never has to recomposite it on every scroll frame. */
+/* Rice-paper surface: a hand-authored, static fibrous-grain tile (a handful
+   of short irregular strokes , no runtime noise/turbulence filter; that
+   was removed from this app in a prior pass for scroll performance and
+   must stay out) layered over warm ivory, plus two soft lacquer/jade color
+   washes in opposite corners for depth. Default (scroll) background-
+   attachment , this app deliberately avoids a fixed-position background
+   for laptop scroll performance. */
 body {
-  background-color: var(--ink);
+  background-color: var(--paper);
   background-image:
-    radial-gradient(ellipse at top left, rgba(79, 107, 69, 0.32), transparent 55%),
-    radial-gradient(ellipse at bottom right, rgba(79, 107, 69, 0.22), transparent 50%),
-    repeating-linear-gradient(
-      180deg,
-      transparent 0,
-      transparent 118px,
-      rgba(0, 0, 0, 0.35) 118px,
-      rgba(0, 0, 0, 0.35) 120px
-    ),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cg stroke='%233a2f22' stroke-width='1' opacity='0.4'%3E%3Cline x1='0' y1='56' x2='56' y2='0'/%3E%3Cline x1='-14' y1='42' x2='42' y2='-14'/%3E%3Cline x1='14' y1='70' x2='70' y2='14'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat, repeat, repeat;
-  background-size: cover, cover, 100% 120px, 56px 56px;
-  color: var(--paper);
+    radial-gradient(ellipse at top left, rgba(179, 18, 43, 0.08), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(31, 122, 83, 0.09), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg stroke='%236b5a45' stroke-width='1' fill='none' stroke-linecap='round' opacity='0.5'%3E%3Cpath d='M4 12 Q22 4 40 14'/%3E%3Cpath d='M62 28 Q80 20 100 30'/%3E%3Cpath d='M18 50 Q34 45 48 54'/%3E%3Cpath d='M78 66 Q96 60 116 70'/%3E%3Cpath d='M10 88 Q30 82 50 92'/%3E%3Cpath d='M60 108 Q80 100 100 110'/%3E%3Cpath d='M100 6 Q112 16 104 28'/%3E%3Cpath d='M20 122 Q38 114 56 124'/%3E%3Cline x1='112' y1='46' x2='130' y2='52'/%3E%3Cline x1='4' y1='68' x2='20' y2='62'/%3E%3Cline x1='118' y1='96' x2='134' y2='104'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size: cover, cover, 140px 140px;
+  color: var(--ink);
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   position: relative;
 }
 
-/* The near-invisible fixed bamboo corner accent that used to live here as
-   `body::before` is gone — replaced by the visible, full-width valley-floor
-   scene rendered in normal document flow at the bottom of dashboard pages
-   (see .valley-floor below and app/d/[token]/layout.tsx). */
+/* A small header-flanking bamboo accent now sits above the fold (see
+   app/d/[token]/layout.tsx), alongside the full-width valley-floor scene at
+   the bottom of dashboard pages (see .valley-floor below) , together they
+   bracket every page instead of hiding the motif below the scroll. */
 
-/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout — kept in
-   the accent serif, not the poster face, so this one mark stays soft. */
+/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout , kept in
+   the accent serif, not the poster face, so this one mark stays soft, but
+   colored in the primary lacquer accent so it reads as the brand's seal. */
 .forte-mark {
   font-family: var(--font-accent);
   font-style: italic;
   font-weight: 600;
-  color: var(--brass);
+  color: var(--lacquer);
 }
 
 .card {
   position: relative;
-  background: var(--ink-raised);
-  border: 1px solid var(--ink-line);
+  /* A subtle top-to-base sheen, not a flat fill , the inset highlight
+     below is a 1px line; this is the broader catch-the-light gradient a
+     real lacquered panel face has across its whole surface, not just its
+     top edge. Static (painted once, never transitioned), so it costs
+     nothing at runtime and doesn't touch the transform/opacity-only
+     compositor budget documented below. */
+  background: linear-gradient(180deg, rgba(255, 250, 235, 0.85), var(--paper-raised) 18%);
+  border: 1.5px solid rgba(201, 162, 39, 0.55);
   border-radius: 0.75rem;
-  /* Soft inset highlight along the top edge (light catching a carved wood
-     panel) plus a real drop shadow beneath, so the panel sits ABOVE the
-     grain rather than being painted flush onto it — actual depth, not a
+  /* A raised lacquer/wood panel sitting above the rice paper: a warm,
+     reddish-brown-tinted drop shadow (never neutral gray) plus a soft
+     highlight along the top edge, so the panel reads as real depth, not a
      flat div with a border. Only `transform` transitions here (a cheap,
-     compositor-only property) — the hover-only deeper shadow below is a
+     compositor-only property) , the hover-only deeper shadow below is a
      separate pseudo-element whose `opacity` transitions instead, so no
      frame ever has to repaint a changing box-shadow. */
   box-shadow:
-    inset 0 1px 0 rgba(238, 224, 196, 0.08),
-    inset 0 -1px 0 rgba(22, 18, 12, 0.2),
-    0 6px 16px rgba(22, 18, 12, 0.35),
-    0 1px 3px rgba(22, 18, 12, 0.3);
+    inset 0 1px 0 rgba(255, 250, 235, 0.75),
+    inset 0 -1px 0 rgba(122, 14, 30, 0.1),
+    0 8px 20px rgba(122, 14, 30, 0.16),
+    0 2px 5px rgba(122, 14, 30, 0.22);
   transition: transform 0.15s ease;
 }
 
@@ -109,17 +124,17 @@ body {
   inset: 0;
   border-radius: inherit;
   box-shadow:
-    inset 0 1px 0 rgba(238, 224, 196, 0.1),
-    inset 0 -1px 0 rgba(22, 18, 12, 0.2),
-    0 12px 28px rgba(22, 18, 12, 0.45),
-    0 2px 6px rgba(22, 18, 12, 0.35);
+    inset 0 1px 0 rgba(255, 250, 235, 0.85),
+    inset 0 -1px 0 rgba(122, 14, 30, 0.12),
+    0 16px 34px rgba(122, 14, 30, 0.26),
+    0 4px 10px rgba(122, 14, 30, 0.24);
   opacity: 0;
   transition: opacity 0.15s ease;
   pointer-events: none;
 }
 
-/* Only clickable cards lift on hover — never the static ones (North Star,
-   Skills at a Glance) — so the motion means something: this is a door. */
+/* Only clickable cards lift on hover , never the static ones (North Star,
+   Skills at a Glance) , so the motion means something: this is a door. */
 a.card:hover {
   transform: translateY(-3px);
 }
@@ -128,16 +143,143 @@ a.card:hover::after {
   opacity: 1;
 }
 
+/* Map-to-index highlight: a terrain map click scrolls to and briefly rings
+   this card. Pre-painted at opacity 0 like .card::after above, so the
+   1.5s highlight is an opacity fade, never a box-shadow repaint. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 3px var(--gold-bright),
+    0 0 24px rgba(201, 162, 39, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.card.is-map-highlighted::before {
+  opacity: 1;
+}
+
+/* ---- Buttons ----
+   Every real <button> in this app used to be a plain Tailwind pill with
+   only a hover color/opacity swap , no shadow, no sense that it was a
+   pressable object. These three variants give buttons the same lacquer-
+   panel material language as .card: a small, tight, warm-tinted shadow at
+   rest, and a genuine pressed state on :active (translateY + a flatter,
+   inset shadow) instead of just a hover tint. Only transform, box-shadow,
+   and color-family properties transition , no layout properties , and
+   box-shadow only ever changes on the rare hover/active edges of a small
+   element, not mid-animation, so this stays cheap at this element size. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.55rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  color: var(--paper-raised);
+  background: var(--lacquer);
+  border: 1px solid var(--lacquer-dark);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 1px 0 var(--lacquer-dark),
+    0 4px 10px rgba(122, 14, 30, 0.35);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--lacquer-dark);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 3px rgba(42, 27, 18, 0.45),
+    0 1px 0 var(--lacquer-dark);
+}
+
+/* Recording state: darker still, reading as "engaged" , stays inside the
+   lacquer family instead of dropping in an off-palette generic red. */
+.btn-primary.is-engaged {
+  background: var(--ink);
+  border-color: rgba(42, 27, 18, 0.5);
+}
+
+.btn-primary.is-engaged:hover:not(:disabled) {
+  background: #150e09;
+}
+
+.btn-ghost {
+  color: var(--ink-dim);
+  background: var(--paper-raised);
+  border: 1.5px solid var(--paper-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 235, 0.6),
+    0 1px 2px rgba(122, 14, 30, 0.1);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: var(--lacquer);
+  border-color: var(--lacquer);
+}
+
+.btn-ghost:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 3px rgba(42, 27, 18, 0.18);
+}
+
+.btn-outline {
+  color: var(--lacquer);
+  background: var(--paper-raised);
+  border: 1.5px solid var(--lacquer);
+  box-shadow: 0 2px 6px rgba(122, 14, 30, 0.18);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--lacquer);
+  color: var(--paper);
+}
+
+.btn-outline:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 3px rgba(42, 27, 18, 0.25);
+}
+
 .label {
   font-family: var(--font-mono);
   font-size: 0.9rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
 }
 
 /* Signature element: an actual tied belt laid flat, drawn as a real SVG
-   belt-silhouette (see components/BeltChip.tsx) — a wrap strip with a
+   belt-silhouette (see components/BeltChip.tsx) , a wrap strip with a
    folded knot and two tapered tails crossing at the fold, colored in rank.
    Sized to read as an object across the room, not a UI sliver. */
 .belt {
@@ -158,220 +300,428 @@ a.card:hover::after {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--paper);
+  color: var(--ink);
 }
 
 .belt-caption {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.04em;
-  color: var(--paper-dim);
+  color: var(--ink-dim);
 }
 
 /* ---- Framework terrain map (Library page) ----
-   Flat hand-drawn hills + one true peak (Fortissimo Summit), in the same
-   walnut/moss/brass, no-gradient illustration language as bamboo.svg. */
+   A single commissioned illustration, hosted in Supabase Storage, with
+   every real location name painted directly into the art. Seven tappable
+   zones match the seven painted signs , tapping one opens a popover listing
+   that territory's real frameworks. Same interaction at every viewport
+   width, so there's no separate mobile treatment to maintain. */
 
 .terrain-scroll {
-  background: var(--ink-raised);
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--gold);
+  border-radius: 0.9rem;
+  box-shadow: 0 10px 26px rgba(122, 14, 30, 0.28);
 }
 
-.terrain-hill {
-  fill: var(--moss);
-  opacity: 0.4;
-}
-
-.terrain-contour {
-  fill: none;
-  stroke-width: 1.5;
-}
-
-.terrain-contour-mid {
-  stroke: var(--brass-dim);
-  opacity: 0.35;
-}
-
-.terrain-contour-inner {
-  stroke: var(--brass);
-  opacity: 0.45;
-}
-
-.terrain-ambient-trail {
-  fill: none;
-  stroke: var(--brass-dim);
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 2 14;
-  opacity: 0.4;
-}
-
-.terrain-summit-back {
-  fill: var(--moss);
-  opacity: 0.45;
-}
-
-.terrain-summit-front {
-  fill: var(--moss);
-  opacity: 0.85;
-}
-
-.terrain-summit-cap {
-  fill: var(--brass);
-  opacity: 0.8;
-}
-
-.terrain-summit-line {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 2;
-  opacity: 0.3;
-}
-
-.terrain-route {
-  fill: none;
-  stroke: var(--ink-line);
-  stroke-width: 2;
-  stroke-linecap: round;
-  opacity: 0.55;
-}
-
-.terrain-route.is-active {
-  stroke: var(--brass);
-  stroke-width: 3;
-  opacity: 1;
-}
-
-.terrain-label {
-  transform: translate(-50%, -100%);
-  text-align: center;
-  width: 12rem;
-}
-
-.terrain-label-name {
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--brass);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-}
-
-.terrain-label-blurb {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  color: var(--paper-dim);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
-}
-
-.map-node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
+.territory-marker {
+  position: relative;
   transform: translate(-50%, -50%);
+  display: block;
   background: none;
   border: none;
-  padding: 0.35rem;
+  padding: 0.4rem;
+  margin: -0.4rem;
   cursor: pointer;
-  border-radius: 0.5rem;
 }
 
-.map-node-dot {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--brass);
-  border: 2px solid var(--ink);
-  box-shadow: 0 1px 3px rgba(22, 18, 12, 0.5);
+.territory-marker-dot {
+  display: block;
+  width: 26px;
+  height: 26px;
+  margin-top: -7px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--paper-raised);
+  border: 3px solid var(--gold-bright);
+  box-shadow: 0 0 0 2px var(--ink), 0 3px 10px rgba(42, 27, 18, 0.75);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.map-node.is-summit .map-node-dot {
-  width: 16px;
-  height: 16px;
-  background: var(--paper);
+.territory-marker.is-summit .territory-marker-dot {
+  width: 32px;
+  height: 32px;
+  background: var(--gold-bright);
 }
 
-.map-node-label {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--paper-dim);
-  text-align: center;
-  max-width: 6.75rem;
-  line-height: 1.15;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+.territory-marker:hover .territory-marker-dot,
+.territory-marker.is-open .territory-marker-dot {
+  background: var(--jade);
+  border-color: var(--paper);
+  transform: rotate(-45deg) scale(1.18);
 }
 
-.map-node:hover .map-node-dot,
-.map-node.is-active .map-node-dot {
-  background: var(--moss);
-}
-
-.map-node:hover .map-node-label,
-.map-node.is-active .map-node-label {
-  color: var(--paper);
-}
-
-.map-node:focus-visible {
-  outline: 2px solid var(--brass);
+.territory-marker:focus-visible {
+  outline: 2px solid var(--gold);
   outline-offset: 3px;
+  border-radius: 50%;
+}
+
+.territory-popover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  min-width: 10.5rem;
+  max-width: 14rem;
+  background: var(--paper-raised);
+  border: 1.5px solid var(--gold);
+  border-radius: 0.6rem;
+  box-shadow: 0 14px 28px rgba(122, 14, 30, 0.38);
+  padding: 0.4rem;
+}
+
+.territory-popover--below { transform: translate(var(--tp-x, -50%), 0.85rem); }
+.territory-popover--above { transform: translate(var(--tp-x, -50%), calc(-100% - 0.85rem)); }
+.territory-popover--center { --tp-x: -50%; }
+.territory-popover--right { --tp-x: 0.5rem; }
+.territory-popover--left { --tp-x: calc(-100% - 0.5rem); }
+
+.territory-popover-title {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  padding: 0.2rem 0.5rem 0.4rem;
+  border-bottom: 1px solid var(--paper-line);
+  margin-bottom: 0.3rem;
+}
+
+.territory-popover-empty {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  color: var(--ink-dim);
+}
+
+.territory-popover-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.35rem;
+  font-size: 0.85rem;
+  line-height: 1.25;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.territory-popover-item:hover,
+.territory-popover-item:focus-visible {
+  background: var(--lacquer);
+  color: var(--paper);
+  outline: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .map-node-dot,
-  .map-node-label,
-  .terrain-route {
+  .map-node-label {
     transition:
       background-color 0.15s ease,
       color 0.15s ease,
-      stroke 0.15s ease,
-      stroke-width 0.15s ease,
       opacity 0.15s ease;
+  }
+
+  .territory-marker-dot {
+    transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
   }
 }
 
 /* The one deliberate per-client flourish: a client's identity word, colored
    with their own accent_hex (set inline as --client-accent), falling back to
-   the shared brass token when a client has none set. Nothing else on the
-   page is tinted per-client. */
+   the shared lacquer token , the app's primary accent , when a client has
+   none set. Nothing else on the page is tinted per-client. */
 .flourish {
-  color: var(--client-accent, var(--brass));
+  color: var(--client-accent, var(--lacquer));
 }
 
-/* Mission timeline: real elapsed time toward a client's stated deadline,
-   in the header of every page. A thin track (unfilled = ink-line) with a
-   brass fill for days already walked — same visual grammar as the belt
-   strap's progress fill, so "time" and "reps" read as the same kind of
-   progress in this system. */
+/* Mission timeline: real elapsed time toward a client's stated deadline, in
+   the header of every page. Milestone ticks (not just a bare fill) turn
+   "time passing" into real waypoints , each one a day count you can actually
+   aim for, with the next one surfaced below as a one-line, real-quote nudge
+   instead of a bare percentage. */
 .mission-timeline {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
 .mission-timeline-track {
-  height: 0.4rem;
+  position: relative;
+  height: 0.55rem;
   border-radius: 999px;
-  background: var(--ink-line);
-  overflow: hidden;
+  background: var(--paper-line);
+  /* A carved-groove read , an inset shadow instead of a flat tint, so the
+     track reads as cut into the panel rather than painted on top of it. */
+  box-shadow: inset 0 1px 3px rgba(42, 27, 18, 0.25);
+  overflow: visible;
 }
 
 .mission-timeline-fill {
   height: 100%;
-  background: var(--brass);
+  background: linear-gradient(180deg, var(--lacquer), var(--lacquer-dark));
   border-radius: 999px;
 }
 
-.mission-timeline-caption {
+.mission-tick {
+  position: absolute;
+  top: 50%;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--paper-raised);
+  border: 1.5px solid var(--ink-dim);
+  transform: translate(-50%, -50%);
+}
+
+.mission-tick.is-passed {
+  background: var(--gold);
+  border-color: var(--gold-bright);
+}
+
+.mission-tick.is-final {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-color: var(--lacquer-dark);
+}
+
+.mission-tick.is-final.is-passed {
+  background: var(--gold-bright);
+}
+
+.mission-tick-labels {
+  position: relative;
+  height: 0.9rem;
+}
+
+.mission-tick-label {
+  position: absolute;
+  transform: translateX(-50%);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+
+.mission-tick-label.is-passed {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* Stat plate: a dark lacquer plaque with a gold frame and corner brackets ,
+   the "Hunter License stat card" reference, translated into this app's own
+   materials (ink + gold, not sci-fi neon chrome). Dark background is the
+   actual fix for legibility: thin text directly on the light, busy paper
+   grain was unreadable, and a dark plate breaks that contrast outright
+   instead of just nudging font-weight. */
+.mission-stat-plate {
+  position: relative;
+  background: var(--ink);
+  border: 1.5px solid var(--gold);
+  border-radius: 0.6rem;
+  padding: 0.85rem 1.1rem 0.9rem;
+  box-shadow:
+    inset 0 0 0 3px rgba(0, 0, 0, 0.25),
+    0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
+.mission-stat-plate::before,
+.mission-stat-plate::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.mission-stat-plate::before {
+  top: -1.5px;
+  left: -1.5px;
+  border-top: 2.5px solid var(--gold-bright);
+  border-left: 2.5px solid var(--gold-bright);
+  border-top-left-radius: 0.4rem;
+}
+
+.mission-stat-plate::after {
+  bottom: -1.5px;
+  right: -1.5px;
+  border-bottom: 2.5px solid var(--gold-bright);
+  border-right: 2.5px solid var(--gold-bright);
+  border-bottom-right-radius: 0.4rem;
+}
+
+.mission-stat-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.mission-stat-day {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--gold-bright);
+  text-shadow: 0 1px 0 rgba(42, 27, 18, 0.55);
+}
+
+.mission-stat-of {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper-line);
+}
+
+.mission-timeline-caption {
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
   letter-spacing: 0.03em;
-  color: var(--paper-dim);
+  color: var(--paper);
+}
+
+.mission-quote {
+  margin-top: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--paper-line);
+}
+
+.mission-quote-text {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--gold-bright);
+}
+
+/* ---- Sidebar (persistent left rail, lg and up) ----
+   Same dark-lacquer plaque surface as .mission-stat-plate, so the two dark
+   elements in an otherwise light rice-paper app read as one deliberate
+   material, not two unrelated dark patches. Sticky, not fixed: it scrolls
+   away with the page on very tall content instead of overlapping the
+   valley-floor scene at the bottom. */
+.sidebar {
+  position: sticky;
+  top: 0;
+  flex: none;
+  width: 15.5rem;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: var(--ink);
+  border-right: 1.5px solid rgba(201, 162, 39, 0.35);
+  padding: 1.5rem 1.1rem;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(216, 201, 163, 0.15);
+  margin-bottom: 1.25rem;
+}
+
+.sidebar-brand-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-line);
+}
+
+.sidebar-brand-name {
+  margin-top: 0.15rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.1;
+  color: var(--gold-bright);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.5rem;
+  border-left: 2.5px solid transparent;
+  font-size: 0.92rem;
+  color: var(--paper-line);
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar-link:hover {
+  color: var(--paper);
+  background: rgba(216, 201, 163, 0.06);
+}
+
+.sidebar-link.is-active {
+  color: var(--gold-bright);
+  background: rgba(201, 162, 39, 0.12);
+  border-left-color: var(--gold-bright);
+}
+
+.sidebar-footer {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-dim);
+}
+
+/* Mobile tab bar (below lg, where the sidebar is hidden): mirrors the
+   sidebar's is-active language , a colored border accent plus a tinted,
+   slightly raised background , so navigation reads as one consistent
+   material at every viewport, not a plain color-swap on small screens. */
+.dashboard-tab {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-dim);
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.dashboard-tab:hover {
+  color: var(--ink);
+}
+
+.dashboard-tab.is-active {
+  background: var(--paper-raised);
+  color: var(--lacquer);
+  border-bottom-color: var(--lacquer);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 250, 235, 0.7),
+    0 -1px 4px rgba(122, 14, 30, 0.08);
 }
 
 /* Valley floor: the full-bleed signature scene at the bottom of every
-   dashboard page — layered mountain silhouettes echoing Fortissimo Summit
+   dashboard page , layered mountain silhouettes echoing Fortissimo Summit
    plus bamboo clusters at the base (see public/valley-floor.svg). Sits in
    normal document flow (never `position: fixed`) so it fills the page
    instead of floating over it, and scales by width so it never creates its

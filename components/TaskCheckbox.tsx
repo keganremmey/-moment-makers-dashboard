@@ -26,7 +26,7 @@ export function TaskCheckbox({
       });
 
       if (!res.ok) {
-        setError("Couldn't save — try again.");
+        setError("Couldn't save, try again.");
         return;
       }
 
@@ -41,7 +41,7 @@ export function TaskCheckbox({
         checked={done}
         disabled={isPending}
         onChange={toggle}
-        className="h-4 w-4 accent-[var(--brass)]"
+        className="h-4 w-4 accent-[var(--lacquer)]"
         aria-label={done ? "Mark task open" : "Mark task done"}
       />
       {error && <span className="text-sm text-red-400">{error}</span>}

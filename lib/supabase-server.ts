@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Server-only Supabase client using the service-role key. This must never be
-// imported from a Client Component or anything that ships to the browser —
+// imported from a Client Component or anything that ships to the browser ,
 // it bypasses Row Level Security entirely. There is no anon/publishable key
 // in this app: RLS is default-deny on every table, so the service role is
 // the only way in, and access control lives in application code (the

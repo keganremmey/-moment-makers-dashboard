@@ -19,14 +19,14 @@ function TaskGroup({
     <section className="card p-5">
       <p className="label">{title}</p>
       {tasks.length === 0 ? (
-        <p className="mt-3 text-base text-paper-dim">{emptyLabel}</p>
+        <p className="mt-3 text-base text-ink-dim">{emptyLabel}</p>
       ) : (
         <ul className="mt-3 flex flex-col gap-3">
           {tasks.map((task) => (
             <li
               key={task.id}
-              className={`flex items-start gap-3 border-b border-ink-line pb-3 last:border-none last:pb-0 ${
-                flagged ? "text-brass" : "text-paper"
+              className={`flex items-start gap-3 border-b border-paper-line pb-3 last:border-none last:pb-0 ${
+                flagged ? "text-lacquer" : "text-ink"
               }`}
             >
               <TaskCheckbox
@@ -37,10 +37,10 @@ function TaskGroup({
               <div>
                 <p className="text-base leading-snug">{task.title}</p>
                 {task.note && (
-                  <p className="mt-1 text-sm text-paper-dim">{task.note}</p>
+                  <p className="mt-1 text-sm text-ink-dim">{task.note}</p>
                 )}
                 {task.assigned_date && (
-                  <p className="mt-1 text-xs text-paper-dim">
+                  <p className="mt-1 text-xs text-ink-dim">
                     Assigned {task.assigned_date}
                   </p>
                 )}
@@ -66,7 +66,7 @@ export default async function TasksPage(props: PageProps<"/d/[token]/tasks">) {
   return (
     <div className="flex flex-col gap-6">
       <TaskGroup
-        title="Slipped — needs a look"
+        title="Slipped, needs a look"
         tasks={slipped}
         token={token}
         emptyLabel="Nothing slipped right now."

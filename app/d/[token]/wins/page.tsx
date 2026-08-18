@@ -16,7 +16,7 @@ export default async function WinsPage(props: PageProps<"/d/[token]/wins">) {
   return (
     <div className="flex flex-col gap-4">
       {wins.length === 0 && (
-        <p className="text-base text-paper-dim">No wins logged yet.</p>
+        <p className="text-base text-ink-dim">No wins logged yet.</p>
       )}
       {wins.map((win) => {
         const session = win.source_session_fathom_id
@@ -26,16 +26,16 @@ export default async function WinsPage(props: PageProps<"/d/[token]/wins">) {
         return (
           <article key={win.id} className="card p-5">
             <p className="label">{win.date}</p>
-            <h2 className="mt-2 font-display text-lg text-paper">
+            <h2 className="mt-2 font-display text-lg text-ink">
               {win.title}
             </h2>
             {win.description && (
-              <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-paper-dim">
+              <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-ink-dim">
                 {win.description}
               </p>
             )}
             {session && (
-              <p className="mt-3 text-sm text-brass">
+              <p className="mt-3 text-sm text-gold">
                 From: {session.title} ({session.date})
               </p>
             )}

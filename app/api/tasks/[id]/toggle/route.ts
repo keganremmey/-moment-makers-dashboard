@@ -15,7 +15,7 @@ function tokensMatch(a: string, b: string): boolean {
 }
 
 // This is the only write path in the whole app, and there is no session or
-// cookie auth anywhere else — the per-client access_token IS the
+// cookie auth anywhere else , the per-client access_token IS the
 // credential. So every write re-verifies the token server-side against the
 // task's own client, on every request, regardless of what the UI already
 // checked.

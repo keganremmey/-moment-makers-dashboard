@@ -1,310 +1,206 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Framework } from "@/lib/data";
 import { TERRITORIES, FRAMEWORK_TERRITORY, FRAMEWORK_ROUTES } from "@/lib/framework-map";
 
-// Intrinsic canvas size in SVG viewBox units. Node/label positions are
-// computed once in this coordinate space, then placed with the HTML
-// overlay using percentages of it — so the whole map scales as one piece
-// regardless of rendered width, with no per-framework hotspot coordinates
-// hand-picked against a flat image.
-const VB_W = 1440;
-const VB_H = 1160;
+// The map is a single painted illustration, hosted in Supabase Storage
+// (not bundled as a Next.js static asset , see TERRAIN_MAP_URL) , commissioned
+// via an image generator from a prompt naming every real territory and its
+// exact signage text, then hand-verified against lib/framework-map.ts for
+// accuracy before shipping.
+//
+// Interaction model: one tappable zone per painted sign (7 territories, not
+// one per framework). Tapping a sign opens a small popover listing that
+// territory's real frameworks; tapping a framework in the popover jumps to
+// its card in the index below. Earlier this used one marker per framework
+// (19 of them) placed directly on the image , fine on a wide desktop canvas,
+// unreadable crammed onto a phone-width image. Territory zones match what's
+// actually painted on the art, so the same interaction works at any size
+// without a separate mobile layout.
+const TERRAIN_MAP_URL =
+  "https://puvfoarakheoyhkvmyef.supabase.co/storage/v1/object/public/site-assets/terrain-map.jpg";
 
 type TerritoryId = (typeof TERRITORIES)[number]["id"];
 
-// Where each terrain feature sits. Fortissimo Summit is the one true peak
-// (smallest cy = highest on the canvas); the six stuck-state regions sit
-// lower around it, in two generously spaced rows, so every climbing route
-// visibly reads uphill and each region's ambient label has clear air above
-// its own hill instead of crowding into a neighbor's.
-const TERRAIN_LAYOUT: Record<TerritoryId, { cx: number; cy: number; rx: number; ry: number }> = {
-  summit: { cx: 760, cy: 170, rx: 140, ry: 100 },
-  swamp: { cx: 260, cy: 560, rx: 190, ry: 130 },
-  flatlands: { cx: 760, cy: 560, rx: 150, ry: 100 },
-  "frozen-lake": { cx: 1160, cy: 560, rx: 170, ry: 120 },
-  valley: { cx: 260, cy: 980, rx: 170, ry: 120 },
-  fog: { cx: 760, cy: 1000, rx: 150, ry: 90 },
-  crossroads: { cx: 1160, cy: 980, rx: 170, ry: 120 },
+// Center point of each territory's real signage in the image, in
+// percent-of-image units, hand-matched against the artwork.
+const TERRITORY_SPOT: Record<TerritoryId, { cx: number; cy: number }> = {
+  summit: { cx: 54, cy: 30 },
+  valley: { cx: 41, cy: 62 },
+  fog: { cx: 21, cy: 76 },
+  crossroads: { cx: 62, cy: 71 },
+  flatlands: { cx: 82, cy: 63 },
+  swamp: { cx: 32, cy: 78 },
+  "frozen-lake": { cx: 76, cy: 68 },
 };
-
-// One hand-picked asymmetry pattern per ground-level region so each hill
-// silhouette reads as organic rather than a perfect ellipse — deterministic
-// (no Math.random) so server/client output can never mismatch.
-const HILL_JITTER: Record<Exclude<TerritoryId, "summit">, number[]> = {
-  swamp: [1, 0.88, 1.1, 0.92, 1.06, 0.85, 1.12, 0.95],
-  fog: [0.92, 1.08, 0.9, 1.14, 0.88, 1.05, 0.94, 1.1],
-  "frozen-lake": [1.1, 0.9, 1.05, 0.88, 1.12, 0.92, 1.02, 0.96],
-  valley: [0.95, 1.12, 0.86, 1.08, 0.98, 1.15, 0.88, 1.04],
-  flatlands: [1.05, 0.92, 1.1, 0.9, 1.02, 1.08, 0.94, 1.12],
-  crossroads: [0.9, 1.06, 0.94, 1.1, 0.86, 1.04, 1.12, 0.96],
-};
-
-/** A closed, softly irregular blob path — flat hand-drawn hill silhouette,
- * not a perfect ellipse, matching bamboo.svg's flat-shape illustration style. */
-function blobPath(cx: number, cy: number, rx: number, ry: number, jitter: number[]) {
-  const n = jitter.length;
-  const pts = jitter.map((r, i) => {
-    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-    return [cx + Math.cos(angle) * rx * r, cy + Math.sin(angle) * ry * r];
-  });
-  let d = `M ${(pts[0][0] + pts[n - 1][0]) / 2} ${(pts[0][1] + pts[n - 1][1]) / 2}`;
-  for (let i = 0; i < n; i++) {
-    const cur = pts[i];
-    const next = pts[(i + 1) % n];
-    const mid = [(cur[0] + next[0]) / 2, (cur[1] + next[1]) / 2];
-    d += ` Q ${cur[0]} ${cur[1]} ${mid[0]} ${mid[1]}`;
-  }
-  return d + " Z";
-}
-
-/** Evenly spaced points on a ring inside a territory, so node placement is
- * computed from how many frameworks live there, not hand-picked per slug. */
-function ringPositions(cx: number, cy: number, rx: number, ry: number, count: number) {
-  if (count <= 0) return [];
-  if (count === 1) return [{ x: cx, y: cy }];
-  const points: { x: number; y: number }[] = [];
-  for (let i = 0; i < count; i++) {
-    const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-    points.push({ x: cx + Math.cos(angle) * rx * 0.6, y: cy + Math.sin(angle) * ry * 0.6 });
-  }
-  return points;
-}
-
-/** A curved trail between two nodes, bowed perpendicular to the line so
- * routes read as hand-drawn paths rather than ruler-straight connectors. */
-function curvePath(x1: number, y1: number, x2: number, y2: number) {
-  const mx = (x1 + x2) / 2;
-  const my = (y1 + y2) / 2;
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const len = Math.hypot(dx, dy) || 1;
-  const nx = -dy / len;
-  const ny = dx / len;
-  const bow = Math.min(70, len * 0.22);
-  const cx = mx + nx * bow;
-  const cy = my + ny * bow;
-  return `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
-}
 
 export function FrameworkTerrainMap({ frameworks }: { frameworks: Framework[] }) {
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [focused, setFocused] = useState<string | null>(null);
-  const active = focused ?? hovered;
+  const [openTerritory, setOpenTerritory] = useState<TerritoryId | null>(null);
+  const [activeFramework, setActiveFramework] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   const frameworksBySlug = useMemo(
     () => new Map(frameworks.map((f) => [f.slug, f])),
     [frameworks]
   );
 
-  // Node positions come from the fixed territory graph, not from the live
-  // Supabase rows — a framework slug that doesn't appear in the map data
-  // simply never gets a position, and is skipped below rather than crashing.
-  const nodePositions = useMemo(() => {
-    const bySlug = new Map<string, { x: number; y: number; territory: TerritoryId }>();
-    const slugsByTerritory = new Map<TerritoryId, string[]>();
+  // Real frameworks grouped by territory, filtered to what's actually live
+  // in Supabase , a slug in FRAMEWORK_TERRITORY with no matching row simply
+  // never appears, rather than showing a broken entry.
+  const frameworksByTerritory = useMemo(() => {
+    const bySlug = new Map<TerritoryId, Framework[]>();
     for (const [slug, territory] of Object.entries(FRAMEWORK_TERRITORY)) {
-      const list = slugsByTerritory.get(territory) ?? [];
-      list.push(slug);
-      slugsByTerritory.set(territory, list);
-    }
-    for (const territory of TERRITORIES) {
-      const slugs = slugsByTerritory.get(territory.id) ?? [];
-      const layout = TERRAIN_LAYOUT[territory.id];
-      const points = ringPositions(layout.cx, layout.cy, layout.rx, layout.ry, slugs.length);
-      slugs.forEach((slug, i) => {
-        bySlug.set(slug, { x: points[i].x, y: points[i].y, territory: territory.id });
-      });
+      const framework = frameworksBySlug.get(slug);
+      if (!framework) continue;
+      const list = bySlug.get(territory as TerritoryId) ?? [];
+      list.push(framework);
+      bySlug.set(territory as TerritoryId, list);
     }
     return bySlug;
-  }, []);
+  }, [frameworksBySlug]);
 
-  const visibleFrameworks = frameworks.filter((f) => nodePositions.has(f.slug));
+  // Close the open popover on an outside click/tap or Escape , a popover
+  // stuck open until you happen to tap another sign reads as broken.
+  useEffect(() => {
+    if (!openTerritory) return;
+    function handlePointerDown(e: PointerEvent) {
+      if (canvasRef.current && !canvasRef.current.contains(e.target as Node)) {
+        setOpenTerritory(null);
+      }
+    }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpenTerritory(null);
+    }
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openTerritory]);
 
-  const routes = useMemo(
-    () =>
-      FRAMEWORK_ROUTES.filter(
-        (r) =>
-          nodePositions.has(r.from) &&
-          nodePositions.has(r.to) &&
-          frameworksBySlug.has(r.from) &&
-          frameworksBySlug.has(r.to)
-      ).map((r) => {
-        const from = nodePositions.get(r.from)!;
-        const to = nodePositions.get(r.to)!;
-        return { ...r, path: curvePath(from.x, from.y, to.x, to.y) };
-      }),
-    [nodePositions, frameworksBySlug]
-  );
+  // Jump to this framework's card in the Framework Index list further down
+  // and give it a brief highlight ring , a direct DOM lookup by id, no
+  // lifted state or context provider needed for a one-shot scroll + timed
+  // class toggle.
+  function selectFramework(slug: string) {
+    setActiveFramework(slug);
+    setOpenTerritory(null);
+    const target = document.getElementById(`framework-index-${slug}`);
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("is-map-highlighted");
+    window.setTimeout(() => target.classList.remove("is-map-highlighted"), 1500);
+  }
 
-  const activeFramework = active ? frameworksBySlug.get(active) ?? null : null;
-  const activeRoutes = active ? routes.filter((r) => r.from === active) : [];
-  const groundTerritories = TERRITORIES.filter(
-    (t): t is typeof TERRITORIES[number] & { id: Exclude<TerritoryId, "summit"> } => t.id !== "summit"
-  );
+  const activeFrameworkData = activeFramework ? frameworksBySlug.get(activeFramework) ?? null : null;
+  const activeRoutes = activeFramework
+    ? FRAMEWORK_ROUTES.filter((r) => r.from === activeFramework && frameworksBySlug.has(r.to))
+    : [];
 
   return (
     <div className="flex flex-col gap-4">
       <div>
         <p className="label">Framework Map</p>
-        <p className="mt-1 text-sm text-paper-dim">
-          Tab or hover over a location to see what it does and where it
-          leads. Every trail climbs toward Fortissimo Summit.
+        <p className="mt-1 text-sm text-ink-dim">
+          Tap a location on the map to see the tools that live there. Every
+          trail climbs toward Fortissimo Summit.
         </p>
       </div>
 
-      <div className="terrain-scroll overflow-x-auto rounded-xl border border-ink-line p-4">
+      <div className="terrain-scroll">
         <div
+          ref={canvasRef}
           className="terrain-canvas relative w-full"
-          style={{ aspectRatio: `${VB_W} / ${VB_H}`, minWidth: "820px" }}
+          style={{ aspectRatio: "1402 / 1122" }}
         >
-          <svg
-            viewBox={`0 0 ${VB_W} ${VB_H}`}
-            className="absolute inset-0 h-full w-full"
-            aria-hidden="true"
-          >
-            {/* ambient trail sweeping up from the lower ground toward the peak */}
-            <path
-              d="M 120 1080 Q 260 940 300 760 Q 400 600 550 480 Q 680 320 760 170"
-              className="terrain-ambient-trail"
-            />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={TERRAIN_MAP_URL}
+            alt="An illustrated map: a winding path climbs from Waffle Swamp, Self-Doubt Fog, Lonely Lake, The Shrinking Valley, The Flatlands, and The Crossroads up to Fortissimo Summit."
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+          />
 
-            {/* six ground-level regions: flat hill silhouettes with
-                topographic contour rings, echoing bamboo.svg's flat-shape,
-                layered-opacity language */}
-            {groundTerritories.map((t) => {
-              const layout = TERRAIN_LAYOUT[t.id];
-              const jitter = HILL_JITTER[t.id];
-              return (
-                <g key={t.id}>
-                  <path
-                    d={blobPath(layout.cx, layout.cy, layout.rx, layout.ry, jitter)}
-                    className="terrain-hill"
-                  />
-                  <path
-                    d={blobPath(layout.cx, layout.cy, layout.rx * 0.72, layout.ry * 0.72, jitter)}
-                    className="terrain-contour terrain-contour-mid"
-                  />
-                  <path
-                    d={blobPath(layout.cx, layout.cy, layout.rx * 0.44, layout.ry * 0.44, jitter)}
-                    className="terrain-contour terrain-contour-inner"
-                  />
-                </g>
-              );
-            })}
+          {TERRITORIES.map((territory) => {
+            const spot = TERRITORY_SPOT[territory.id];
+            const territoryFrameworks = frameworksByTerritory.get(territory.id) ?? [];
+            const isOpen = openTerritory === territory.id;
+            const vertical = spot.cy < 45 ? "below" : "above";
+            const horizontal = spot.cx < 35 ? "right" : spot.cx > 65 ? "left" : "center";
 
-            {/* Fortissimo Summit: a real peak, not another hill — the one
-                shared destination every route climbs toward */}
-            {(() => {
-              const s = TERRAIN_LAYOUT.summit;
-              return (
-                <g>
-                  <path
-                    d={`M ${s.cx - 150} ${s.cy + 110} L ${s.cx - 46} ${s.cy - 80} L ${s.cx - 6} ${s.cy - 130} L ${s.cx + 36} ${s.cy - 78} L ${s.cx + 150} ${s.cy + 110} Z`}
-                    className="terrain-summit-back"
-                  />
-                  <path
-                    d={`M ${s.cx - 96} ${s.cy + 110} L ${s.cx - 10} ${s.cy - 130} L ${s.cx + 78} ${s.cy + 110} Z`}
-                    className="terrain-summit-front"
-                  />
-                  <path
-                    d={`M ${s.cx - 26} ${s.cy - 62} L ${s.cx - 10} ${s.cy - 130} L ${s.cx + 20} ${s.cy - 58} Z`}
-                    className="terrain-summit-cap"
-                  />
-                  <path d={`M ${s.cx - 60} ${s.cy - 10} q 40 -14 76 4`} className="terrain-summit-line" />
-                  <path d={`M ${s.cx - 78} ${s.cy + 40} q 56 -18 108 4`} className="terrain-summit-line" />
-                </g>
-              );
-            })()}
-
-            {/* functional routes: curved trails between real frameworks */}
-            {routes.map((r) => (
-              <path
-                key={`${r.from}->${r.to}`}
-                d={r.path}
-                className={`terrain-route${active === r.from ? " is-active" : ""}`}
-              />
-            ))}
-          </svg>
-
-          {/* ambient territory labels — decorative text only, never a
-              second clickable layer */}
-          {TERRITORIES.map((t) => {
-            const layout = TERRAIN_LAYOUT[t.id];
             return (
-              <div
-                key={t.id}
-                className="terrain-label pointer-events-none absolute"
-                style={{
-                  left: `${(layout.cx / VB_W) * 100}%`,
-                  top: `${((layout.cy - layout.ry - 22) / VB_H) * 100}%`,
-                }}
-              >
-                <p className="terrain-label-name">{t.name}</p>
-                <p className="terrain-label-blurb">{t.blurb}</p>
+              <div key={territory.id} className="absolute" style={{ left: `${spot.cx}%`, top: `${spot.cy}%` }}>
+                <button
+                  type="button"
+                  className={`territory-marker${isOpen ? " is-open" : ""}${
+                    territory.id === "summit" ? " is-summit" : ""
+                  }`}
+                  aria-expanded={isOpen}
+                  aria-haspopup="true"
+                  onClick={() =>
+                    setOpenTerritory((current) => (current === territory.id ? null : territory.id))
+                  }
+                >
+                  <span className="sr-only">{territory.name}</span>
+                  <span className="territory-marker-dot" />
+                </button>
+
+                {isOpen && (
+                  <div
+                    className={`territory-popover territory-popover--${vertical} territory-popover--${horizontal}`}
+                    role="menu"
+                  >
+                    <p className="territory-popover-title">{territory.name}</p>
+                    {territoryFrameworks.length === 0 ? (
+                      <p className="territory-popover-empty">No tools logged here yet.</p>
+                    ) : (
+                      territoryFrameworks.map((framework) => (
+                        <button
+                          key={framework.id}
+                          type="button"
+                          role="menuitem"
+                          className="territory-popover-item"
+                          onClick={() => selectFramework(framework.slug)}
+                        >
+                          {framework.name}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
               </div>
-            );
-          })}
-
-          {/* real, focusable location markers */}
-          {visibleFrameworks.map((framework) => {
-            const pos = nodePositions.get(framework.slug)!;
-            const territory = TERRITORIES.find((t) => t.id === pos.territory);
-            const isActive = active === framework.slug;
-            return (
-              <button
-                key={framework.id}
-                type="button"
-                className={`map-node absolute${isActive ? " is-active" : ""}${
-                  pos.territory === "summit" ? " is-summit" : ""
-                }`}
-                style={{ left: `${(pos.x / VB_W) * 100}%`, top: `${(pos.y / VB_H) * 100}%` }}
-                onMouseEnter={() => setHovered(framework.slug)}
-                onMouseLeave={() => setHovered((h) => (h === framework.slug ? null : h))}
-                onFocus={() => setFocused(framework.slug)}
-                onBlur={() => setFocused((f) => (f === framework.slug ? null : f))}
-                aria-describedby="terrain-map-panel"
-              >
-                <span className="map-node-dot" />
-                <span className="map-node-label">
-                  {framework.name}
-                  <span className="sr-only"> — {territory?.name ?? "unmapped"}</span>
-                </span>
-              </button>
             );
           })}
         </div>
       </div>
-      <p className="text-xs text-paper-dim sm:hidden">
-        Scroll sideways to explore the full map →
-      </p>
 
       <div id="terrain-map-panel" className="card p-5" aria-live="polite">
-        {activeFramework ? (
+        {activeFrameworkData ? (
           <>
-            <h3 className="font-display text-lg text-paper">{activeFramework.name}</h3>
-            {activeFramework.summary && (
-              <p className="mt-1 text-base text-paper-dim">{activeFramework.summary}</p>
+            <h3 className="font-display text-lg text-ink">{activeFrameworkData.name}</h3>
+            {activeFrameworkData.summary && (
+              <p className="mt-1 text-base text-ink-dim">{activeFrameworkData.summary}</p>
             )}
-            {activeFramework.steps.length > 0 && (
+            {activeFrameworkData.steps.length > 0 && (
               <ol className="mt-3 flex flex-col gap-1.5">
-                {activeFramework.steps.map((step, i) => (
-                  <li key={i} className="text-base text-paper">
-                    <span className="mr-2 font-mono text-sm text-brass">{i + 1}</span>
+                {activeFrameworkData.steps.map((step, i) => (
+                  <li key={i} className="text-base text-ink">
+                    <span className="mr-2 font-mono text-sm text-gold">{i + 1}</span>
                     {step}
                   </li>
                 ))}
               </ol>
             )}
             {activeRoutes.length > 0 && (
-              <ul className="mt-4 flex flex-col gap-2 border-t border-ink-line pt-3">
+              <ul className="mt-4 flex flex-col gap-2 border-t border-paper-line pt-3">
                 {activeRoutes.map((r) => {
                   const dest = frameworksBySlug.get(r.to);
                   if (!dest) return null;
                   return (
-                    <li key={r.to} className="text-sm text-paper-dim">
-                      <span className="text-brass">→ {dest.name}:</span> {r.note}
+                    <li key={r.to} className="text-sm text-ink-dim">
+                      <span className="text-gold">→ {dest.name}:</span> {r.note}
                     </li>
                   );
                 })}
@@ -316,8 +212,8 @@ export function FrameworkTerrainMap({ frameworks }: { frameworks: Framework[] })
             <p className="label">Terrain key</p>
             <ul className="mt-3 flex flex-col gap-2">
               {TERRITORIES.map((t) => (
-                <li key={t.id} className="text-sm text-paper-dim">
-                  <span className="text-paper">{t.name}:</span> {t.blurb}
+                <li key={t.id} className="text-sm text-ink-dim">
+                  <span className="text-ink">{t.name}:</span> {t.blurb}
                 </li>
               ))}
             </ul>

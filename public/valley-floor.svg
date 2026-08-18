@@ -9,63 +9,63 @@
   <!-- farthest range, most translucent -->
   <path
     d="M0 220 L110 150 L200 190 L310 110 L430 175 L560 90 L690 165 L820 120 L950 185 L1080 130 L1210 190 L1330 150 L1440 175 L1440 300 L0 300 Z"
-    fill="#33452c"
+    fill="#145C3D"
     opacity="0.45"
   />
 
   <!-- mid range -->
   <path
     d="M0 250 L160 190 L300 235 L450 165 L600 230 L760 155 L900 225 L1050 175 L1200 240 L1440 205 L1440 300 L0 300 Z"
-    fill="#4f6b45"
+    fill="#1F7A53"
     opacity="0.65"
   />
 
   <!-- near ridge, with two summit-style peaks (brass cap) closest to the viewer -->
   <path
     d="M0 280 L140 245 L260 270 L340 200 L360 200 L440 270 L560 250 L640 190 L660 190 L740 250 L860 260 L960 220 L1180 260 L1440 240 L1440 300 L0 300 Z"
-    fill="#33452c"
+    fill="#145C3D"
     opacity="0.85"
   />
   <g opacity="0.9">
-    <path d="M280 270 L330 190 L350 165 L370 190 L420 270 Z" fill="#33452c" />
-    <path d="M310 270 L350 175 L390 270 Z" fill="#4f6b45" />
-    <path d="M340 215 L350 175 L362 213 Z" fill="#c9a15c" />
+    <path d="M280 270 L330 190 L350 165 L370 190 L420 270 Z" fill="#145C3D" />
+    <path d="M310 270 L350 175 L390 270 Z" fill="#1F7A53" />
+    <path d="M340 215 L350 175 L362 213 Z" fill="#C9A227" />
   </g>
   <g opacity="0.92">
-    <path d="M580 260 L630 175 L650 148 L670 175 L720 260 Z" fill="#33452c" />
-    <path d="M610 260 L650 158 L690 260 Z" fill="#4f6b45" />
-    <path d="M640 200 L650 158 L662 198 Z" fill="#c9a15c" />
+    <path d="M580 260 L630 175 L650 148 L670 175 L720 260 Z" fill="#145C3D" />
+    <path d="M610 260 L650 158 L690 260 Z" fill="#1F7A53" />
+    <path d="M640 200 L650 158 L662 198 Z" fill="#C9A227" />
   </g>
 
   <!-- bamboo clusters at the base, echoing public/bamboo.svg's stalk style -->
   <g opacity="0.8">
-    <path d="M110 300 L110 210 Q110 198 118 198 Q126 198 126 210 L126 300 Z" fill="#4f6b45" />
-    <rect x="108" y="230" width="20" height="5" rx="2.5" fill="#16120c" opacity="0.35" />
-    <rect x="108" y="260" width="20" height="5" rx="2.5" fill="#16120c" opacity="0.35" />
-    <path d="M118 214 Q78 190 72 158 Q112 172 118 214Z" fill="#4f6b45" />
-    <path d="M126 232 Q168 216 178 188 Q136 198 126 232Z" fill="#4f6b45" />
+    <path d="M110 300 L110 210 Q110 198 118 198 Q126 198 126 210 L126 300 Z" fill="#1F7A53" />
+    <rect x="108" y="230" width="20" height="5" rx="2.5" fill="#2A1B12" opacity="0.35" />
+    <rect x="108" y="260" width="20" height="5" rx="2.5" fill="#2A1B12" opacity="0.35" />
+    <path d="M118 214 Q78 190 72 158 Q112 172 118 214Z" fill="#1F7A53" />
+    <path d="M126 232 Q168 216 178 188 Q136 198 126 232Z" fill="#1F7A53" />
 
-    <path d="M140 300 L140 235 Q140 225 147 225 Q154 225 154 235 L154 300 Z" fill="#33452c" />
-    <rect x="138" y="250" width="18" height="4" rx="2" fill="#16120c" opacity="0.35" />
-    <path d="M147 240 Q114 222 108 196 Q142 208 147 240Z" fill="#33452c" />
+    <path d="M140 300 L140 235 Q140 225 147 225 Q154 225 154 235 L154 300 Z" fill="#145C3D" />
+    <rect x="138" y="250" width="18" height="4" rx="2" fill="#2A1B12" opacity="0.35" />
+    <path d="M147 240 Q114 222 108 196 Q142 208 147 240Z" fill="#145C3D" />
   </g>
 
   <g opacity="0.88">
-    <path d="M980 300 L980 195 Q980 182 989 182 Q998 182 998 195 L998 300 Z" fill="#4f6b45" />
-    <rect x="977" y="218" width="22" height="6" rx="3" fill="#16120c" opacity="0.4" />
-    <rect x="977" y="252" width="22" height="6" rx="3" fill="#16120c" opacity="0.4" />
-    <path d="M989 200 Q944 174 936 138 Q980 154 989 200Z" fill="#4f6b45" />
-    <path d="M998 222 Q1046 204 1058 172 Q1010 184 998 222Z" fill="#4f6b45" />
+    <path d="M980 300 L980 195 Q980 182 989 182 Q998 182 998 195 L998 300 Z" fill="#1F7A53" />
+    <rect x="977" y="218" width="22" height="6" rx="3" fill="#2A1B12" opacity="0.4" />
+    <rect x="977" y="252" width="22" height="6" rx="3" fill="#2A1B12" opacity="0.4" />
+    <path d="M989 200 Q944 174 936 138 Q980 154 989 200Z" fill="#1F7A53" />
+    <path d="M998 222 Q1046 204 1058 172 Q1010 184 998 222Z" fill="#1F7A53" />
 
-    <path d="M1015 300 L1015 225 Q1015 214 1023 214 Q1031 214 1031 225 L1031 300 Z" fill="#33452c" />
-    <rect x="1013" y="245" width="20" height="5" rx="2.5" fill="#16120c" opacity="0.35" />
-    <path d="M1023 228 Q984 208 977 180 Q1015 192 1023 228Z" fill="#33452c" />
+    <path d="M1015 300 L1015 225 Q1015 214 1023 214 Q1031 214 1031 225 L1031 300 Z" fill="#145C3D" />
+    <rect x="1013" y="245" width="20" height="5" rx="2.5" fill="#2A1B12" opacity="0.35" />
+    <path d="M1023 228 Q984 208 977 180 Q1015 192 1023 228Z" fill="#145C3D" />
   </g>
 
   <g opacity="0.75">
-    <path d="M1320 300 L1320 220 Q1320 209 1327 209 Q1334 209 1334 220 L1334 300 Z" fill="#4f6b45" />
-    <rect x="1318" y="240" width="18" height="5" rx="2.5" fill="#16120c" opacity="0.35" />
-    <path d="M1327 224 Q1292 202 1286 172 Q1320 186 1327 224Z" fill="#4f6b45" />
-    <path d="M1334 240 Q1374 226 1384 200 Q1346 210 1334 240Z" fill="#4f6b45" />
+    <path d="M1320 300 L1320 220 Q1320 209 1327 209 Q1334 209 1334 220 L1334 300 Z" fill="#1F7A53" />
+    <rect x="1318" y="240" width="18" height="5" rx="2.5" fill="#2A1B12" opacity="0.35" />
+    <path d="M1327 224 Q1292 202 1286 172 Q1320 186 1327 224Z" fill="#1F7A53" />
+    <path d="M1334 240 Q1374 226 1384 200 Q1346 210 1334 240Z" fill="#1F7A53" />
   </g>
 </svg>

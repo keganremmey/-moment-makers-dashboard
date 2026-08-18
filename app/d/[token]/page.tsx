@@ -3,25 +3,64 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getClientByToken,
+  getFirstSessionDate,
   getSkills,
   getSkillReps,
   getTasks,
   getWins,
 } from "@/lib/data";
-import { BELTS, beltStatusForReps } from "@/lib/belts";
+import { supabaseServer } from "@/lib/supabase-server";
+import { beltStatusForReps, BELT_COLORS } from "@/lib/belts";
+import { computeProgramTimeline, formatShortDate } from "@/lib/timeline";
 import { BeltChip } from "@/components/BeltChip";
+import { GrowthMountain } from "@/components/GrowthMountain";
+import { BeltLadder } from "@/components/BeltLadder";
+
+function StatCard({
+  label,
+  value,
+  caption,
+  accentColor,
+}: {
+  label: string;
+  value: string;
+  caption: string;
+  accentColor?: string;
+}) {
+  return (
+    <div className="card p-5" style={accentColor ? { borderLeft: `4px solid ${accentColor}` } : undefined}>
+      <p className="label">{label}</p>
+      <p className="mt-2 font-display text-4xl leading-none text-ink">{value}</p>
+      <p className="mt-2 text-sm text-ink-dim">{caption}</p>
+    </div>
+  );
+}
 
 export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   const { token } = await props.params;
   const client = await getClientByToken(token);
   if (!client) notFound();
 
-  const [skills, reps, tasks, wins] = await Promise.all([
+  const visionBoardUrl = client.vision_board_path
+    ? (
+        await supabaseServer()
+          .storage.from("vision-boards")
+          .createSignedUrl(client.vision_board_path, 3600)
+      ).data?.signedUrl ?? null
+    : null;
+
+  const [skills, reps, tasks, wins, startedOn] = await Promise.all([
     getSkills(),
     getSkillReps(client.id),
     getTasks(client.id),
     getWins(client.id),
+    getFirstSessionDate(client.id),
   ]);
+
+  const timeline =
+    startedOn && client.target_date
+      ? computeProgramTimeline(startedOn, client.target_date)
+      : null;
 
   const repCountBySkill = new Map<string, number>();
   for (const rep of reps) {
@@ -35,21 +74,34 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   const identityWord = client.identity_names?.[0];
 
   // Skill statuses, computed once and reused by both the main "Skills at a
-  // Glance" list and the rail's rank summary — no new data fetching, just a
+  // Glance" list and the rail's rank summary , no new data fetching, just a
   // summary of what getSkills/getSkillReps already returned.
   const skillStatuses = skills.map((skill) => ({
     skill,
     status: beltStatusForReps(repCountBySkill.get(skill.id) ?? 0),
   }));
 
-  const beltCounts = BELTS.map((b) => ({
-    name: b.name,
-    count: skillStatuses.filter((s) => s.status.belt.name === b.name).length,
-  })).filter((b) => b.count > 0);
+  // The overview belt reflects total reps across every skill, not the best
+  // single skill , a client spreading reps across four skills should see
+  // their belt move even if no one skill has crossed a threshold alone.
+  // Per-skill belts (Skills at a Glance, the full skill map) still use each
+  // skill's own count, this only changes what the headline stat shows.
+  const overallStatus = beltStatusForReps(reps.length);
+  const overallBeltColor = BELT_COLORS[overallStatus.belt.name];
 
-  const highestRanked = skillStatuses.reduce<
-    (typeof skillStatuses)[number] | null
-  >((best, cur) => (!best || cur.status.reps > best.status.reps ? cur : best), null);
+  // The skill closest to its next belt: the "almost there" gap, not a static
+  // fact about where you already are. Naming the shortest distance to a real
+  // reward is what makes someone want to close it, the same reason a
+  // progress bar at 90% pulls harder than one sitting at 40%.
+  const nearestPromotion = skillStatuses
+    .filter((s) => s.status.nextBelt && s.status.repsToNext != null)
+    .reduce<(typeof skillStatuses)[number] | null>(
+      (closest, cur) =>
+        !closest || cur.status.repsToNext! < closest.status.repsToNext!
+          ? cur
+          : closest,
+      null
+    );
 
   return (
     <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-6">
@@ -63,43 +115,125 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
             }
           >
             <p className="label">Identity</p>
-            <p className="flourish mt-2 font-display text-6xl uppercase tracking-tight leading-none">
-              {identityWord}
-            </p>
+            <div className="relative mt-2 inline-block">
+              <p className="flourish font-display text-6xl uppercase tracking-tight leading-none">
+                {identityWord}
+              </p>
+              {/* Ink-seal / chop stamp: a decorative mark, like a real seal
+                  impression on a scroll , an abstract glyph, not real
+                  calligraphy, offset from the identity word's baseline. */}
+              <svg
+                viewBox="0 0 40 40"
+                aria-hidden="true"
+                className="absolute -right-4 -top-3 h-9 w-9 rotate-6"
+              >
+                <rect x="2" y="2" width="36" height="36" rx="5" fill="var(--lacquer)" />
+                <rect
+                  x="2"
+                  y="2"
+                  width="36"
+                  height="36"
+                  rx="5"
+                  fill="none"
+                  stroke="var(--gold-bright)"
+                  strokeWidth="1.5"
+                  opacity="0.7"
+                />
+                <g stroke="var(--gold-bright)" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="12" y1="20" x2="28" y2="20" />
+                  <line x1="20" y1="12" x2="20" y2="28" />
+                </g>
+              </svg>
+            </div>
           </section>
         )}
+
+        <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <StatCard
+            label="Reps Logged"
+            value={String(reps.length)}
+            caption={reps.length === 0 ? "None yet, log one" : "Across every skill"}
+          />
+          <StatCard
+            label="Open Tasks"
+            value={String(openTaskCount)}
+            caption={
+              slippedTaskCount > 0
+                ? `${slippedTaskCount} slipped, worth a look`
+                : "Nothing slipping"
+            }
+          />
+          <StatCard
+            label="Current Belt"
+            value={overallStatus.belt.name}
+            accentColor={overallBeltColor}
+            caption={
+              overallStatus.nextBelt
+                ? `${overallStatus.repsToNext} rep${overallStatus.repsToNext === 1 ? "" : "s"} to ${overallStatus.nextBelt.name}`
+                : "Top belt reached"
+            }
+          />
+          <StatCard
+            label="Days to Summit"
+            value={timeline ? String(Math.max(0, timeline.remainingDays)) : "TBD"}
+            caption={
+              timeline
+                ? `${Math.max(0, timeline.elapsedDays)} of ${timeline.totalDays} days in`
+                : "Target date not set"
+            }
+          />
+        </section>
 
         {client.north_star && (
-          <section className="card p-5">
+          <section className="card border-l-4 border-l-gold p-6">
             <p className="label">North Star</p>
-            <p className="mt-2 text-pretty font-display text-lg leading-snug text-paper">
-              {client.north_star}
+            <p className="mt-3 text-pretty font-display text-2xl leading-snug text-ink">
+              &ldquo;{client.north_star}&rdquo;
             </p>
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-paper-line pt-3 font-mono text-xs uppercase tracking-wide text-ink-dim">
+              {client.program && <span>{client.program}</span>}
+              {startedOn && <span>Started {formatShortDate(startedOn)}</span>}
+              {client.target_date && <span>Target {formatShortDate(client.target_date)}</span>}
+              <span>{overallStatus.belt.name} rank</span>
+            </div>
           </section>
         )}
 
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Link href={`/d/${token}/tasks`} className="card block p-5 transition-colors hover:border-brass-dim">
-            <p className="label">Open Tasks</p>
-            <p className="mt-2 font-display text-3xl text-paper">{openTaskCount}</p>
-            {slippedTaskCount > 0 && (
-              <p className="mt-1 text-sm text-brass">
-                {slippedTaskCount} slipped — worth a look
+        <section className="card overflow-hidden p-0">
+          <div className="p-5 pb-0">
+            <p className="label">Vision Board</p>
+          </div>
+          {visionBoardUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={visionBoardUrl}
+              alt={`${client.identity_names?.[0] ?? client.name}'s vision board`}
+              className="mt-3 w-full"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-2 px-5 py-10 text-center">
+              <p className="text-base text-ink-dim">
+                Your vision board is on the way. Once it&apos;s ready, this is
+                where you&apos;ll see yourself in it.
               </p>
-            )}
-          </Link>
+            </div>
+          )}
+        </section>
 
-          <Link href={`/d/${token}/wins`} className="card block p-5 transition-colors hover:border-brass-dim">
+        <GrowthMountain reps={reps} />
+
+        <section className="grid grid-cols-1 gap-4">
+          <Link href={`/d/${token}/wins`} className="card block p-5 transition-colors hover:border-lacquer">
             <p className="label">Most Recent Win</p>
             {mostRecentWin ? (
               <>
-                <p className="mt-2 font-display text-lg leading-snug text-paper">
+                <p className="mt-2 font-display text-lg leading-snug text-ink">
                   {mostRecentWin.title}
                 </p>
-                <p className="mt-1 text-sm text-paper-dim">{mostRecentWin.date}</p>
+                <p className="mt-1 text-sm text-ink-dim">{mostRecentWin.date}</p>
               </>
             ) : (
-              <p className="mt-2 text-base text-paper-dim">Nothing logged yet.</p>
+              <p className="mt-2 text-base text-ink-dim">Nothing logged yet.</p>
             )}
           </Link>
         </section>
@@ -107,7 +241,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
         <section className="card p-5">
           <p className="label">Skills at a Glance</p>
           {skillStatuses.length === 0 ? (
-            <p className="mt-4 text-base text-paper-dim">
+            <p className="mt-4 text-base text-ink-dim">
               No skills tracked yet.
             </p>
           ) : (
@@ -115,11 +249,11 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
               {skillStatuses.map(({ skill, status }) => (
                 <li
                   key={skill.id}
-                  className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-line pb-3 last:border-none last:pb-0"
+                  className="flex flex-wrap items-center justify-between gap-2 border-b border-paper-line pb-3 last:border-none last:pb-0"
                 >
                   <div>
-                    <p className="text-base text-paper">{skill.name}</p>
-                    <p className="text-sm text-paper-dim">
+                    <p className="text-base text-ink">{skill.name}</p>
+                    <p className="text-sm text-ink-dim">
                       {status.reps} rep{status.reps === 1 ? "" : "s"} logged
                     </p>
                   </div>
@@ -130,7 +264,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           )}
           <Link
             href={`/d/${token}/skills`}
-            className="mt-4 inline-block text-sm text-brass hover:underline"
+            className="mt-4 inline-block text-sm text-lacquer hover:underline"
           >
             Full skill map →
           </Link>
@@ -138,31 +272,27 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
       </div>
 
       <aside className="flex flex-col gap-4">
-        {beltCounts.length > 0 && (
+        {nearestPromotion && (
           <section className="card p-5">
-            <p className="label">Rank Summary</p>
-            <ul className="mt-3 flex flex-col gap-2">
-              {beltCounts.map((b) => (
-                <li key={b.name} className="flex items-center justify-between text-sm">
-                  <span className="text-paper">{b.name}</span>
-                  <span className="font-mono text-paper-dim">{b.count}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="label">Next Promotion</p>
+            <p className="mt-2 font-display text-lg leading-snug text-ink">
+              {nearestPromotion.skill.name}
+            </p>
+            <p className="mt-1 text-sm text-gold">
+              {nearestPromotion.status.repsToNext} rep{nearestPromotion.status.repsToNext === 1 ? "" : "s"} to {nearestPromotion.status.nextBelt!.name}
+            </p>
           </section>
         )}
 
-        {highestRanked && (
-          <section className="card p-5">
-            <p className="label">Highest Rank</p>
-            <p className="mt-2 font-display text-lg leading-snug text-paper">
-              {highestRanked.skill.name}
-            </p>
-            <p className="mt-1 text-sm text-paper-dim">
-              {highestRanked.status.belt.name} belt · {highestRanked.status.reps} reps
-            </p>
-          </section>
-        )}
+        <section className="card p-5">
+          <p className="label">Belt Ladder</p>
+          <p className="mt-1 text-xs text-ink-dim">
+            Which version of you shows up under pressure, right now.
+          </p>
+          <div className="mt-3">
+            <BeltLadder currentBeltName={overallStatus.belt.name} compact />
+          </div>
+        </section>
       </aside>
     </div>
   );

@@ -1,6 +1,6 @@
 // The mission timeline: real elapsed time toward a client's stated
 // deadline, not a generic "24 sessions" package label. Pure date math,
-// no side effects — the caller supplies "started" (a client's earliest
+// no side effects , the caller supplies "started" (a client's earliest
 // real session date) and "target" (client.target_date), both of which
 // come from real data, never invented here.
 

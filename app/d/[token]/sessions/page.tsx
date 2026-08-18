@@ -14,7 +14,7 @@ export default async function SessionsPage(
   return (
     <div className="flex flex-col gap-4">
       {sessions.length === 0 && (
-        <p className="text-base text-paper-dim">No sessions logged yet.</p>
+        <p className="text-base text-ink-dim">No sessions logged yet.</p>
       )}
       {sessions.map((session) => (
         <article key={session.id} className="card p-5">
@@ -28,22 +28,22 @@ export default async function SessionsPage(
               href={session.fathom_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-brass hover:underline"
+              className="text-sm text-lacquer hover:underline"
             >
               Watch on Fathom →
             </a>
           </div>
-          <h2 className="mt-2 font-display text-lg text-paper">
+          <h2 className="mt-2 font-display text-lg text-ink">
             {session.title}
           </h2>
           {session.purpose && (
-            <p className="mt-1 text-base italic text-paper-dim">
+            <p className="mt-1 text-base italic text-ink-dim">
               {session.purpose}
             </p>
           )}
           {session.summary_md && (
             <p
-              className="mt-3 max-w-[65ch] text-base leading-relaxed text-paper"
+              className="mt-3 max-w-[65ch] text-base leading-relaxed text-ink"
               dangerouslySetInnerHTML={{
                 __html: renderInlineMarkdown(session.summary_md),
               }}

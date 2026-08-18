@@ -6,16 +6,32 @@
 export type Belt = {
   name: string;
   minReps: number;
+  description: string;
 };
 
+// Descriptions are this app's own authored mastery curve (same status as the
+// rep thresholds themselves , a designed game layer, not a transcript quote)
+// so a client can see what a rank actually represents, not just its number.
 export const BELTS: Belt[] = [
-  { name: "White", minReps: 0 },
-  { name: "Gray", minReps: 10 },
-  { name: "Blue", minReps: 20 },
-  { name: "Purple", minReps: 35 },
-  { name: "Brown", minReps: 55 },
-  { name: "Black", minReps: 80 },
+  { name: "White", minReps: 0, description: "First reps. Building awareness of the pattern in real time." },
+  { name: "Gray", minReps: 10, description: "Catching it before it happens. Consistent under low stakes." },
+  { name: "Blue", minReps: 20, description: "Reliable under real pressure, not just in easy moments." },
+  { name: "Purple", minReps: 35, description: "Second nature in most rooms, barely has to think about it." },
+  { name: "Brown", minReps: 55, description: "Sharp enough to adjust it live, mid-conversation." },
+  { name: "Black", minReps: 80, description: "Teaches it without trying. It just shows up as who you are." },
 ];
+
+// Shared rank -> color map, consumed by both BeltChip (per-skill status
+// chip) and BeltLadder (the full roadmap reference), so the two visuals can
+// never drift out of sync on what a rank's color is.
+export const BELT_COLORS: Record<string, string> = {
+  White: "var(--belt-white)",
+  Gray: "var(--belt-gray)",
+  Blue: "var(--belt-blue)",
+  Purple: "var(--belt-purple)",
+  Brown: "var(--belt-brown)",
+  Black: "var(--belt-black)",
+};
 
 export type BeltStatus = {
   belt: Belt;
