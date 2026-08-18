@@ -136,11 +136,11 @@ export function AudioRecorder({
           <span className="text-sm text-gold">Saved</span>
         )}
         {uploadState === "error" && (
-          <span className="text-sm text-red-400">Couldn&apos;t save, try again.</span>
+          <span className="text-sm text-lacquer">Couldn&apos;t save, try again.</span>
         )}
       </div>
       {permissionError && (
-        <p className="mt-2 text-sm text-red-400">{permissionError}</p>
+        <p className="mt-2 text-sm text-lacquer">{permissionError}</p>
       )}
     </div>
   );

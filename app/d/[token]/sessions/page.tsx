@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import { ArrowSquareOut } from "@phosphor-icons/react/dist/ssr";
 import { getClientByToken, getSessions } from "@/lib/data";
 import { renderInlineMarkdown } from "@/lib/markdown";
+import { formatShortDate } from "@/lib/timeline";
 
 export default async function SessionsPage(
   props: PageProps<"/d/[token]/sessions">
@@ -20,7 +22,7 @@ export default async function SessionsPage(
         <article key={session.id} className="card p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <p className="label">
-              {session.date}
+              {formatShortDate(session.date)}
               {session.session_number != null &&
                 ` · Session ${session.session_number}`}
             </p>
@@ -28,9 +30,10 @@ export default async function SessionsPage(
               href={session.fathom_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-lacquer hover:underline"
+              className="inline-flex items-center gap-1 text-sm text-lacquer hover:underline"
             >
-              Watch on Fathom →
+              Watch on Fathom
+              <ArrowSquareOut aria-hidden="true" className="h-3.5 w-3.5" />
             </a>
           </div>
           <h2 className="mt-2 font-display text-lg text-ink">

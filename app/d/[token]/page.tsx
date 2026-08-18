@@ -12,6 +12,7 @@ import {
 import { supabaseServer } from "@/lib/supabase-server";
 import { beltStatusForReps, BELT_COLORS } from "@/lib/belts";
 import { computeProgramTimeline, formatShortDate } from "@/lib/timeline";
+import { Trophy } from "@phosphor-icons/react/dist/ssr";
 import { BeltChip } from "@/components/BeltChip";
 import { GrowthMountain } from "@/components/GrowthMountain";
 import { BeltLadder } from "@/components/BeltLadder";
@@ -69,7 +70,11 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
 
   const openTaskCount = tasks.filter((t) => t.status === "open").length;
   const slippedTaskCount = tasks.filter((t) => t.status === "slipped").length;
-  const mostRecentWin = wins[0];
+  // The 2-3 wins that lead the page , same `wins` query already fetched
+  // above (ordered newest-first by getWins), just showing more of what's
+  // already there instead of only the single latest one.
+  const recentWins = wins.slice(0, 3);
+  const mostRecentWin = recentWins[0];
 
   const identityWord = client.identity_names?.[0];
 
@@ -148,6 +153,52 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           </section>
         )}
 
+        {/* Wins lead the page , the client's own recorded evidence of
+            progress, before any stat, chart, or logistics. This is the
+            fullest version of the card language already established for
+            North Star below (gold left rail, p-6, not the plain p-5 most
+            cards use), now applied to the section that most makes a client
+            want to keep opening this link. Static, not a click-through: it
+            already carries its own "All wins" link inside, so the whole
+            panel doesn't double as one giant door. */}
+        <section className="card border-l-4 border-l-gold p-6">
+          <div className="flex items-center gap-2">
+            <Trophy weight="fill" className="h-4 w-4 text-gold" aria-hidden="true" />
+            <p className="label">Recent Wins</p>
+          </div>
+          {mostRecentWin ? (
+            <>
+              <p className="mt-3 text-sm text-ink-dim">{formatShortDate(mostRecentWin.date)}</p>
+              <p className="mt-1 text-pretty font-display text-2xl leading-snug text-ink">
+                {mostRecentWin.title}
+              </p>
+              {mostRecentWin.description && (
+                <p className="mt-2 max-w-[60ch] text-base leading-relaxed text-ink-dim">
+                  {mostRecentWin.description}
+                </p>
+              )}
+              {recentWins.length > 1 && (
+                <ul className="mt-4 flex flex-col gap-2 border-t border-paper-line pt-4">
+                  {recentWins.slice(1).map((win) => (
+                    <li key={win.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                      <span className="label">{formatShortDate(win.date)}</span>
+                      <span className="text-base text-ink">{win.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ) : (
+            <p className="mt-3 text-base text-ink-dim">Nothing logged yet.</p>
+          )}
+          <Link
+            href={`/d/${token}/wins`}
+            className="mt-4 inline-block text-sm text-lacquer hover:underline"
+          >
+            All wins →
+          </Link>
+        </section>
+
         <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <StatCard
             label="Reps Logged"
@@ -184,6 +235,40 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           />
         </section>
 
+        <GrowthMountain reps={reps} />
+
+        <section className="card p-5">
+          <p className="label">Skills at a Glance</p>
+          {skillStatuses.length === 0 ? (
+            <p className="mt-4 text-base text-ink-dim">
+              No skills tracked yet.
+            </p>
+          ) : (
+            <ul className="mt-4 flex flex-col gap-3">
+              {skillStatuses.map(({ skill, status }) => (
+                <li
+                  key={skill.id}
+                  className="flex flex-wrap items-center justify-between gap-2 border-b border-paper-line pb-3 last:border-none last:pb-0"
+                >
+                  <div>
+                    <p className="text-base text-ink">{skill.name}</p>
+                    <p className="text-sm text-ink-dim">
+                      {status.reps} rep{status.reps === 1 ? "" : "s"} logged
+                    </p>
+                  </div>
+                  <BeltChip status={status} />
+                </li>
+              ))}
+            </ul>
+          )}
+          <Link
+            href={`/d/${token}/skills`}
+            className="mt-4 inline-block text-sm text-lacquer hover:underline"
+          >
+            Full skill map →
+          </Link>
+        </section>
+
         {client.north_star && (
           <section className="card border-l-4 border-l-gold p-6">
             <p className="label">North Star</p>
@@ -218,56 +303,6 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
               </p>
             </div>
           )}
-        </section>
-
-        <GrowthMountain reps={reps} />
-
-        <section className="grid grid-cols-1 gap-4">
-          <Link href={`/d/${token}/wins`} className="card block p-5 transition-colors hover:border-lacquer">
-            <p className="label">Most Recent Win</p>
-            {mostRecentWin ? (
-              <>
-                <p className="mt-2 font-display text-lg leading-snug text-ink">
-                  {mostRecentWin.title}
-                </p>
-                <p className="mt-1 text-sm text-ink-dim">{mostRecentWin.date}</p>
-              </>
-            ) : (
-              <p className="mt-2 text-base text-ink-dim">Nothing logged yet.</p>
-            )}
-          </Link>
-        </section>
-
-        <section className="card p-5">
-          <p className="label">Skills at a Glance</p>
-          {skillStatuses.length === 0 ? (
-            <p className="mt-4 text-base text-ink-dim">
-              No skills tracked yet.
-            </p>
-          ) : (
-            <ul className="mt-4 flex flex-col gap-3">
-              {skillStatuses.map(({ skill, status }) => (
-                <li
-                  key={skill.id}
-                  className="flex flex-wrap items-center justify-between gap-2 border-b border-paper-line pb-3 last:border-none last:pb-0"
-                >
-                  <div>
-                    <p className="text-base text-ink">{skill.name}</p>
-                    <p className="text-sm text-ink-dim">
-                      {status.reps} rep{status.reps === 1 ? "" : "s"} logged
-                    </p>
-                  </div>
-                  <BeltChip status={status} />
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link
-            href={`/d/${token}/skills`}
-            className="mt-4 inline-block text-sm text-lacquer hover:underline"
-          >
-            Full skill map →
-          </Link>
         </section>
       </div>
 

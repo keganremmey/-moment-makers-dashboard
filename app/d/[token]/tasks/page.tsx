@@ -8,15 +8,19 @@ function TaskGroup({
   token,
   emptyLabel,
   flagged,
+  muted,
 }: {
   title: string;
   tasks: Task[];
   token: string;
   emptyLabel: string;
   flagged?: boolean;
+  muted?: boolean;
 }) {
   return (
-    <section className="card p-5">
+    <section
+      className={`card p-5${flagged ? " border-l-4 border-l-lacquer" : ""}`}
+    >
       <p className="label">{title}</p>
       {tasks.length === 0 ? (
         <p className="mt-3 text-base text-ink-dim">{emptyLabel}</p>
@@ -26,7 +30,7 @@ function TaskGroup({
             <li
               key={task.id}
               className={`flex items-start gap-3 border-b border-paper-line pb-3 last:border-none last:pb-0 ${
-                flagged ? "text-lacquer" : "text-ink"
+                flagged ? "text-lacquer" : muted ? "text-ink-dim" : "text-ink"
               }`}
             >
               <TaskCheckbox
@@ -83,6 +87,7 @@ export default async function TasksPage(props: PageProps<"/d/[token]/tasks">) {
         tasks={done}
         token={token}
         emptyLabel="Nothing marked done yet."
+        muted
       />
     </div>
   );
