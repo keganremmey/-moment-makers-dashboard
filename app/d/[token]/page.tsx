@@ -70,16 +70,16 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
 
   const openTaskCount = tasks.filter((t) => t.status === "open").length;
   const slippedTaskCount = tasks.filter((t) => t.status === "slipped").length;
-  // The 2-3 wins that lead the page , same `wins` query already fetched
-  // above (ordered newest-first by getWins), just showing more of what's
-  // already there instead of only the single latest one.
+  // The 2-3 wins that lead the page use the same `wins` query already
+  // fetched above (ordered newest-first by getWins), just showing more of
+  // what's already there instead of only the single latest one.
   const recentWins = wins.slice(0, 3);
   const mostRecentWin = recentWins[0];
 
   const identityWord = client.identity_names?.[0];
 
   // Skill statuses, computed once and reused by both the main "Skills at a
-  // Glance" list and the rail's rank summary , no new data fetching, just a
+  // Glance" list and the rail's rank summary. No new data fetching, just a
   // summary of what getSkills/getSkillReps already returned.
   const skillStatuses = skills.map((skill) => ({
     skill,
@@ -87,7 +87,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   }));
 
   // The overview belt reflects total reps across every skill, not the best
-  // single skill , a client spreading reps across four skills should see
+  // single skill. A client spreading reps across four skills should see
   // their belt move even if no one skill has crossed a threshold alone.
   // Per-skill belts (Skills at a Glance, the full skill map) still use each
   // skill's own count, this only changes what the headline stat shows.
@@ -125,7 +125,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
                 {identityWord}
               </p>
               {/* Ink-seal / chop stamp: a decorative mark, like a real seal
-                  impression on a scroll , an abstract glyph, not real
+                  impression on a scroll. An abstract glyph, not real
                   calligraphy, offset from the identity word's baseline. */}
               <svg
                 viewBox="0 0 40 40"
@@ -153,7 +153,7 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           </section>
         )}
 
-        {/* Wins lead the page , the client's own recorded evidence of
+        {/* Wins lead the page: the client's own recorded evidence of
             progress, before any stat, chart, or logistics. This is the
             fullest version of the card language already established for
             North Star below (gold left rail, p-6, not the plain p-5 most

@@ -36,7 +36,7 @@ export function TaskCheckbox({
 
   return (
     <div className="flex items-center gap-2">
-      {/* A custom-drawn box instead of the bare native checkbox , same
+      {/* A custom-drawn box instead of the bare native checkbox, same
           lacquer-panel material language as .card/.btn (a small raised
           shadow at rest, a real pressed state on :active), not a naked
           form control sitting alone on rice paper. `appearance-none` drops
