@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -76,7 +75,6 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   const recentWins = wins.slice(0, 3);
   const mostRecentWin = recentWins[0];
 
-  const identityWord = client.identity_names?.[0];
 
   // Skill statuses, computed once and reused by both the main "Skills at a
   // Glance" list and the rail's rank summary. No new data fetching, just a
@@ -111,47 +109,6 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   return (
     <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-6">
       <div className="flex flex-col gap-8">
-        {identityWord && (
-          <section
-            style={
-              client.accent_hex
-                ? ({ "--client-accent": client.accent_hex } as CSSProperties)
-                : undefined
-            }
-          >
-            <p className="label">Identity</p>
-            <div className="relative mt-2 inline-block">
-              <p className="flourish font-display text-6xl uppercase tracking-tight leading-none">
-                {identityWord}
-              </p>
-              {/* Ink-seal / chop stamp: a decorative mark, like a real seal
-                  impression on a scroll. An abstract glyph, not real
-                  calligraphy, offset from the identity word's baseline. */}
-              <svg
-                viewBox="0 0 40 40"
-                aria-hidden="true"
-                className="absolute -right-4 -top-3 h-9 w-9 rotate-6"
-              >
-                <rect x="2" y="2" width="36" height="36" rx="5" fill="var(--lacquer)" />
-                <rect
-                  x="2"
-                  y="2"
-                  width="36"
-                  height="36"
-                  rx="5"
-                  fill="none"
-                  stroke="var(--gold-bright)"
-                  strokeWidth="1.5"
-                  opacity="0.7"
-                />
-                <g stroke="var(--gold-bright)" strokeWidth="2.5" strokeLinecap="round">
-                  <line x1="12" y1="20" x2="28" y2="20" />
-                  <line x1="20" y1="12" x2="20" y2="28" />
-                </g>
-              </svg>
-            </div>
-          </section>
-        )}
 
         {/* Wins lead the page: the client's own recorded evidence of
             progress, before any stat, chart, or logistics. This is the

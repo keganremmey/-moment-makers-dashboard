@@ -786,3 +786,168 @@ a.card:hover::after {
   width: 100%;
   height: auto;
 }
+
+/* ---------------------------------------------------------------------------
+   Identity placard + ascent light
+   The identity word promoted from one line on the overview page to a struck
+   placard on every page: black field, white letterforms, gold rule. It is the
+   only element in the app that inverts the rice-paper ground, which is what
+   makes it read as a marker rather than another card.
+--------------------------------------------------------------------------- */
+
+.identity-placard {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.15rem;
+  background: linear-gradient(168deg, #241a13, #120c08 60%, #1c130d);
+  border: 1.5px solid var(--client-accent, var(--gold));
+  border-radius: 3px;
+  /* Two gold hairlines inset from the border, the way a struck plaque has a
+     bevel inside its frame, plus the app's existing raised-shadow physics. */
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 162, 39, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 1px 2px rgba(42, 27, 18, 0.18),
+    0 4px 12px rgba(42, 27, 18, 0.12);
+}
+
+.identity-placard-word {
+  color: #f7f2e6;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 1.05rem;
+  line-height: 1;
+  white-space: nowrap;
+  /* A faint gold cast on the letter edges, so the word sits in the same
+     light as its frame instead of floating as pure white. */
+  text-shadow: 0 0 14px rgba(201, 162, 39, 0.34);
+}
+
+.identity-placard-rule {
+  width: 1.35rem;
+  height: 1px;
+  flex: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--client-accent, var(--gold))
+  );
+}
+
+.identity-placard-rule:last-child {
+  background: linear-gradient(
+    270deg,
+    transparent,
+    var(--client-accent, var(--gold))
+  );
+}
+
+/* The strike: what a landing light does to the placard. Deliberately a
+   brightening of what is already there (border, inner bevel, letter glow)
+   rather than an overlay flash, so nothing new appears on screen. */
+@media (prefers-reduced-motion: no-preference) {
+  .identity-placard.is-struck {
+    animation: placard-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .identity-placard.is-struck .identity-placard-word {
+    animation: placard-word-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+}
+
+@keyframes placard-strike {
+  0% {
+    box-shadow:
+      inset 0 0 0 1px rgba(201, 162, 39, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 1px 2px rgba(42, 27, 18, 0.18),
+      0 4px 12px rgba(42, 27, 18, 0.12);
+    border-color: var(--client-accent, var(--gold));
+  }
+  30% {
+    box-shadow:
+      inset 0 0 0 1px rgba(232, 197, 88, 0.85),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 1px 2px rgba(42, 27, 18, 0.18),
+      0 0 26px 4px rgba(232, 197, 88, 0.42);
+    border-color: var(--gold-bright);
+  }
+  100% {
+    box-shadow:
+      inset 0 0 0 1px rgba(201, 162, 39, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 1px 2px rgba(42, 27, 18, 0.18),
+      0 4px 12px rgba(42, 27, 18, 0.12);
+    border-color: var(--client-accent, var(--gold));
+  }
+}
+
+@keyframes placard-word-strike {
+  0%   { text-shadow: 0 0 14px rgba(201, 162, 39, 0.34); }
+  30%  { text-shadow: 0 0 22px rgba(232, 197, 88, 0.95), 0 0 44px rgba(232, 197, 88, 0.5); }
+  100% { text-shadow: 0 0 14px rgba(201, 162, 39, 0.34); }
+}
+
+/* The traveling light. Fixed layer, no pointer surface, sits above content
+   but below any focus ring. */
+.ascent-light-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.ascent-bolt {
+  position: absolute;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin: -0.35rem 0 0 -0.35rem;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(232, 197, 88, 0.95) 0%,
+    rgba(201, 162, 39, 0.55) 45%,
+    rgba(201, 162, 39, 0) 72%
+  );
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ascent-bolt {
+    animation: ascent-travel 560ms cubic-bezier(0.35, 0, 0.2, 1) forwards;
+  }
+}
+
+/* Reduced motion: the bolt never crosses the screen. It resolves in place as
+   a brief confirmation, and the placard still receives its (motion-gated)
+   strike, so the causal link is preserved without travel. */
+@media (prefers-reduced-motion: reduce) {
+  .ascent-bolt {
+    animation: ascent-settle 260ms ease-out forwards;
+  }
+}
+
+@keyframes ascent-travel {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    transform: translate3d(0, 0, 0) scale(1.25);
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--bolt-dx), var(--bolt-dy), 0) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes ascent-settle {
+  0%   { transform: scale(0.7); opacity: 0; }
+  40%  { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0; }
+}

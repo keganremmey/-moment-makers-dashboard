@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 export function TaskCheckbox({
@@ -15,9 +15,23 @@ export function TaskCheckbox({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const boxRef = useRef<HTMLInputElement>(null);
 
   function toggle() {
     setError(null);
+
+    // Fire on the open -> done direction only, and fire at click time rather
+    // than after the round trip: the row is unmounted by the revalidation that
+    // follows, so a light launched afterward would launch from a dead node.
+    if (!done && boxRef.current) {
+      const r = boxRef.current.getBoundingClientRect();
+      window.dispatchEvent(
+        new CustomEvent("ff:task-complete", {
+          detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+        })
+      );
+    }
+
     startTransition(async () => {
       const res = await fetch(`/api/tasks/${taskId}/toggle`, {
         method: "POST",
@@ -43,6 +57,7 @@ export function TaskCheckbox({
           only the browser's own paint; the input stays a real checkbox for
           keyboard, screen-reader, and label semantics. */}
       <input
+        ref={boxRef}
         type="checkbox"
         checked={done}
         disabled={isPending}

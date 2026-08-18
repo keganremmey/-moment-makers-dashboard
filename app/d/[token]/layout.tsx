@@ -5,6 +5,8 @@ import { DashboardNav } from "@/components/DashboardNav";
 import { Sidebar } from "@/components/Sidebar";
 import { computeProgramTimeline } from "@/lib/timeline";
 import { MissionTimeline } from "@/components/MissionTimeline";
+import { IdentityPlacard } from "@/components/IdentityPlacard";
+import { AscentLight } from "@/components/AscentLight";
 
 export async function generateMetadata(
   props: LayoutProps<"/d/[token]">
@@ -71,11 +73,22 @@ export default async function DashboardLayout(
               </div>
             </div>
 
+            {client.identity_names?.[0] && (
+              <div className="flex">
+                <IdentityPlacard
+                  word={client.identity_names[0]}
+                  accent={client.accent_hex}
+                  token={token}
+                />
+              </div>
+            )}
+
             {timeline && <MissionTimeline timeline={timeline} />}
 
             <DashboardNav token={token} />
           </header>
           <main id="main-content" className="flex-1">{props.children}</main>
+          <AscentLight />
 
           {/* Signature valley-floor scene: normal document flow inside the
               content column, so it fills the page below the content

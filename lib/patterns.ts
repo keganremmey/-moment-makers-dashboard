@@ -108,7 +108,10 @@ export async function analyzePatterns(
 
   const response = await client.messages.create({
     model: "claude-sonnet-5",
-    max_tokens: 4096,
+    // 4096 truncated mid-JSON once the evidence set passed ~20 items: with
+    // adaptive thinking the reasoning shares this budget, so the structured
+    // output got cut and JSON.parse threw. Raised with real headroom.
+    max_tokens: 16384,
     thinking: { type: "adaptive" },
     output_config: {
       effort: "high",
@@ -126,6 +129,12 @@ export async function analyzePatterns(
   const textBlock = response.content.find((b) => b.type === "text");
   if (!textBlock || textBlock.type !== "text") {
     throw new Error("Claude returned no text content.");
+  }
+
+  if (response.stop_reason === "max_tokens") {
+    throw new Error(
+      "Pattern analysis hit the token ceiling before finishing its JSON. Raise max_tokens or reduce the evidence window."
+    );
   }
 
   const parsed = JSON.parse(textBlock.text) as {
