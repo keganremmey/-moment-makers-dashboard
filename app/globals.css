@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Chinese-temple-dojo palette , vivid, dimensional rice paper + lacquer
+  /* Chinese-temple-dojo palette: vivid, dimensional rice paper + lacquer
      red + jade + gold. A light, warm, saturated base now, not a dark one:
      --paper is the main surface color, --ink is dark warm-brown text sitting
      on top of it. */
@@ -55,11 +55,11 @@ html {
 }
 
 /* Rice-paper surface: a hand-authored, static fibrous-grain tile (a handful
-   of short irregular strokes , no runtime noise/turbulence filter; that
+   of short irregular strokes, no runtime noise/turbulence filter; that
    was removed from this app in a prior pass for scroll performance and
    must stay out) layered over warm ivory, plus two soft lacquer/jade color
    washes in opposite corners for depth. Default (scroll) background-
-   attachment , this app deliberately avoids a fixed-position background
+   attachment: this app deliberately avoids a fixed-position background
    for laptop scroll performance. */
 body {
   background-color: var(--paper);
@@ -77,10 +77,10 @@ body {
 
 /* A small header-flanking bamboo accent now sits above the fold (see
    app/d/[token]/layout.tsx), alongside the full-width valley-floor scene at
-   the bottom of dashboard pages (see .valley-floor below) , together they
+   the bottom of dashboard pages (see .valley-floor below); together they
    bracket every page instead of hiding the motif below the scroll. */
 
-/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout , kept in
+/* A quiet forte mark (𝑓𝑓) used as the wordmark accent throughout, kept in
    the accent serif, not the poster face, so this one mark stays soft, but
    colored in the primary lacquer accent so it reads as the brand's seal. */
 .forte-mark {
@@ -92,7 +92,7 @@ body {
 
 .card {
   position: relative;
-  /* A subtle top-to-base sheen, not a flat fill , the inset highlight
+  /* A subtle top-to-base sheen, not a flat fill; the inset highlight
      below is a 1px line; this is the broader catch-the-light gradient a
      real lacquered panel face has across its whole surface, not just its
      top edge. Static (painted once, never transitioned), so it costs
@@ -105,7 +105,7 @@ body {
      reddish-brown-tinted drop shadow (never neutral gray) plus a soft
      highlight along the top edge, so the panel reads as real depth, not a
      flat div with a border. Only `transform` transitions here (a cheap,
-     compositor-only property) , the hover-only deeper shadow below is a
+     compositor-only property); the hover-only deeper shadow below is a
      separate pseudo-element whose `opacity` transitions instead, so no
      frame ever has to repaint a changing box-shadow. */
   box-shadow:
@@ -133,8 +133,8 @@ body {
   pointer-events: none;
 }
 
-/* Only clickable cards lift on hover , never the static ones (North Star,
-   Skills at a Glance) , so the motion means something: this is a door. */
+/* Only clickable cards lift on hover, never the static ones (North Star,
+   Skills at a Glance), so the motion means something: this is a door. */
 a.card:hover {
   transform: translateY(-3px);
 }
@@ -165,12 +165,12 @@ a.card:hover::after {
 
 /* ---- Buttons ----
    Every real <button> in this app used to be a plain Tailwind pill with
-   only a hover color/opacity swap , no shadow, no sense that it was a
+   only a hover color/opacity swap, no shadow, no sense that it was a
    pressable object. These three variants give buttons the same lacquer-
    panel material language as .card: a small, tight, warm-tinted shadow at
    rest, and a genuine pressed state on :active (translateY + a flatter,
    inset shadow) instead of just a hover tint. Only transform, box-shadow,
-   and color-family properties transition , no layout properties , and
+   and color-family properties transition, no layout properties, and
    box-shadow only ever changes on the rare hover/active edges of a small
    element, not mid-animation, so this stays cheap at this element size. */
 .btn {
@@ -223,7 +223,7 @@ a.card:hover::after {
     0 1px 0 var(--lacquer-dark);
 }
 
-/* Recording state: darker still, reading as "engaged" , stays inside the
+/* Recording state: darker still, reading as "engaged", stays inside the
    lacquer family instead of dropping in an off-palette generic red. */
 .btn-primary.is-engaged {
   background: var(--ink);
@@ -272,7 +272,7 @@ a.card:hover::after {
 
 /* Custom checkbox: the same raised-panel material as .btn (a small warm-
    tinted shadow at rest, a flattened inset shadow on :active) instead of
-   the bare native control , checked state fills in lacquer with a drawn
+   the bare native control; checked state fills in lacquer with a drawn
    checkmark, so a task list has the same tactile weight as everything else
    on the page. `appearance-none` removes only the browser paint; this stays
    a real <input type="checkbox"> for keyboard and screen-reader behavior. */
@@ -328,7 +328,7 @@ a.card:hover::after {
 }
 
 /* Signature element: an actual tied belt laid flat, drawn as a real SVG
-   belt-silhouette (see components/BeltChip.tsx) , a wrap strip with a
+   belt-silhouette (see components/BeltChip.tsx): a wrap strip with a
    folded knot and two tapered tails crossing at the fold, colored in rank.
    Sized to read as an object across the room, not a UI sliver. */
 .belt {
@@ -362,7 +362,7 @@ a.card:hover::after {
 /* ---- Framework terrain map (Library page) ----
    A single commissioned illustration, hosted in Supabase Storage, with
    every real location name painted directly into the art. Seven tappable
-   zones match the seven painted signs , tapping one opens a popover listing
+   zones match the seven painted signs; tapping one opens a popover listing
    that territory's real frameworks. Same interaction at every viewport
    width, so there's no separate mobile treatment to maintain. */
 
@@ -491,7 +491,7 @@ a.card:hover::after {
 
 /* The one deliberate per-client flourish: a client's identity word, colored
    with their own accent_hex (set inline as --client-accent), falling back to
-   the shared lacquer token , the app's primary accent , when a client has
+   the shared lacquer token, the app's primary accent, when a client has
    none set. Nothing else on the page is tinted per-client. */
 .flourish {
   color: var(--client-accent, var(--lacquer));
@@ -499,7 +499,7 @@ a.card:hover::after {
 
 /* Mission timeline: real elapsed time toward a client's stated deadline, in
    the header of every page. Milestone ticks (not just a bare fill) turn
-   "time passing" into real waypoints , each one a day count you can actually
+   "time passing" into real waypoints, each one a day count you can actually
    aim for, with the next one surfaced below as a one-line, real-quote nudge
    instead of a bare percentage. */
 .mission-timeline {
@@ -513,7 +513,7 @@ a.card:hover::after {
   height: 0.55rem;
   border-radius: 999px;
   background: var(--paper-line);
-  /* A carved-groove read , an inset shadow instead of a flat tint, so the
+  /* A carved-groove read: an inset shadow instead of a flat tint, so the
      track reads as cut into the panel rather than painted on top of it. */
   box-shadow: inset 0 1px 3px rgba(42, 27, 18, 0.25);
   overflow: visible;
@@ -742,8 +742,8 @@ a.card:hover::after {
 }
 
 /* Mobile tab bar (below lg, where the sidebar is hidden): mirrors the
-   sidebar's is-active language , a colored border accent plus a tinted,
-   slightly raised background , so navigation reads as one consistent
+   sidebar's is-active language: a colored border accent plus a tinted,
+   slightly raised background, so navigation reads as one consistent
    material at every viewport, not a plain color-swap on small screens. */
 .dashboard-tab {
   display: inline-flex;
@@ -770,7 +770,7 @@ a.card:hover::after {
 }
 
 /* Valley floor: the full-bleed signature scene at the bottom of every
-   dashboard page , layered mountain silhouettes echoing Fortissimo Summit
+   dashboard page: layered mountain silhouettes echoing Fortissimo Summit
    plus bamboo clusters at the base (see public/valley-floor.svg). Sits in
    normal document flow (never `position: fixed`) so it fills the page
    instead of floating over it, and scales by width so it never creates its
