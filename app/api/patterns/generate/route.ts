@@ -1,22 +1,16 @@
 import { NextResponse } from "next/server";
-import { getClientByToken, getSessions, getJournalEntries } from "@/lib/data";
-import { analyzePatterns } from "@/lib/patterns";
-import {
-  persistAnalysis,
-  getLatestPatternRun,
-  countEvidence,
-} from "@/lib/patterns-store";
+import { getClientByToken } from "@/lib/data";
+import { refreshPatterns } from "@/lib/patterns-refresh";
 
 export const maxDuration = 300;
 
 /**
- * Generate patterns and store them. This is the only place a model call
- * happens for patterns; the page itself never waits on one.
+ * Manual/safety-net entry point for pattern regeneration.
  *
- * Incremental by default: if no new evidence has landed since the last run,
- * it does nothing and says so. Pass `force: true` to recompute anyway.
- *
- * Intended callers are the daily job and an explicit refresh, not page loads.
+ * Patterns normally refresh on their own: the Fathom session webhook and the
+ * journal upload route both call refreshPatterns() the moment new evidence
+ * lands. This route exists for backfilling, for forcing a rewrite after a
+ * prompt change, and as a recovery path if an automatic refresh errored.
  */
 export async function POST(req: Request) {
   let body: { token?: string; force?: boolean };
@@ -36,47 +30,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown client." }, { status: 404 });
   }
 
-  const evidenceCount = await countEvidence(client.id);
-  if (evidenceCount < 2) {
-    return NextResponse.json({
-      ran: false,
-      reason: "Needs at least two pieces of evidence.",
-      evidenceCount,
-    });
-  }
-
-  const lastRun = await getLatestPatternRun(client.id);
-  if (!force && lastRun && lastRun.evidence_count >= evidenceCount) {
-    return NextResponse.json({
-      ran: false,
-      reason: "No new sessions or journal entries since the last run.",
-      evidenceCount,
-      lastRanAt: lastRun.ran_at,
-    });
-  }
-
-  const [sessions, journalEntries] = await Promise.all([
-    getSessions(client.id),
-    getJournalEntries(client.id),
-  ]);
-
   try {
-    const analysis = await analyzePatterns(
-      client.name,
-      sessions.filter((s) => s.summary_md),
-      journalEntries.filter((e) => e.transcript)
-    );
-    const { written, superseded } = await persistAnalysis(
-      client.id,
-      analysis,
-      evidenceCount
-    );
-    return NextResponse.json({ ran: true, written, superseded, evidenceCount });
+    const result = await refreshPatterns(client.id, { force });
+    return NextResponse.json(result);
   } catch (err) {
     console.error("Pattern generation failed", err);
-    return NextResponse.json(
-      { error: "Pattern generation failed." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Pattern generation failed." }, { status: 500 });
   }
 }

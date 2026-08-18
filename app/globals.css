@@ -799,11 +799,18 @@ a.card:hover::after {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1.15rem;
+  gap: clamp(0.8rem, 2.2vw, 1.75rem);
+  padding: clamp(0.7rem, 2vw, 1.45rem) clamp(1.2rem, 4vw, 3.2rem);
   background: linear-gradient(168deg, #241a13, #120c08 60%, #1c130d);
-  border: 1.5px solid var(--client-accent, var(--gold));
-  border-radius: 3px;
+  border: 2.5px solid var(--client-accent, var(--gold));
+  border-radius: 4px;
+  /* Tilted off the grid on purpose. Every card, panel and input in this app
+     is strictly orthogonal, so a small counter-clockwise rotation is enough
+     to read as a struck plaque hung on the page rather than another
+     container in the layout. Kept under 2deg: past that the letterforms
+     start to look like a mistake instead of a choice. */
+  transform: rotate(-1.6deg);
+  transform-origin: center;
   /* Two gold hairlines inset from the border, the way a struck plaque has a
      bevel inside its frame, plus the app's existing raised-shadow physics. */
   box-shadow:
@@ -813,11 +820,19 @@ a.card:hover::after {
     0 4px 12px rgba(42, 27, 18, 0.12);
 }
 
+.identity-placard-wrap {
+  display: flex;
+  padding: 0.35rem 0.5rem;
+}
+
 .identity-placard-word {
   color: #f7f2e6;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 1.05rem;
+  letter-spacing: 0.2em;
+  /* 3x the original 1.05rem at full width, clamped so a long identity word
+     still fits a 390px viewport without overflowing the header. */
+  font-size: clamp(1.5rem, 5.4vw, 3.15rem);
+  font-weight: 700;
   line-height: 1;
   white-space: nowrap;
   /* A faint gold cast on the letter edges, so the word sits in the same
@@ -826,8 +841,8 @@ a.card:hover::after {
 }
 
 .identity-placard-rule {
-  width: 1.35rem;
-  height: 1px;
+  width: clamp(1.1rem, 3vw, 3.6rem);
+  height: 1.5px;
   flex: none;
   background: linear-gradient(
     90deg,
@@ -851,7 +866,12 @@ a.card:hover::after {
   .identity-placard.is-struck {
     animation: placard-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1);
   }
-  .identity-placard.is-struck .identity-placard-word {
+  .identity-placard.is-struck .identity-placard-wrap {
+  display: flex;
+  padding: 0.35rem 0.5rem;
+}
+
+.identity-placard-word {
     animation: placard-word-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1);
   }
 }
@@ -900,22 +920,28 @@ a.card:hover::after {
 
 .ascent-bolt {
   position: absolute;
-  width: 0.7rem;
-  height: 0.7rem;
-  margin: -0.35rem 0 0 -0.35rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -0.875rem 0 0 -0.875rem;
   border-radius: 999px;
+  /* A hot white core falling off through gold, so it reads as light rather
+     than a coloured dot. The layered box-shadow is the bloom around it. */
   background: radial-gradient(
     circle,
-    rgba(232, 197, 88, 0.95) 0%,
-    rgba(201, 162, 39, 0.55) 45%,
-    rgba(201, 162, 39, 0) 72%
+    rgba(255, 250, 235, 1) 0%,
+    rgba(240, 210, 110, 0.95) 28%,
+    rgba(201, 162, 39, 0.55) 55%,
+    rgba(201, 162, 39, 0) 76%
   );
+  box-shadow:
+    0 0 14px 4px rgba(232, 197, 88, 0.55),
+    0 0 34px 10px rgba(201, 162, 39, 0.28);
   will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .ascent-bolt {
-    animation: ascent-travel 560ms cubic-bezier(0.35, 0, 0.2, 1) forwards;
+    animation: ascent-travel 680ms cubic-bezier(0.35, 0, 0.2, 1) forwards;
   }
 }
 
@@ -933,15 +959,15 @@ a.card:hover::after {
     transform: translate3d(0, 0, 0) scale(0.6);
     opacity: 0;
   }
-  12% {
-    transform: translate3d(0, 0, 0) scale(1.25);
+  10% {
+    transform: translate3d(0, 0, 0) scale(1.5);
     opacity: 1;
   }
-  75% {
+  82% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(var(--bolt-dx), var(--bolt-dy), 0) scale(0.4);
+    transform: translate3d(var(--bolt-dx), var(--bolt-dy), 0) scale(0.55);
     opacity: 0;
   }
 }

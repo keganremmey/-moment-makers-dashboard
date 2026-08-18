@@ -66,15 +66,15 @@ export default async function DashboardLayout(
               />
               <span className="forte-mark text-3xl">𝑓𝑓</span>
               <div>
-                <h1 className="font-display text-3xl uppercase tracking-tight leading-none text-ink">
-                  {client.identity_names?.[0] ?? client.name}
-                </h1>
-                <p className="label">{client.program}</p>
+                {/* The identity word lives in the placard directly below on
+                    every route, so this mobile header carries the program
+                    only. Repeating the word here stacked it twice. */}
+                <h1 className="label">{client.program}</h1>
               </div>
             </div>
 
             {client.identity_names?.[0] && (
-              <div className="flex">
+              <div className="identity-placard-wrap">
                 <IdentityPlacard
                   word={client.identity_names[0]}
                   accent={client.accent_hex}

@@ -37,7 +37,7 @@ export function AscentLight() {
       // Strike the placard as the light lands, not when it launches.
       window.setTimeout(
         () => window.dispatchEvent(new CustomEvent("ff:placard-strike")),
-        520
+        620
       );
     }
 

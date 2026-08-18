@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
 import { getClientByToken } from "@/lib/data";
 import { transcribeAudio } from "@/lib/transcription";
+import { refreshPatterns } from "@/lib/patterns-refresh";
 
 const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
 
@@ -90,6 +91,20 @@ export async function POST(request: Request) {
     if (updateError) {
       console.error("journal entry transcript update error", updateError);
     }
+  }
+
+  // A transcribed journal entry counts as evidence for pattern analysis, so
+  // it invalidates the documented patterns exactly like a new session does.
+  // Untranscribed uploads add nothing readable, so they do not trigger.
+  if (transcription) {
+    after(async () => {
+      try {
+        const result = await refreshPatterns(client.id);
+        console.log("Journal upload: pattern refresh:", JSON.stringify(result));
+      } catch (err) {
+        console.error("Journal upload: pattern refresh failed", err);
+      }
+    });
   }
 
   return NextResponse.json({ id: inserted.id, transcribed: transcription !== null });

@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { supabaseServer } from "@/lib/supabase-server";
+import { refreshPatterns } from "@/lib/patterns-refresh";
 
 // This route lets Fathom automatically create a `sessions` row when a new
 // coaching-call recording is ready, instead of Kegan asking Claude Code to
@@ -310,6 +311,22 @@ export async function POST(request: Request) {
     console.error("Fathom webhook: session upsert failed", upsertError);
     return NextResponse.json({ received: true, matched: true, saved: false }, { status: 200 });
   }
+
+  // A new session is new evidence, so the client's documented patterns are
+  // now stale. Regenerate them after the response is sent: Fathom gets its
+  // 200 immediately and never waits on a model call, and the refresh is
+  // itself incremental so a redelivered webhook costs nothing.
+  after(async () => {
+    try {
+      const result = await refreshPatterns(client.id);
+      console.log(
+        `Fathom webhook: pattern refresh for ${client.name}:`,
+        JSON.stringify(result)
+      );
+    } catch (err) {
+      console.error("Fathom webhook: pattern refresh failed", err);
+    }
+  });
 
   return NextResponse.json({ received: true, matched: true, saved: true }, { status: 200 });
 }
