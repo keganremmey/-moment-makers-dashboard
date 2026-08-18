@@ -107,7 +107,7 @@ export async function analyzePatterns(
     .join("\n\n---\n\n");
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-sonnet-5",
     max_tokens: 4096,
     thinking: { type: "adaptive" },
     output_config: {
