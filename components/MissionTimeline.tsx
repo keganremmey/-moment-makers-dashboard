@@ -1,5 +1,4 @@
 import { formatShortDate, type ProgramTimeline } from "@/lib/timeline";
-import { CheckCircle, Circle } from "@phosphor-icons/react/dist/ssr";
 
 const MISSION_QUOTE = "Be the butler of your future self.";
 
@@ -54,28 +53,28 @@ export function MissionTimeline({
           className="mission-timeline-fill"
           style={{ width: `${timeline.percentElapsed * 100}%` }}
         />
-        {milestones.map((m) => (
-          <div
-            key={m.day}
-            className="mission-checkpoint"
-            style={{ left: `${Math.min(100, (m.day / timeline.totalDays) * 100)}%` }}
-            aria-hidden="true"
-          >
-            {m.passed ? (
-              <CheckCircle
-                weight="fill"
-                size={m.isFinal ? 20 : 14}
-                className="mission-checkpoint-icon is-passed"
-              />
-            ) : (
-              <Circle
-                weight="bold"
-                size={m.isFinal ? 18 : 12}
-                className="mission-checkpoint-icon"
-              />
-            )}
-          </div>
-        ))}
+        {milestones.map((m) => {
+          const size = m.isFinal ? 20 : 14;
+          return (
+            <div
+              key={m.day}
+              className="mission-checkpoint"
+              style={{ left: `${Math.min(100, (m.day / timeline.totalDays) * 100)}%` }}
+              aria-hidden="true"
+            >
+              {m.passed ? (
+                <svg width={size} height={size} viewBox="0 0 20 20" className="mission-checkpoint-icon is-passed">
+                  <circle cx="10" cy="10" r="9" fill="currentColor" />
+                  <path d="M6 10.2 8.7 13 14 7" fill="none" stroke="var(--ink)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <svg width={size} height={size} viewBox="0 0 20 20" className="mission-checkpoint-icon">
+                  <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mission-tick-labels" aria-hidden="true">
