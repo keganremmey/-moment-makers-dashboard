@@ -5,7 +5,6 @@ import {
   getLatestPatternRun,
   countEvidence,
 } from "@/lib/patterns-store";
-import { PatternDraftMessage } from "@/components/PatternDraftMessage";
 
 function formatWhen(iso: string): string {
   const d = new Date(iso);
@@ -78,10 +77,6 @@ export default async function PatternsPage(
           )}
         </section>
       ))}
-
-      {lastRun?.draft_message && (
-        <PatternDraftMessage text={lastRun.draft_message} />
-      )}
 
       {lastRun && (
         <p className="text-xs text-ink-dim">

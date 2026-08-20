@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getClientByToken, getFirstSessionDate } from "@/lib/data";
+import { getClientByToken, getFirstSessionDate, getSkillReps } from "@/lib/data";
 import { DashboardNav } from "@/components/DashboardNav";
 import { Sidebar } from "@/components/Sidebar";
 import { computeProgramTimeline } from "@/lib/timeline";
@@ -33,7 +33,10 @@ export default async function DashboardLayout(
     notFound();
   }
 
-  const startedOn = await getFirstSessionDate(client.id);
+  const [startedOn, reps] = await Promise.all([
+    getFirstSessionDate(client.id),
+    getSkillReps(client.id),
+  ]);
   const timeline =
     startedOn && client.target_date
       ? computeProgramTimeline(startedOn, client.target_date)
@@ -83,7 +86,7 @@ export default async function DashboardLayout(
               </div>
             )}
 
-            {timeline && <MissionTimeline timeline={timeline} />}
+            {timeline && <MissionTimeline timeline={timeline} totalReps={reps.length} />}
 
             <DashboardNav token={token} />
           </header>

@@ -17,7 +17,6 @@ export type StoredPattern = {
 export type PatternRun = {
   ran_at: string;
   status: string;
-  draft_message: string | null;
   evidence_count: number;
 };
 
@@ -44,7 +43,7 @@ export async function getLatestPatternRun(clientId: string): Promise<PatternRun 
   const supabase = supabaseServer();
   const { data, error } = await supabase
     .from("pattern_runs")
-    .select("ran_at,status,draft_message,evidence_count")
+    .select("ran_at,status,evidence_count")
     .eq("client_id", clientId)
     .order("ran_at", { ascending: false })
     .limit(1)
@@ -145,7 +144,6 @@ export async function persistAnalysis(
   await supabase.from("pattern_runs").insert({
     client_id: clientId,
     status: "ok",
-    draft_message: analysis.draftMessage,
     themes_written: written,
     themes_superseded: superseded,
     evidence_count: evidenceCount,

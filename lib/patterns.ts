@@ -12,7 +12,6 @@ export type PatternTheme = {
 
 export type PatternAnalysis = {
   themes: PatternTheme[];
-  draftMessage: string;
 };
 
 let cachedClient: Anthropic | null = null;
@@ -46,9 +45,8 @@ const OUTPUT_SCHEMA = {
         additionalProperties: false,
       },
     },
-    draft_message: { type: "string" },
   },
-  required: ["themes", "draft_message"],
+  required: ["themes"],
   additionalProperties: false,
 } as const;
 
@@ -121,7 +119,7 @@ export async function analyzePatterns(
     messages: [
       {
         role: "user",
-        content: `Here are ${clientName}'s coaching session summaries and self-recorded journal entries, oldest first, each dated:\n\n${transcript}\n\nTwo things:\n\n1. Identify 2-4 real recurring themes across these sessions and journal entries, following the method above. For each: a short title, a 1-3 sentence description in feedforward/behavioral language, the exact first_seen and last_seen dates, session_count (how many sessions and journal entries together actually evidence it), and a forward_invitation, one concrete, small, client-choosable question or experiment for next time.\n\n2. Draft a short check-in text or email from the coach to ${clientName}, in a warm, direct, non-generic voice. Like a text from someone who's actually been paying attention, not a corporate check-in. Reference one specific, real, dated thing from these sessions or journal entries. Keep it under 80 words. Close with a feedforward-style invitation (an experiment or a question about next time), not "let me know if you need anything." Do not use an em dash anywhere in this message.`,
+        content: `Here are ${clientName}'s coaching session summaries and self-recorded journal entries, oldest first, each dated:\n\n${transcript}\n\nIdentify 2-4 real recurring themes across these sessions and journal entries, following the method above. For each: a short title, a 1-3 sentence description in feedforward/behavioral language, the exact first_seen and last_seen dates, session_count (how many sessions and journal entries together actually evidence it), and a forward_invitation, one concrete, small, client-choosable question or experiment for next time.`,
       },
     ],
   });
@@ -146,7 +144,6 @@ export async function analyzePatterns(
       session_count: number;
       forward_invitation: string;
     }[];
-    draft_message: string;
   };
 
   return {
@@ -158,6 +155,5 @@ export async function analyzePatterns(
       sessionCount: t.session_count,
       forwardInvitation: t.forward_invitation,
     })),
-    draftMessage: parsed.draft_message,
   };
 }

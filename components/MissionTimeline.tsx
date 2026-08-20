@@ -1,25 +1,13 @@
 import { formatShortDate, type ProgramTimeline } from "@/lib/timeline";
+import { CheckCircle, Circle } from "@phosphor-icons/react/dist/ssr";
 
-// Real, publicly attributed Rumi lines (not invented) , used sparingly, one
-// per milestone tick, cycling if there are more ticks than quotes. This is
-// published poetry in the public domain, not a claim about anything Ian or
-// Kegan said, so it doesn't fall under this app's "never fabricate client
-// content" rule the way an invented coaching quote would.
-const RUMI_LINES = [
-  "You were born with wings, why prefer to crawl through life?",
-  "Let yourself be silently drawn by the strange pull of what you really love.",
-  "The wound is the place where the light enters you.",
-  "Respond to every call that excites your spirit.",
-  "What you seek is seeking you.",
-  "Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.",
-];
+const MISSION_QUOTE = "Be the butler of your future self.";
 
 type Milestone = {
   day: number;
   dateStr: string;
   passed: boolean;
   isFinal: boolean;
-  quote: string;
 };
 
 function addDays(startedOn: string, days: number): string {
@@ -40,16 +28,21 @@ function buildMilestones(timeline: ProgramTimeline): Milestone[] {
   }
   days.push(timeline.totalDays);
 
-  return days.map((day, i) => ({
+  return days.map((day) => ({
     day,
     dateStr: addDays(timeline.startedOn, day),
     passed: timeline.elapsedDays >= day,
     isFinal: day === timeline.totalDays,
-    quote: RUMI_LINES[i % RUMI_LINES.length],
   }));
 }
 
-export function MissionTimeline({ timeline }: { timeline: ProgramTimeline }) {
+export function MissionTimeline({
+  timeline,
+  totalReps,
+}: {
+  timeline: ProgramTimeline;
+  totalReps: number;
+}) {
   const milestones = buildMilestones(timeline);
   const nextMilestone = milestones.find((m) => !m.passed) ?? milestones[milestones.length - 1];
   const daysToNext = Math.max(0, nextMilestone.day - Math.max(0, timeline.elapsedDays));
@@ -64,10 +57,24 @@ export function MissionTimeline({ timeline }: { timeline: ProgramTimeline }) {
         {milestones.map((m) => (
           <div
             key={m.day}
-            className={`mission-tick${m.passed ? " is-passed" : ""}${m.isFinal ? " is-final" : ""}`}
+            className="mission-checkpoint"
             style={{ left: `${Math.min(100, (m.day / timeline.totalDays) * 100)}%` }}
             aria-hidden="true"
-          />
+          >
+            {m.passed ? (
+              <CheckCircle
+                weight="fill"
+                size={m.isFinal ? 20 : 14}
+                className="mission-checkpoint-icon is-passed"
+              />
+            ) : (
+              <Circle
+                weight="bold"
+                size={m.isFinal ? 18 : 12}
+                className="mission-checkpoint-icon"
+              />
+            )}
+          </div>
         ))}
       </div>
 
@@ -83,17 +90,17 @@ export function MissionTimeline({ timeline }: { timeline: ProgramTimeline }) {
         ))}
       </div>
 
-      {/* Stat plate: a dark lacquer plaque with a gold frame, bold display-
-          face day count up front , a Hunter-License-style stat card rather
-          than thin caption text floating directly on the busy paper grain,
-          which was unreadable. */}
+      {/* Stat plate: a dark lacquer plaque with a gold frame. The headline
+          number is reps logged, not elapsed days , what he actually built,
+          not what the calendar produced for free. Day count still lives
+          here, just demoted to the caption line below it. */}
       <div className="mission-stat-plate">
         <div className="mission-stat-headline">
-          <span className="mission-stat-day">Day {Math.max(0, timeline.elapsedDays)}</span>
-          <span className="mission-stat-of">of {timeline.totalDays}</span>
+          <span className="mission-stat-day">{totalReps}</span>
+          <span className="mission-stat-of">rep{totalReps === 1 ? "" : "s"} logged</span>
         </div>
         <p className="mission-timeline-caption">
-          started {formatShortDate(timeline.startedOn)}
+          Day {Math.max(0, timeline.elapsedDays)} of {timeline.totalDays}
           {" · "}
           {timeline.remainingDays > 0
             ? `${timeline.remainingDays} days to Fortissimo Summit`
@@ -101,9 +108,9 @@ export function MissionTimeline({ timeline }: { timeline: ProgramTimeline }) {
         </p>
         <p className="mission-quote">
           {daysToNext > 0
-            ? `${daysToNext} day${daysToNext === 1 ? "" : "s"} to your next milestone (${nextMilestone.isFinal ? "the Summit" : `Day ${nextMilestone.day}`}): `
-            : "You just reached a milestone: "}
-          <span className="mission-quote-text">&ldquo;{nextMilestone.quote}&rdquo;</span>
+            ? `${daysToNext} day${daysToNext === 1 ? "" : "s"} to your next checkpoint (${nextMilestone.isFinal ? "the Summit" : `Day ${nextMilestone.day}`}): `
+            : "You just cleared a checkpoint: "}
+          <span className="mission-quote-text">&ldquo;{MISSION_QUOTE}&rdquo;</span>
         </p>
       </div>
     </div>
