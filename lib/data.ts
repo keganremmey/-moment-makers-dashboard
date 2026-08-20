@@ -12,7 +12,7 @@ export type Client = {
   accent_hex: string | null;
   target_date: string | null;
   access_token: string;
-  vision_board_path: string | null;
+  vision_board_paths: string[];
   created_at: string;
 };
 

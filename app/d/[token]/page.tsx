@@ -41,13 +41,15 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
   const client = await getClientByToken(token);
   if (!client) notFound();
 
-  const visionBoardUrl = client.vision_board_path
-    ? (
-        await supabaseServer()
-          .storage.from("vision-boards")
-          .createSignedUrl(client.vision_board_path, 3600)
-      ).data?.signedUrl ?? null
-    : null;
+  const visionBoardUrls = (
+    await Promise.all(
+      client.vision_board_paths.map((path) =>
+        supabaseServer().storage.from("vision-boards").createSignedUrl(path, 3600)
+      )
+    )
+  )
+    .map((res) => res.data?.signedUrl)
+    .filter((url): url is string => Boolean(url));
 
   const [skills, reps, tasks, wins, startedOn] = await Promise.all([
     getSkills(),
@@ -241,17 +243,20 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           </section>
         )}
 
-        <section className="card overflow-hidden p-0">
-          <div className="p-5 pb-0">
-            <p className="label">Vision Board</p>
-          </div>
-          {visionBoardUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={visionBoardUrl}
-              alt={`${client.identity_names?.[0] ?? client.name}'s vision board`}
-              className="mt-3 w-full"
-            />
+        <section className="card p-5">
+          <p className="label">Vision Board</p>
+          {visionBoardUrls.length > 0 ? (
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {visionBoardUrls.map((url, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={url}
+                  src={url}
+                  alt={`${client.identity_names?.[0] ?? client.name}'s vision board, image ${i + 1}`}
+                  className="aspect-[4/5] w-full rounded-lg border border-paper-line object-cover"
+                />
+              ))}
+            </div>
           ) : (
             <div className="flex flex-col items-center gap-2 px-5 py-10 text-center">
               <p className="text-base text-ink-dim">
