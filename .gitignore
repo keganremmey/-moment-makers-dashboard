@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local-only design scratch page, never ships to the client site
+public/texture-lab.html

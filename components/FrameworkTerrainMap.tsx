@@ -23,16 +23,35 @@ const TERRAIN_MAP_URL =
 
 type TerritoryId = (typeof TERRITORIES)[number]["id"];
 
-// Center point of each territory's real signage in the image, in
-// percent-of-image units, hand-matched against the artwork.
+// Where each territory's pin sits, in percent-of-image units.
+//
+// Measured against the source artwork at its native 1402x1122, then set so
+// the pin hangs DIRECTLY BELOW that territory's painted sign rather than
+// floating near it. `cx` is the horizontal centre of the signboard; `cy` is
+// just under its lower edge. The marker is centre-anchored
+// (translate(-50%,-50%)), so these are pin centres, not top-left corners.
+//
+// Previous values were eyeballed and drifted badly: several pins sat closer
+// to a neighbouring sign than to their own, which made the map read as
+// decorative rather than as a set of labelled controls.
 const TERRITORY_SPOT: Record<TerritoryId, { cx: number; cy: number }> = {
-  summit: { cx: 54, cy: 30 },
-  valley: { cx: 41, cy: 62 },
-  fog: { cx: 21, cy: 76 },
-  crossroads: { cx: 62, cy: 71 },
-  flatlands: { cx: 82, cy: 63 },
-  swamp: { cx: 32, cy: 78 },
-  "frozen-lake": { cx: 76, cy: 68 },
+  // Arch banner spans x 650-870, lower edge ~y 300.
+  summit: { cx: 54, cy: 29 },
+  // Standing stone spans x 420-540, base ~y 600.
+  valley: { cx: 34, cy: 55 },
+  // Hanging banner spans x 60-280, tassels end ~y 740.
+  fog: { cx: 12, cy: 68 },
+  // Signpost board spans x 640-810, board bottom ~y 650 (above the post).
+  crossroads: { cx: 51.5, cy: 60 },
+  // Board spans x 1015-1165, lower edge ~y 580.
+  flatlands: { cx: 78, cy: 54 },
+  // Board spans x 290-500 and its lower edge sits at ~y 1085, closer to the
+  // frame bottom than the other signs. The pin hangs just under it and rides
+  // the bottom edge of the canvas, which is why this one is not clear of the
+  // frame the way the others are.
+  swamp: { cx: 28, cy: 98 },
+  // Board spans x 1105-1265, lower edge ~y 985.
+  "frozen-lake": { cx: 84.5, cy: 90 },
 };
 
 export function FrameworkTerrainMap({ frameworks }: { frameworks: Framework[] }) {
