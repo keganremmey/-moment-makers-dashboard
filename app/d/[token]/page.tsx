@@ -112,10 +112,25 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
     <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[1fr_320px] lg:items-start lg:gap-6">
       <div className="flex flex-col gap-8">
 
+        {client.north_star && (
+          <section className="card border-l-4 border-l-gold p-6">
+            <p className="label">North Star</p>
+            <p className="mt-3 text-pretty font-display text-2xl leading-snug text-ink">
+              &ldquo;{client.north_star}&rdquo;
+            </p>
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-paper-line pt-3 font-mono text-xs uppercase tracking-wide text-ink-dim">
+              {client.program && <span>{client.program}</span>}
+              {startedOn && <span>Started {formatShortDate(startedOn)}</span>}
+              {client.target_date && <span>Target {formatShortDate(client.target_date)}</span>}
+              <span>{overallStatus.belt.name} rank</span>
+            </div>
+          </section>
+        )}
+
         {/* Wins lead the page: the client's own recorded evidence of
             progress, before any stat, chart, or logistics. This is the
             fullest version of the card language already established for
-            North Star below (gold left rail, p-6, not the plain p-5 most
+            North Star above (gold left rail, p-6, not the plain p-5 most
             cards use), now applied to the section that most makes a client
             want to keep opening this link. Static, not a click-through: it
             already carries its own "All wins" link inside, so the whole
@@ -194,6 +209,30 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           />
         </section>
 
+        <section className="card p-5">
+          <p className="label">Vision Board</p>
+          {visionBoardUrls.length > 0 ? (
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {visionBoardUrls.map((url, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={url}
+                  src={url}
+                  alt={`${client.identity_names?.[0] ?? client.name}'s vision board, image ${i + 1}`}
+                  className="aspect-[4/5] w-full rounded-lg border border-paper-line object-cover"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2 px-5 py-10 text-center">
+              <p className="text-base text-ink-dim">
+                Your vision board is on the way. Once it&apos;s ready, this is
+                where you&apos;ll see yourself in it.
+              </p>
+            </div>
+          )}
+        </section>
+
         <GrowthMountain reps={reps} />
 
         <section className="card p-5">
@@ -226,45 +265,6 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
           >
             Full skill map →
           </Link>
-        </section>
-
-        {client.north_star && (
-          <section className="card border-l-4 border-l-gold p-6">
-            <p className="label">North Star</p>
-            <p className="mt-3 text-pretty font-display text-2xl leading-snug text-ink">
-              &ldquo;{client.north_star}&rdquo;
-            </p>
-            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-paper-line pt-3 font-mono text-xs uppercase tracking-wide text-ink-dim">
-              {client.program && <span>{client.program}</span>}
-              {startedOn && <span>Started {formatShortDate(startedOn)}</span>}
-              {client.target_date && <span>Target {formatShortDate(client.target_date)}</span>}
-              <span>{overallStatus.belt.name} rank</span>
-            </div>
-          </section>
-        )}
-
-        <section className="card p-5">
-          <p className="label">Vision Board</p>
-          {visionBoardUrls.length > 0 ? (
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {visionBoardUrls.map((url, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={url}
-                  src={url}
-                  alt={`${client.identity_names?.[0] ?? client.name}'s vision board, image ${i + 1}`}
-                  className="aspect-[4/5] w-full rounded-lg border border-paper-line object-cover"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center gap-2 px-5 py-10 text-center">
-              <p className="text-base text-ink-dim">
-                Your vision board is on the way. Once it&apos;s ready, this is
-                where you&apos;ll see yourself in it.
-              </p>
-            </div>
-          )}
         </section>
       </div>
 
