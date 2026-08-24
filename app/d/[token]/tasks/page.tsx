@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getClientByToken, getTasks, type Task } from "@/lib/data";
 import { TaskCheckbox } from "@/components/TaskCheckbox";
+import { AddTaskInput } from "@/components/AddTaskInput";
 
 function TaskGroup({
   title,
@@ -69,6 +70,7 @@ export default async function TasksPage(props: PageProps<"/d/[token]/tasks">) {
 
   return (
     <div className="flex flex-col gap-6">
+      <AddTaskInput token={token} />
       <TaskGroup
         title="Slipped, needs a look"
         tasks={slipped}

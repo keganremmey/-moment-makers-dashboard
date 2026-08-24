@@ -25,7 +25,7 @@ export function AscentLight() {
   useEffect(() => {
     function onComplete(e: Event) {
       const from = (e as CustomEvent<{ x: number; y: number }>).detail;
-      const target = window.__ffPlacard;
+      const target = window.__ffPlacard?.();
       if (!from || !target) return;
 
       const id = ++seq;
@@ -34,11 +34,15 @@ export function AscentLight() {
         { id, x: from.x, y: from.y, dx: target.x - from.x, dy: target.y - from.y },
       ]);
 
-      // Strike the placard as the light lands, not when it launches.
-      window.setTimeout(
-        () => window.dispatchEvent(new CustomEvent("ff:placard-strike")),
-        620
-      );
+      // Strike the placard as the light lands, not when it launches. The
+      // plus-one is dispatched separately from the strike glow, since the
+      // glow also fires just from landing on the stats page (see
+      // IdentityPlacard's isStatsPage announcement), and that arrival should
+      // never claim a rep that wasn't actually earned.
+      window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("ff:placard-strike"));
+        window.dispatchEvent(new CustomEvent("ff:placard-plusone"));
+      }, 620);
     }
 
     window.addEventListener("ff:task-complete", onComplete);

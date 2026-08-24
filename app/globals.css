@@ -864,6 +864,47 @@ a.card:hover::after {
   );
 }
 
+/* The score-popup a landing light leaves behind: a gold "+1" in the
+   placard's own display face, anchored to its top-right corner, video-game
+   style , a quick pop in, a hold, then a fade, roughly 2.5s total. */
+.identity-placard-plusone {
+  position: absolute;
+  top: -0.7rem;
+  right: -0.6rem;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  font-weight: 700;
+  color: var(--gold-bright);
+  text-shadow: 0 0 14px rgba(232, 197, 88, 0.85), 0 0 28px rgba(201, 162, 39, 0.5);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .identity-placard-plusone {
+    animation: placard-plusone 2.6s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .identity-placard-plusone {
+    animation: placard-plusone-fade 2.6s ease-out forwards;
+  }
+}
+
+@keyframes placard-plusone {
+  0% { opacity: 0; transform: scale(0.5) translateY(6px); }
+  12% { opacity: 1; transform: scale(1.15) translateY(0); }
+  22% { transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1) translateY(-10px); }
+}
+
+@keyframes placard-plusone-fade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* The strike: what a landing light does to the placard. Deliberately a
    brightening of what is already there (border, inner bevel, letter glow)
    rather than an overlay flash, so nothing new appears on screen. */

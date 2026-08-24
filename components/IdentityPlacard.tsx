@@ -13,6 +13,8 @@ import { usePathname } from "next/navigation";
  * sits to this placard's measured centre, so the motion always terminates on
  * the identity rather than dissipating into empty page.
  */
+let plusOneSeq = 0;
+
 export function IdentityPlacard({
   word,
   accent,
@@ -24,27 +26,26 @@ export function IdentityPlacard({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [struck, setStruck] = useState(false);
+  const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const pathname = usePathname();
   // The overview route is the stats page: the KPI row, growth mountain and
   // belt ladder all live there. Landing on it announces the identity.
   const isStatsPage = pathname === `/d/${token}`;
 
-  // Publish the placard's live position so the traveling light has a real
-  // target. Recomputed on resize and scroll rather than cached at mount,
-  // since the header is sticky and the page below it scrolls independently.
+  // Expose the placard's position as an on-demand getter rather than a
+  // value kept fresh by scroll/resize listeners: the light only ever needs
+  // this once, at the moment a task completes, so measuring live at read
+  // time is both simpler and cheaper than reflowing on every scroll tick.
   useEffect(() => {
-    const publish = () => {
+    const getPos = () => {
       const el = ref.current;
-      if (!el) return;
+      if (!el) return null;
       const r = el.getBoundingClientRect();
-      window.__ffPlacard = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
     };
-    publish();
-    window.addEventListener("resize", publish);
-    window.addEventListener("scroll", publish, { passive: true });
+    window.__ffPlacard = getPos;
     return () => {
-      window.removeEventListener("resize", publish);
-      window.removeEventListener("scroll", publish);
+      if (window.__ffPlacard === getPos) window.__ffPlacard = undefined;
     };
   }, []);
 
@@ -59,6 +60,18 @@ export function IdentityPlacard({
     return () => window.removeEventListener("ff:placard-strike", onArrive);
   }, [isStatsPage, pathname]);
 
+  // The gold "+1" that flashes on arrival, video-game-style. Kept separate
+  // from the strike glow above: the glow also plays on stats-page arrival,
+  // and a plus-one there would credit a rep that was never actually earned.
+  useEffect(() => {
+    const onPlusOne = () => {
+      const id = ++plusOneSeq;
+      setPlusOnes((cur) => [...cur, id]);
+    };
+    window.addEventListener("ff:placard-plusone", onPlusOne);
+    return () => window.removeEventListener("ff:placard-plusone", onPlusOne);
+  }, []);
+
   return (
     <div
       ref={ref}
@@ -69,12 +82,22 @@ export function IdentityPlacard({
       <span className="identity-placard-rule" aria-hidden="true" />
       <span className="identity-placard-word font-display">{word}</span>
       <span className="identity-placard-rule" aria-hidden="true" />
+      {plusOnes.map((id) => (
+        <span
+          key={id}
+          className="identity-placard-plusone font-display"
+          aria-hidden="true"
+          onAnimationEnd={() => setPlusOnes((cur) => cur.filter((x) => x !== id))}
+        >
+          +1
+        </span>
+      ))}
     </div>
   );
 }
 
 declare global {
   interface Window {
-    __ffPlacard?: { x: number; y: number };
+    __ffPlacard?: () => { x: number; y: number } | null;
   }
 }
