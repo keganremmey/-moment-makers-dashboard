@@ -816,6 +816,10 @@ a.card:hover::after {
      start to look like a mistake instead of a choice. */
   transform: rotate(-1.6deg);
   transform-origin: center;
+  /* How large the checkpoint burst peaks, cut down on narrow viewports so a
+     3x placard never overruns a 390px screen; full size from tablet width
+     up (see the override below). */
+  --checkpoint-peak-scale: 1.7;
   /* Two gold hairlines inset from the border, the way a struck plaque has a
      bevel inside its frame, plus the app's existing raised-shadow physics. */
   box-shadow:
@@ -828,6 +832,31 @@ a.card:hover::after {
 .identity-placard-wrap {
   display: flex;
   padding: 0.35rem 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .identity-placard {
+    --checkpoint-peak-scale: 3;
+  }
+}
+
+/* The center-outward glow the checkpoint burst flashes across the placard's
+   own dark field, a literal reveal rather than an overlay so it never
+   spills past the placard's edges. */
+.identity-placard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(232, 197, 88, 0.55) 0%,
+    rgba(232, 197, 88, 0.26) 45%,
+    rgba(232, 197, 88, 0) 75%
+  );
+  opacity: 0;
+  pointer-events: none;
+  clip-path: circle(0% at 50% 50%);
 }
 
 .identity-placard-word {
@@ -907,6 +936,38 @@ a.card:hover::after {
   100% { opacity: 0; }
 }
 
+/* The checkpoint variant: "+1,000" instead of "+1". Six characters, so a
+   noticeably smaller face than the everyday badge is what keeps every
+   letter inside the dark field on a 390px placard. No independent scale
+   ramp of its own, only a fade, since the whole placard is already
+   ballooning underneath it via .is-checkpoint , stacking two scale
+   animations would overshoot the frame. */
+.identity-placard-plusone.is-big {
+  top: 0.3rem;
+  right: 0.4rem;
+  font-size: clamp(0.72rem, 2.1vw, 1.15rem);
+  letter-spacing: 0.02em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .identity-placard-plusone.is-big {
+    animation: placard-plusone-big 1.8s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .identity-placard-plusone.is-big {
+    animation: placard-plusone-fade 1.8s ease-out forwards;
+  }
+}
+
+@keyframes placard-plusone-big {
+  0% { opacity: 0; transform: scale(0.85); }
+  15% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.12); }
+}
+
 /* The strike: what a landing light does to the placard. Deliberately a
    brightening of what is already there (border, inner bevel, letter glow)
    rather than an overlay flash, so nothing new appears on screen. */
@@ -937,6 +998,37 @@ a.card:hover::after {
   .identity-placard.is-struck.is-hit {
     animation: placard-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1), placard-shake 380ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
   }
+
+  /* The checkpoint burst: the placard itself raises up to --checkpoint-peak-
+     scale and settles back, paired with the center-outward glow on its own
+     ::before. A real checkpoint always strikes too (see AscentLight), so
+     the combined rule is what actually plays , is-checkpoint alone would
+     only matter if something ever fired it without a strike. */
+  .identity-placard.is-checkpoint {
+    animation: placard-checkpoint-burst 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20;
+  }
+
+  .identity-placard.is-checkpoint::before {
+    animation: placard-checkpoint-glow 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .identity-placard.is-struck.is-checkpoint {
+    animation: placard-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1), placard-checkpoint-burst 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20;
+  }
+}
+
+@keyframes placard-checkpoint-burst {
+  0% { transform: rotate(-1.6deg) scale(1); }
+  45% { transform: rotate(-1.6deg) scale(var(--checkpoint-peak-scale, 1.7)); }
+  100% { transform: rotate(-1.6deg) scale(1); }
+}
+
+@keyframes placard-checkpoint-glow {
+  0% { opacity: 0; clip-path: circle(0% at 50% 50%); }
+  40% { opacity: 1; }
+  100% { opacity: 0; clip-path: circle(75% at 50% 50%); }
 }
 
 @keyframes placard-shake {

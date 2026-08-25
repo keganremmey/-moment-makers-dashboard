@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getClientByToken, getFirstSessionDate, getSkillReps } from "@/lib/data";
 import { DashboardNav } from "@/components/DashboardNav";
 import { Sidebar } from "@/components/Sidebar";
-import { computeProgramTimeline } from "@/lib/timeline";
+import { computeProgramTimeline, getCheckpointDays } from "@/lib/timeline";
 import { MissionTimeline } from "@/components/MissionTimeline";
 import { IdentityPlacard } from "@/components/IdentityPlacard";
 import { AscentLight } from "@/components/AscentLight";
@@ -41,6 +41,16 @@ export default async function DashboardLayout(
     startedOn && client.target_date
       ? computeProgramTimeline(startedOn, client.target_date)
       : null;
+
+  // The highest checkpoint day already crossed but not yet celebrated. Null
+  // once the client's last_celebrated marker has caught up (the normal
+  // steady state) so the placard only ever bursts for a genuinely new
+  // milestone, never on every page load.
+  const pendingCheckpointDay = timeline
+    ? getCheckpointDays(timeline.totalDays)
+        .filter((day) => timeline.elapsedDays >= day && day > client.last_celebrated_checkpoint_day)
+        .at(0) ?? null
+    : null;
 
   return (
     <>
@@ -82,6 +92,7 @@ export default async function DashboardLayout(
                   word={client.identity_names[0]}
                   accent={client.accent_hex}
                   token={token}
+                  pendingCheckpointDay={pendingCheckpointDay}
                 />
               </div>
             )}

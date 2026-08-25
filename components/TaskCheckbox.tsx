@@ -25,9 +25,14 @@ export function TaskCheckbox({
     // follows, so a light launched afterward would launch from a dead node.
     if (!done && boxRef.current) {
       const r = boxRef.current.getBoundingClientRect();
+      const checkpointDay = window.__ffPendingCheckpointDay ?? null;
       window.dispatchEvent(
         new CustomEvent("ff:task-complete", {
-          detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+          detail: {
+            x: r.left + r.width / 2,
+            y: r.top + r.height / 2,
+            checkpointDay,
+          },
         })
       );
     }

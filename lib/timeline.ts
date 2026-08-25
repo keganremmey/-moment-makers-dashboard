@@ -33,6 +33,26 @@ export function computeProgramTimeline(
   return { startedOn, targetOn, totalDays, elapsedDays, remainingDays, percentElapsed };
 }
 
+/**
+ * The same ~6-evenly-spaced, rounded-to-a-nice-5-day-number milestone days
+ * MissionTimeline draws as checkpoints on the progress bar, extracted here
+ * so the server (layout.tsx, deciding whether a checkpoint was just
+ * crossed) and the client (MissionTimeline, drawing the ticks) always agree
+ * on exactly which days count, rather than two copies of the same math
+ * drifting apart.
+ */
+export function getCheckpointDays(totalDays: number): number[] {
+  const rawInterval = totalDays / 6;
+  const interval = Math.max(5, Math.round(rawInterval / 5) * 5);
+
+  const days: number[] = [];
+  for (let d = interval; d < totalDays; d += interval) {
+    days.push(d);
+  }
+  days.push(totalDays);
+  return days;
+}
+
 export function formatShortDate(dateStr: string): string {
   return new Date(dateStr + "T00:00:00Z").toLocaleDateString("en-US", {
     month: "short",

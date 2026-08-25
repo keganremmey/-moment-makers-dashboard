@@ -1,4 +1,4 @@
-import { formatShortDate, type ProgramTimeline } from "@/lib/timeline";
+import { formatShortDate, getCheckpointDays, type ProgramTimeline } from "@/lib/timeline";
 
 const MISSION_QUOTE = "Be the butler of your future self.";
 
@@ -15,19 +15,8 @@ function addDays(startedOn: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** ~6 evenly spaced milestones, rounded to a "nice" 5-day number so the
- * ticks read as real markers instead of an arbitrary fraction. */
 function buildMilestones(timeline: ProgramTimeline): Milestone[] {
-  const rawInterval = timeline.totalDays / 6;
-  const interval = Math.max(5, Math.round(rawInterval / 5) * 5);
-
-  const days: number[] = [];
-  for (let d = interval; d < timeline.totalDays; d += interval) {
-    days.push(d);
-  }
-  days.push(timeline.totalDays);
-
-  return days.map((day) => ({
+  return getCheckpointDays(timeline.totalDays).map((day) => ({
     day,
     dateStr: addDays(timeline.startedOn, day),
     passed: timeline.elapsedDays >= day,

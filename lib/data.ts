@@ -13,6 +13,7 @@ export type Client = {
   target_date: string | null;
   access_token: string;
   vision_board_paths: string[];
+  last_celebrated_checkpoint_day: number;
   created_at: string;
 };
 

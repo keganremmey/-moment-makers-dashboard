@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { playSuccessChime } from "@/lib/chime";
+import { playLevelUpSweep, playBellCascadeEcho } from "@/lib/chime";
 
 /**
  * The client's identity word as a struck placard: black field, white
@@ -20,15 +20,19 @@ export function IdentityPlacard({
   word,
   accent,
   token,
+  pendingCheckpointDay,
 }: {
   word: string;
   accent?: string | null;
   token: string;
+  pendingCheckpointDay: number | null;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [struck, setStruck] = useState(false);
   const [hit, setHit] = useState(false);
+  const [checkpoint, setCheckpoint] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
+  const [bigOnes, setBigOnes] = useState<number[]>([]);
   const pathname = usePathname();
   // The overview route is the stats page: the KPI row, growth mountain and
   // belt ladder all live there. Landing on it announces the identity.
@@ -50,6 +54,18 @@ export function IdentityPlacard({
       if (window.__ffPlacard === getPos) window.__ffPlacard = undefined;
     };
   }, []);
+
+  // A plain value, not a getter: TaskCheckbox only needs to know whether a
+  // real mission-timeline checkpoint is waiting to be celebrated, read at
+  // the moment someone completes a task, never kept fresh on a timer.
+  useEffect(() => {
+    window.__ffPendingCheckpointDay = pendingCheckpointDay;
+    return () => {
+      if (window.__ffPendingCheckpointDay === pendingCheckpointDay) {
+        window.__ffPendingCheckpointDay = undefined;
+      }
+    };
+  }, [pendingCheckpointDay]);
 
   // Struck by an arriving light, or by landing on a page that announces itself.
   useEffect(() => {
@@ -73,20 +89,47 @@ export function IdentityPlacard({
       setPlusOnes((cur) => [...cur, id]);
       setHit(false);
       requestAnimationFrame(() => setHit(true));
-      playSuccessChime();
+      playLevelUpSweep();
     };
     window.addEventListener("ff:placard-plusone", onPlusOne);
     return () => window.removeEventListener("ff:placard-plusone", onPlusOne);
   }, []);
 
+  // The escalated celebration for a real mission-timeline checkpoint: a
+  // "+1,000" instead of "+1", the whole placard bursting rather than just
+  // shaking, and the bell-cascade-with-echo instead of the everyday sweep.
+  // Also tells the server this checkpoint has been shown, so it never
+  // replays on a later, ordinary task completion.
+  useEffect(() => {
+    const onCheckpoint = (e: Event) => {
+      const day = (e as CustomEvent<{ day: number }>).detail?.day;
+      const id = ++plusOneSeq;
+      setBigOnes((cur) => [...cur, id]);
+      setCheckpoint(false);
+      requestAnimationFrame(() => setCheckpoint(true));
+      playBellCascadeEcho();
+
+      if (typeof day === "number") {
+        fetch("/api/checkpoints/acknowledge", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, day }),
+        }).catch(() => {});
+      }
+    };
+    window.addEventListener("ff:placard-checkpoint", onCheckpoint);
+    return () => window.removeEventListener("ff:placard-checkpoint", onCheckpoint);
+  }, [token]);
+
   return (
     <div
       ref={ref}
-      className={`identity-placard${struck ? " is-struck" : ""}${hit ? " is-hit" : ""}`}
+      className={`identity-placard${struck ? " is-struck" : ""}${hit ? " is-hit" : ""}${checkpoint ? " is-checkpoint" : ""}`}
       style={accent ? ({ "--client-accent": accent } as React.CSSProperties) : undefined}
       onAnimationEnd={() => {
         setStruck(false);
         setHit(false);
+        setCheckpoint(false);
       }}
     >
       <span className="identity-placard-rule" aria-hidden="true" />
@@ -102,6 +145,16 @@ export function IdentityPlacard({
           +1
         </span>
       ))}
+      {bigOnes.map((id) => (
+        <span
+          key={id}
+          className="identity-placard-plusone is-big font-display"
+          aria-hidden="true"
+          onAnimationEnd={() => setBigOnes((cur) => cur.filter((x) => x !== id))}
+        >
+          +1,000
+        </span>
+      ))}
     </div>
   );
 }
@@ -109,5 +162,6 @@ export function IdentityPlacard({
 declare global {
   interface Window {
     __ffPlacard?: () => { x: number; y: number } | null;
+    __ffPendingCheckpointDay?: number | null;
   }
 }

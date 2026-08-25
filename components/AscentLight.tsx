@@ -24,24 +24,30 @@ export function AscentLight() {
 
   useEffect(() => {
     function onComplete(e: Event) {
-      const from = (e as CustomEvent<{ x: number; y: number }>).detail;
+      const detail = (e as CustomEvent<{ x: number; y: number; checkpointDay?: number | null }>).detail;
       const target = window.__ffPlacard?.();
-      if (!from || !target) return;
+      if (!detail || !target) return;
+      const { x: fx, y: fy, checkpointDay } = detail;
 
       const id = ++seq;
       setBolts((b) => [
         ...b,
-        { id, x: from.x, y: from.y, dx: target.x - from.x, dy: target.y - from.y },
+        { id, x: fx, y: fy, dx: target.x - fx, dy: target.y - fy },
       ]);
 
-      // Strike the placard as the light lands, not when it launches. The
-      // plus-one is dispatched separately from the strike glow, since the
-      // glow also fires just from landing on the stats page (see
-      // IdentityPlacard's isStatsPage announcement), and that arrival should
-      // never claim a rep that wasn't actually earned.
+      // Strike the placard as the light lands, not when it launches. A
+      // pending real mission-timeline checkpoint (set by layout.tsx, read by
+      // TaskCheckbox at click time) escalates this landing to the big
+      // celebration instead of the everyday plus-one, never both, so which
+      // reward fires is grounded in genuine calendar progress rather than a
+      // random roll.
       window.setTimeout(() => {
         window.dispatchEvent(new CustomEvent("ff:placard-strike"));
-        window.dispatchEvent(new CustomEvent("ff:placard-plusone"));
+        if (checkpointDay != null) {
+          window.dispatchEvent(new CustomEvent("ff:placard-checkpoint", { detail: { day: checkpointDay } }));
+        } else {
+          window.dispatchEvent(new CustomEvent("ff:placard-plusone"));
+        }
       }, 620);
     }
 
