@@ -831,7 +831,20 @@ a.card:hover::after {
 
 .identity-placard-wrap {
   display: flex;
-  padding: 0.35rem 0.5rem;
+  padding: 0.75rem 0.5rem 0.35rem;
+  /* Stays pinned to the viewport as the page scrolls, on phone and desktop
+     alike, so it's still on screen to visibly receive the task-completion
+     light no matter how far down a long task list someone has scrolled.
+     Sticks flush to the very top (rather than with a gap) with its own
+     opaque paper backdrop, so whatever scrolls underneath disappears behind
+     it cleanly instead of peeking through a transparent gap. Below the
+     ascent light's own layer (z-index 30) so a landing bolt still renders
+     on top of it, above ordinary page content so cards scrolling underneath
+     don't paint over it. */
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  z-index: 20;
 }
 
 @media (min-width: 640px) {

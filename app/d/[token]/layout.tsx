@@ -63,40 +63,47 @@ export default async function DashboardLayout(
       <div className="lg:flex lg:min-h-full lg:items-start">
         <Sidebar token={token} clientName={client.identity_names?.[0] ?? client.name} />
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 py-10 lg:max-w-none lg:px-10">
-          <header className="flex flex-col gap-4">
-            <div className="flex items-baseline gap-3 lg:hidden">
-              {/* Bamboo above the fold: a small, modest header accent using
-                  the same grove illustration as the full valley-floor scene
-                  at the bottom of the page, so the motif reads as present
-                  on load instead of only after scrolling to the very bottom.
-                  Hidden on lg+ since the sidebar already carries the brand
-                  mark and client name. */}
-              <img
-                src="/bamboo.svg"
-                alt=""
-                aria-hidden="true"
-                className="h-12 w-auto flex-none opacity-90 sm:h-14"
-              />
-              <span className="forte-mark text-3xl">𝑓𝑓</span>
-              <div>
-                {/* The identity word lives in the placard directly below on
-                    every route, so this mobile header carries the program
-                    only. Repeating the word here stacked it twice. */}
-                <h1 className="label">{client.program}</h1>
-              </div>
+          <div className="flex items-baseline gap-3 lg:hidden">
+            {/* Bamboo above the fold: a small, modest header accent using
+                the same grove illustration as the full valley-floor scene
+                at the bottom of the page, so the motif reads as present
+                on load instead of only after scrolling to the very bottom.
+                Hidden on lg+ since the sidebar already carries the brand
+                mark and client name. */}
+            <img
+              src="/bamboo.svg"
+              alt=""
+              aria-hidden="true"
+              className="h-12 w-auto flex-none opacity-90 sm:h-14"
+            />
+            <span className="forte-mark text-3xl">𝑓𝑓</span>
+            <div>
+              {/* The identity word lives in the placard directly below on
+                  every route, so this mobile header carries the program
+                  only. Repeating the word here stacked it twice. */}
+              <h1 className="label">{client.program}</h1>
             </div>
+          </div>
 
-            {client.identity_names?.[0] && (
-              <div className="identity-placard-wrap">
-                <IdentityPlacard
-                  word={client.identity_names[0]}
-                  accent={client.accent_hex}
-                  token={token}
-                  pendingCheckpointDay={pendingCheckpointDay}
-                />
-              </div>
-            )}
+          {/* A direct child of this column, not nested inside a shorter
+              header block, on purpose: position:sticky only holds an element
+              in place while its own parent's box is still on screen, so the
+              placard's parent has to span the whole scrollable column (down
+              through every task on a long list) or it would let go partway
+              down and land off-screen, right when a completion light needs
+              a visible target to strike. */}
+          {client.identity_names?.[0] && (
+            <div className="identity-placard-wrap">
+              <IdentityPlacard
+                word={client.identity_names[0]}
+                accent={client.accent_hex}
+                token={token}
+                pendingCheckpointDay={pendingCheckpointDay}
+              />
+            </div>
+          )}
 
+          <header className="flex flex-col gap-4">
             {timeline && <MissionTimeline timeline={timeline} totalReps={reps.length} />}
 
             <DashboardNav token={token} />
