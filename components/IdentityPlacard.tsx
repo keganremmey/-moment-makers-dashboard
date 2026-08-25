@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { playSuccessChime } from "@/lib/chime";
 
 /**
  * The client's identity word as a struck placard: black field, white
@@ -26,6 +27,7 @@ export function IdentityPlacard({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [struck, setStruck] = useState(false);
+  const [hit, setHit] = useState(false);
   const [plusOnes, setPlusOnes] = useState<number[]>([]);
   const pathname = usePathname();
   // The overview route is the stats page: the KPI row, growth mountain and
@@ -60,13 +62,18 @@ export function IdentityPlacard({
     return () => window.removeEventListener("ff:placard-strike", onArrive);
   }, [isStatsPage, pathname]);
 
-  // The gold "+1" that flashes on arrival, video-game-style. Kept separate
-  // from the strike glow above: the glow also plays on stats-page arrival,
-  // and a plus-one there would credit a rep that was never actually earned.
+  // The gold "+1", the shake, and the chime all ride the same event, and
+  // only this event: the glow above also plays on stats-page arrival, but
+  // a page landing shaking the placard and playing a sound every time
+  // would train the ear to ignore it. This one fires on a real completion
+  // only, so every shake and every chime means something actually happened.
   useEffect(() => {
     const onPlusOne = () => {
       const id = ++plusOneSeq;
       setPlusOnes((cur) => [...cur, id]);
+      setHit(false);
+      requestAnimationFrame(() => setHit(true));
+      playSuccessChime();
     };
     window.addEventListener("ff:placard-plusone", onPlusOne);
     return () => window.removeEventListener("ff:placard-plusone", onPlusOne);
@@ -75,9 +82,12 @@ export function IdentityPlacard({
   return (
     <div
       ref={ref}
-      className={`identity-placard${struck ? " is-struck" : ""}`}
+      className={`identity-placard${struck ? " is-struck" : ""}${hit ? " is-hit" : ""}`}
       style={accent ? ({ "--client-accent": accent } as React.CSSProperties) : undefined}
-      onAnimationEnd={() => setStruck(false)}
+      onAnimationEnd={() => {
+        setStruck(false);
+        setHit(false);
+      }}
     >
       <span className="identity-placard-rule" aria-hidden="true" />
       <span className="identity-placard-word font-display">{word}</span>

@@ -922,6 +922,31 @@ a.card:hover::after {
 .identity-placard-word {
     animation: placard-word-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1);
   }
+
+  /* The impact shake, only on a real completion (see is-hit's trigger in
+     IdentityPlacard.tsx), never on a plain page-arrival strike. Jitters
+     around the placard's own resting tilt rather than through 0deg, so
+     the shake reads as the plaque itself rattling, not straightening out
+     mid-animation. `animation` is a shorthand, not additive, so is-struck
+     and is-hit both firing at once (the real-completion case) needs its
+     own combined rule below or one animation silently wins over the other. */
+  .identity-placard.is-hit {
+    animation: placard-shake 380ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  .identity-placard.is-struck.is-hit {
+    animation: placard-strike 620ms cubic-bezier(0.2, 0.7, 0.3, 1), placard-shake 380ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+}
+
+@keyframes placard-shake {
+  0%   { transform: rotate(-1.6deg) translateX(0); }
+  15%  { transform: rotate(-1.6deg) translateX(-4px); }
+  30%  { transform: rotate(-1.6deg) translateX(4px); }
+  45%  { transform: rotate(-1.6deg) translateX(-3px); }
+  60%  { transform: rotate(-1.6deg) translateX(3px); }
+  75%  { transform: rotate(-1.6deg) translateX(-1.5px); }
+  100% { transform: rotate(-1.6deg) translateX(0); }
 }
 
 @keyframes placard-strike {
