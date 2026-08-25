@@ -865,17 +865,20 @@ a.card:hover::after {
 }
 
 /* The score-popup a landing light leaves behind: a gold "+1" in the
-   placard's own display face, anchored to its top-right corner, video-game
-   style , a quick pop in, a hold, then a fade, roughly 2.5s total. */
+   placard's own display face, sitting inside the dark field near its
+   top-right corner (never spilling past the border onto the light paper
+   behind it, which is where gold-on-gold has no contrast at all), video-
+   game style , show up, grow, then fade, roughly 2.5s total. */
 .identity-placard-plusone {
   position: absolute;
-  top: -0.7rem;
-  right: -0.6rem;
-  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  top: 0.35rem;
+  right: 0.5rem;
+  font-size: clamp(1.2rem, 3.4vw, 1.75rem);
   font-weight: 700;
   color: var(--gold-bright);
   text-shadow: 0 0 14px rgba(232, 197, 88, 0.85), 0 0 28px rgba(201, 162, 39, 0.5);
   pointer-events: none;
+  transform-origin: top right;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -891,11 +894,10 @@ a.card:hover::after {
 }
 
 @keyframes placard-plusone {
-  0% { opacity: 0; transform: scale(0.5) translateY(6px); }
-  12% { opacity: 1; transform: scale(1.15) translateY(0); }
-  22% { transform: scale(1); }
-  70% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1) translateY(-10px); }
+  0% { opacity: 0; transform: scale(0.7); }
+  15% { opacity: 1; transform: scale(1); }
+  65% { opacity: 1; transform: scale(1.7); }
+  100% { opacity: 0; transform: scale(1.9); }
 }
 
 @keyframes placard-plusone-fade {
