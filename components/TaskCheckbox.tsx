@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { primeAudio } from "@/lib/chime";
 
 export function TaskCheckbox({
   taskId,
@@ -19,6 +20,12 @@ export function TaskCheckbox({
 
   function toggle() {
     setError(null);
+
+    // Unlock audio synchronously, inside this real user gesture. The chime
+    // itself plays ~620ms later once the completion light lands, well
+    // outside the gesture window mobile browsers require for starting
+    // sound, so without this the light would land silently on a phone.
+    if (!done) primeAudio();
 
     // Fire on the open -> done direction only, and fire at click time rather
     // than after the round trip: the row is unmounted by the revalidation that

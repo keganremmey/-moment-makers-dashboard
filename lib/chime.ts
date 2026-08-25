@@ -14,6 +14,31 @@ function getContext(): AudioContext | null {
 }
 
 /**
+ * Unlocks audio playback for the rest of the page. Mobile Safari (and other
+ * mobile browsers) only allows sound to start during the actual synchronous
+ * call stack of a user gesture; the real chime plays later, from a
+ * `setTimeout` queued once the completion light lands (see AscentLight.tsx),
+ * which is well outside that window. Call this directly from the gesture
+ * handler itself (the checkbox's onChange) so the context is already
+ * running by the time the delayed chime tries to play. The silent,
+ * zero-gain tick is the actual unlock on iOS: some versions only count the
+ * hardware as unlocked once a sound has genuinely started, not just once
+ * `resume()` has been called.
+ */
+export function primeAudio() {
+  const audio = getContext();
+  if (!audio) return;
+
+  const osc = audio.createOscillator();
+  const gain = audio.createGain();
+  gain.gain.value = 0;
+  osc.connect(gain);
+  gain.connect(audio.destination);
+  osc.start(audio.currentTime);
+  osc.stop(audio.currentTime + 0.01);
+}
+
+/**
  * A sine tone with an optional detuned partial layered on top for a bell-like
  * timbre. `dest` lets a caller route the tone straight to the speakers or
  * into an effects bus (e.g. an echo send) instead.
