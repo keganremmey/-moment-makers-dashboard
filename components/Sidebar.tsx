@@ -11,10 +11,12 @@ import {
   Fingerprint,
   Medal,
   BookOpen,
+  Sword,
 } from "@phosphor-icons/react";
 
 const NAV = [
   { href: "", label: "Overview", Icon: HouseSimple },
+  { href: "/quests", label: "Quests", Icon: Sword },
   { href: "/tasks", label: "Tasks", Icon: ListChecks },
   { href: "/wins", label: "Wins", Icon: Trophy },
   { href: "/sessions", label: "Sessions", Icon: ChatCircleText },

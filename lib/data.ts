@@ -255,6 +255,107 @@ export async function getJournalEntries(clientId: string): Promise<JournalEntry[
   return (data as JournalEntry[]) ?? [];
 }
 
+export type Quest = {
+  id: string;
+  client_id: string;
+  slug: string;
+  name: string;
+  subtitle: string | null;
+  boss_name: string;
+  boss_client_label: string | null;
+  boss_description: string | null;
+  hit_condition: string | null;
+  win_condition: string | null;
+  failsafe: string | null;
+  treasure: string | null;
+  why_this_design: string | null;
+  window_start: string;
+  window_end: string;
+  total_days: number;
+  kill_days: number;
+  status: "active" | "cleared" | "failed";
+  created_at: string;
+};
+
+export type QuestEncounter = {
+  id: string;
+  quest_id: string;
+  slug: string;
+  ord: number;
+  name: string;
+  block: string;
+  objective: string;
+  why: string | null;
+  terrain: string | null;
+  gear: string | null;
+  proof: string;
+};
+
+export type QuestLog = {
+  id: string;
+  quest_id: string;
+  client_id: string;
+  log_date: string;
+  encounter_id: string | null;
+  note: string | null;
+  score: number | null;
+  created_at: string;
+};
+
+/** The client's current quest, active first, most recently created next , a
+ * client only ever has one live quest at a time in practice, but this
+ * doesn't hard-enforce that so a cleared quest's history stays queryable. */
+export async function getCurrentQuest(clientId: string): Promise<Quest | null> {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase
+    .from("quests")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("status", { ascending: true })
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("getCurrentQuest error", error);
+    return null;
+  }
+
+  return data as Quest | null;
+}
+
+export async function getQuestEncounters(questId: string): Promise<QuestEncounter[]> {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase
+    .from("quest_encounters")
+    .select("*")
+    .eq("quest_id", questId)
+    .order("ord", { ascending: true });
+
+  if (error) {
+    console.error("getQuestEncounters error", error);
+    return [];
+  }
+
+  return (data as QuestEncounter[]) ?? [];
+}
+
+export async function getQuestLogs(questId: string): Promise<QuestLog[]> {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase
+    .from("quest_logs")
+    .select("*")
+    .eq("quest_id", questId)
+    .order("log_date", { ascending: true });
+
+  if (error) {
+    console.error("getQuestLogs error", error);
+    return [];
+  }
+
+  return (data as QuestLog[]) ?? [];
+}
+
 export async function getQuotes(clientId: string): Promise<Quote[]> {
   // Deliberately client-scoped only, even though `quotes.client_id` is
   // nullable in the schema (a future "shared coaching wisdom" quote could

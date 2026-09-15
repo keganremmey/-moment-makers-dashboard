@@ -1155,3 +1155,153 @@ a.card:hover::after {
   40%  { transform: scale(1); opacity: 0.9; }
   100% { transform: scale(1); opacity: 0; }
 }
+
+/* ---------------------------------------------------------------------------
+   Quest system (THE CROSSING and future quests)
+   The boss card borrows the identity placard's dark/gold "struck plaque"
+   material, but is its own component: this is a status readout (progress,
+   hit/won state), never the identity mark itself, so it stays visually
+   related but never identical.
+--------------------------------------------------------------------------- */
+
+.quest-boss-card {
+  background: linear-gradient(168deg, #241a13, #120c08 60%, #1c130d);
+  border: 1.5px solid rgba(201, 162, 39, 0.35);
+  border-radius: 0.75rem;
+  padding: 1.35rem 1.6rem;
+  color: #f7f2e6;
+}
+
+.quest-boss-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-line);
+}
+
+.quest-boss-name {
+  margin-top: 0.2rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--gold-bright);
+}
+
+.quest-boss-desc {
+  margin-top: 0.6rem;
+  max-width: 60ch;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(247, 242, 230, 0.75);
+}
+
+.quest-progress-track {
+  position: relative;
+  margin-top: 1.35rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(247, 242, 230, 0.12);
+}
+
+.quest-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+  transition: width 0.4s cubic-bezier(0.2, 0.7, 0.3, 1), background 0.3s ease;
+}
+
+.quest-progress-fill.is-hit {
+  background: linear-gradient(90deg, #a8412a, var(--lacquer));
+}
+
+.quest-progress-fill.is-won {
+  background: var(--lacquer);
+}
+
+.quest-progress-threshold {
+  position: absolute;
+  top: -0.2rem;
+  bottom: -0.2rem;
+  width: 2px;
+  background: rgba(247, 242, 230, 0.5);
+}
+
+.quest-progress-caption {
+  margin-top: 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: rgba(247, 242, 230, 0.65);
+}
+
+.quest-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.quest-status-pill.is-safe {
+  background: rgba(31, 122, 83, 0.22);
+  color: #7fe0b3;
+}
+
+.quest-status-pill.is-hit {
+  background: rgba(179, 18, 43, 0.22);
+  color: #f0968a;
+}
+
+.quest-status-pill.is-won {
+  background: rgba(179, 18, 43, 0.38);
+  color: #ffb3a3;
+}
+
+.quest-status-pill.is-cleared {
+  background: rgba(201, 162, 39, 0.28);
+  color: var(--gold-bright);
+}
+
+.quest-encounter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--gold);
+}
+
+.quest-score-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--paper-line);
+  background: var(--paper-raised);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--ink);
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.15s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.quest-score-btn.is-selected {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+  transform: scale(1.05);
+}
