@@ -268,6 +268,7 @@ export type Quest = {
   win_condition: string | null;
   failsafe: string | null;
   treasure: string | null;
+  how_to_play: string | null;
   why_this_design: string | null;
   window_start: string;
   window_end: string;

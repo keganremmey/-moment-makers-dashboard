@@ -85,6 +85,13 @@ export default async function QuestsPage(props: PageProps<"/d/[token]/quests">) 
         </p>
       </div>
 
+      {quest.how_to_play && (
+        <div className="card p-5 border-l-4 border-l-gold">
+          <p className="label">How this works</p>
+          <p className="mt-2 max-w-[65ch] text-base leading-relaxed text-ink">{quest.how_to_play}</p>
+        </div>
+      )}
+
       {quest.failsafe && (
         <div className="card p-5">
           <p className="label">Failsafe</p>
