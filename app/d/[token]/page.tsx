@@ -11,7 +11,7 @@ import {
 import { supabaseServer } from "@/lib/supabase-server";
 import { beltStatusForReps, BELT_COLORS } from "@/lib/belts";
 import { computeProgramTimeline, formatShortDate } from "@/lib/timeline";
-import { Trophy } from "@phosphor-icons/react/dist/ssr";
+import { Sparkle, Trophy } from "@phosphor-icons/react/dist/ssr";
 import { BeltChip } from "@/components/BeltChip";
 import { GrowthMountain } from "@/components/GrowthMountain";
 import { BeltLadder } from "@/components/BeltLadder";
@@ -126,6 +126,32 @@ export default async function OverviewPage(props: PageProps<"/d/[token]">) {
             </div>
           </section>
         )}
+
+        {/* The one external door on this page: everything else here is a
+            record of what already happened, this is where Ian goes to
+            actually do the thing. Sits right after North Star, before the
+            evidence (Wins) , identity, then action, then proof. */}
+        <section className="card border-l-4 border-l-gold p-6">
+          <div className="flex items-center gap-2">
+            <Sparkle weight="fill" className="h-4 w-4 text-gold" aria-hidden="true" />
+            <p className="label">Your Test-Out</p>
+          </div>
+          <p className="mt-3 text-pretty font-display text-2xl leading-snug text-ink">
+            Every tool you&apos;ve learned, on one page, ready to prove live.
+          </p>
+          <p className="mt-2 max-w-[60ch] text-base leading-relaxed text-ink-dim">
+            Signature moves, the full skill list, and a game show to put it under pressure.
+            Prove all nineteen and your certificate unlocks.
+          </p>
+          <a
+            href="https://claude.ai/artifact/YJmPXU2YE5pz8DMhcyJTnm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary mt-4"
+          >
+            Go to your test-out practice →
+          </a>
+        </section>
 
         {/* Wins lead the page: the client's own recorded evidence of
             progress, before any stat, chart, or logistics. This is the
