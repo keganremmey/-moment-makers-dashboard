@@ -53,6 +53,16 @@ export function getCheckpointDays(totalDays: number): number[] {
   return days;
 }
 
+/** mm:ss (or h:mm:ss past an hour) for a Fathom clip timestamp. */
+export function formatClipTime(totalSeconds: number): string {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = Math.floor(totalSeconds % 60);
+  const mm = h > 0 ? String(m).padStart(2, "0") : String(m);
+  const ss = String(s).padStart(2, "0");
+  return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
+}
+
 export function formatShortDate(dateStr: string): string {
   return new Date(dateStr + "T00:00:00Z").toLocaleDateString("en-US", {
     month: "short",

@@ -1305,3 +1305,28 @@ a.card:hover::after {
   color: var(--ink);
   transform: scale(1.05);
 }
+
+/* "Want to see this in action?" clip link (LibraryBrowser.tsx): a deep link
+   into the real Fathom recording at the moment a framework (or one of its
+   numbered steps) was actually taught, not just a plain inline anchor, so it
+   reads as its own small affordance rather than body text that happens to
+   be clickable. */
+.framework-example-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  color: var(--jade-dark);
+  font-size: 0.85rem;
+  transition: color 0.15s ease;
+}
+
+.framework-example-link svg {
+  flex: none;
+  margin-top: 0.15rem;
+}
+
+.framework-example-link:hover {
+  color: var(--jade);
+  text-decoration: underline;
+}

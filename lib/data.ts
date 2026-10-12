@@ -239,6 +239,37 @@ export async function getFrameworks(): Promise<Framework[]> {
   return (data as Framework[]) ?? [];
 }
 
+export type FrameworkExample = {
+  id: string;
+  framework_id: string;
+  step_index: number | null;
+  label: string;
+  fathom_id: number;
+  start_seconds: number;
+  end_seconds: number | null;
+  ord: number;
+};
+
+/** "Want to see this tool in action?" clips: a specific moment inside a real
+ * session where a framework (or one of its numbered steps) was actually
+ * taught or demonstrated live. Resolved against `sessions` in the caller
+ * (same join-in-app-code pattern as wins/page.tsx), not a DB-level foreign
+ * key, since `sessions.fathom_id` isn't declared unique. */
+export async function getFrameworkExamples(): Promise<FrameworkExample[]> {
+  const supabase = supabaseServer();
+  const { data, error } = await supabase
+    .from("framework_examples")
+    .select("*")
+    .order("ord", { ascending: true });
+
+  if (error) {
+    console.error("getFrameworkExamples error", error);
+    return [];
+  }
+
+  return (data as FrameworkExample[]) ?? [];
+}
+
 export async function getJournalEntries(clientId: string): Promise<JournalEntry[]> {
   const supabase = supabaseServer();
   const { data, error } = await supabase
