@@ -3,8 +3,8 @@ import { Instrument_Sans } from "next/font/google";
 import BodyQuiz from "./BodyQuiz";
 import styles from "./body.module.css";
 
-// Event landing page for the Body Under Pressure Assessment: hero, then
-// question 1 right underneath, mirroring the vibecheck layout. Results live
+// Event landing page for the Body Under Pressure Assessment: hero, then the
+// get-in-line details box right underneath, which fades into question 1. Results live
 // on body.wearemomentmakers.com/r/{id}.
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
@@ -14,7 +14,7 @@ const instrument = Instrument_Sans({
 
 export const metadata: Metadata = {
   title: "The Body Under Pressure Assessment",
-  description: "4 quick questions. See your Body Under Pressure Pattern on your phone in under a minute.",
+  description: "Get in line for free bodywork with Kegan Remmey, then see your Body Under Pressure Pattern in 4 quick questions.",
 };
 
 export default function BodyPage() {
@@ -23,13 +23,13 @@ export default function BodyPage() {
       <header className={styles.topbar}>Moment Makers · Structural Bodywork</header>
 
       <section className={styles.hero}>
-        <p className={styles.pill}>Free. 4 questions. Under a minute.</p>
+        <p className={styles.pill}>Free bodywork. Get in line below.</p>
         <h1 className={styles.headline}>
           Is Your Body Working <span className={styles.gold}>With You</span>, Or Restricting You?
         </h1>
         <p className={styles.subhead}>
-          The shoulder that keeps getting tight. The hip that always needs stretching. Tap your
-          answers below and see the pattern behind it.
+          The shoulder that keeps getting tight. The hip that always needs stretching. Save your
+          spot on Kegan&apos;s table, then see the pattern behind it while you wait.
         </p>
 
         <div className={styles.byline}>

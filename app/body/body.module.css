@@ -276,3 +276,46 @@
 .footer a {
   color: var(--muted);
 }
+
+/* Each step (details, question 1, question 2...) fades up in place inside the
+   same card, so getting in line flows straight into question 1. */
+.step {
+  animation: stepIn 320ms ease-out;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step {
+    animation: none;
+  }
+}
+
+.cardLoading {
+  min-height: 360px;
+}
+
+.inLine {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #e6f1f0;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+}
