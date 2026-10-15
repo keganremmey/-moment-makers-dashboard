@@ -163,7 +163,7 @@ export default function BodyQuiz() {
     const name = firstName.trim();
     if (name.length < 1 || name.length > 60) next.firstName = "Enter your first name.";
     if (!isValidPhone(phone)) next.phone = "Please enter a valid phone number.";
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Enter a valid email address.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Enter a valid email address.";
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
@@ -269,7 +269,7 @@ export default function BodyQuiz() {
       {phase === "contact" && (
         <form onSubmit={submit} noValidate className={styles.form}>
           <h2 className={styles.prompt}>Your pattern is ready. Where should we send it?</h2>
-          <p className={styles.formNote}>It shows up on this screen the second you tap the button, and we text you the full report so you keep it.</p>
+          <p className={styles.formNote}>It shows up on this screen the second you tap the button, and we text and email you the full report so you keep it.</p>
 
           <label className={styles.label}>
             First Name
@@ -282,7 +282,7 @@ export default function BodyQuiz() {
             {errors.phone && <span className={styles.err}>{errors.phone}</span>}
           </label>
           <label className={styles.label}>
-            Email (optional)
+            Email
             <input className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} onFocus={onFieldFocus} type="email" inputMode="email" autoComplete="email" />
             {errors.email && <span className={styles.err}>{errors.email}</span>}
           </label>
