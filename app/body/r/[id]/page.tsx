@@ -18,7 +18,7 @@ const instrument = Instrument_Sans({
 });
 
 const BODY_SITE = "https://body.wearemomentmakers.com";
-const BOOKING_FALLBACK = "https://book.wearemomentmakers.com/widget/bookings/75-minute-structural-bodywork";
+const BOOKING_FALLBACK = "https://book.wearemomentmakers.com/widget/booking/8GqdiM5N0ad9d59SFwGp";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const metadata: Metadata = {
@@ -64,10 +64,11 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
     redirect(`${BODY_SITE}/r/${id}`);
   }
 
+  // Same booking link the GoHighLevel text and email use for event takers.
   const { data: setting } = await supabase
     .from("bup_settings")
     .select("value")
-    .eq("key", "booking_url_75")
+    .eq("key", "event_booking_url")
     .maybeSingle();
   const bookingUrl = (setting as { value?: string } | null)?.value || BOOKING_FALLBACK;
 
