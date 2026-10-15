@@ -1,6 +1,8 @@
 // Report copy for the 4-question event quiz, copied verbatim from the live
 // results pages at body.wearemomentmakers.com/r/{id} (version "event-v1").
-// Only the booking button label differs: "Schedule My Session".
+// Differences: the booking button reads "Schedule My Session", and the
+// section 06 copy frames the full 75-minute session ("Within the first 20
+// minutes...") since event takers already had a free 20 minutes.
 import type { Pattern } from "../questions";
 
 export type ReportCopy = {
@@ -94,7 +96,7 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
       "ENERGY YOU GET TO SPEND"
     ],
     "cta": [
-      "In twenty minutes we find the one place your body is working overtime. The spot that's tight every single day. The shoulder that stopped going overhead. The hip you've quietly started googling.",
+      "Within the first 20 minutes of your session, we find the one place your body is working overtime. The spot that's tight every single day. The shoulder that stopped going overhead. The hip you've quietly started googling.",
       "We change it while you're on the table, and you feel the difference before you put your shoes back on.",
       "Then you drive home with the energy that used to go into holding, and you spend it on people you like."
     ]
@@ -183,7 +185,7 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
       "PRODUCE AGAIN"
     ],
     "cta": [
-      "Twenty minutes on the table with somebody whose entire job is getting your body to come down.",
+      "Within the first 20 minutes on the table, you're with somebody whose entire job is getting your body to come down.",
       "We find where the week is still stored. The neck that won't turn all the way. The hip flexors that never fully let go. The back that starts talking every Thursday. You feel it release while it's happening, which is a sensation most drivers have not had in years.",
       "You leave with a body that believes the day is over. Then you sleep like it."
     ]
@@ -268,7 +270,7 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
     ],
     "cta": [
       "You cannot see this one from the inside. That is the entire problem with it.",
-      "In twenty minutes I watch you move and tell you who has been covering for who. Then we hand some of the work back, and you feel the side that's been carrying you finally set it down.",
+      "Within the first 20 minutes, I watch you move and tell you who has been covering for who. Then we hand some of the work back, and you feel the side that's been carrying you finally set it down.",
       "The hip that aches every ride. The shoulder that won't press overhead. The thing four people have already looked at. We start where it actually starts, which is usually nowhere near where it hurts."
     ]
   },
@@ -358,7 +360,7 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
     ],
     "cta": [
       "You can practice most of this alone. The part you can't do alone is feel something you've spent twenty years training yourself to ignore.",
-      "That's what the twenty minutes is for. I put my hands on the place you've been overriding. The shoulder you've been managing. The hip that's been sending letters since spring. We slow it down until you can actually feel what's there.",
+      "That's what the session is for. Within the first 20 minutes, I put my hands on the place you've been overriding. The shoulder you've been managing. The hip that's been sending letters since spring. We slow it down until you can actually feel what's there.",
       "Most people get surprised twice. First by how much was going on in there. Then by how good it feels when it finally lets go.",
       "You spend a lot of your life inside that body. It's worth knowing what's happening in it."
     ]
