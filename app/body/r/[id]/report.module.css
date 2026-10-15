@@ -1,0 +1,378 @@
+/* Results page styling, matched to body.wearemomentmakers.com/r/{id}. */
+.page {
+  --navy: #0e2233;
+  --paper: #f6f4ef;
+  --gold: #d4a843;
+  --muted: #3a5164;
+  --teal: #1b6f6b;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--paper);
+  color: var(--navy);
+  font-family: var(--font-instrument), -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+.hero {
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: 48px 20px 36px;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pattern {
+  margin: 12px 0 0;
+  font-size: clamp(36px, 10vw, 52px);
+  line-height: 1.05;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.tagline {
+  margin: 14px auto 0;
+  max-width: 560px;
+  font-size: 20px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.photo {
+  position: relative;
+  margin: 32px auto 0;
+  max-width: 340px;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px -20px rgba(14, 34, 51, 0.55);
+}
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+}
+
+.photoShade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 112px;
+  background: linear-gradient(to top, var(--navy), rgba(14, 34, 51, 0.55), transparent);
+}
+
+.photoCaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 16px;
+  text-align: left;
+}
+
+.photoName {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.photoRole {
+  margin: 2px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.book {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  margin-top: 24px;
+  padding: 16px 32px;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 28px -10px rgba(212, 168, 67, 0.55);
+}
+
+.article {
+  margin: 0 auto;
+  max-width: 672px;
+  padding: 48px 20px 24px;
+}
+
+.section {
+  margin-bottom: 52px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.sectionNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.para {
+  margin: 0 0 14px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.told {
+  margin-bottom: 18px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(14, 34, 51, 0.1);
+}
+
+.toldPrompt {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.toldAnswer {
+  margin: 8px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.toldRead {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--teal);
+}
+
+.summary {
+  margin: 8px 0 0;
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.realTalk {
+  margin: 22px 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.punch {
+  margin: 0 0 14px;
+  font-size: 20px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.costs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.costs li {
+  display: flex;
+  gap: 14px;
+}
+
+.costNum {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.costTitle {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.costDetail {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.capLabel {
+  margin: 14px 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.capacity {
+  margin: 0 0 16px;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--teal);
+}
+
+.question {
+  margin: 0 0 14px;
+  font-size: 22px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.compass {
+  display: grid;
+  gap: 14px;
+}
+
+.compassCard {
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(14, 34, 51, 0.1);
+}
+
+.compassKey {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+}
+
+.compassTitle {
+  margin: 4px 0 10px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.compassNote {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--teal);
+}
+
+.map {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.map li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.arrow {
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.mapStep,
+.mapEnd {
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: #fff;
+  border: 1px solid rgba(14, 34, 51, 0.15);
+}
+
+.mapEnd {
+  background: var(--navy);
+  color: var(--gold);
+  border-color: var(--navy);
+}
+
+.endCta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.pdf {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px 40px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.footer a {
+  color: var(--muted);
+}
