@@ -1,72 +1,20 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import styles from "./body.module.css";
+import { LETTERS, PATTERN_BY_LETTER, QUESTIONS, type Letter, type Pattern } from "./questions";
 
-// Same 4 questions, letters, and scoring as the live event quiz at
-// body.wearemomentmakers.com/q/assessment (version "event-v1"), so results,
-// GoHighLevel tags, texts, and emails come out identical.
-type Letter = "A" | "B" | "C" | "D";
-type Pattern = "HOLDER" | "DRIVER" | "COMPENSATOR" | "OVERRIDER";
-
-const BODY_SITE = "https://body.wearemomentmakers.com";
+// Same 4 questions, letters, and scoring as the live event quiz (version
+// "event-v1"), so results, GoHighLevel tags, texts, and emails come out
+// identical.
 const VERSION = "event-v1";
-const LETTERS: Letter[] = ["A", "B", "C", "D"];
-const PATTERN_BY_LETTER: Record<Letter, Pattern> = {
-  A: "HOLDER",
-  B: "DRIVER",
-  C: "COMPENSATOR",
-  D: "OVERRIDER",
-};
 const TIEBREAK_TEXT: Record<Pattern, string> = {
   HOLDER: "My body stays tight and braced after the moment is over.",
   DRIVER: "I have a hard time stopping. I go straight to the next thing.",
   COMPENSATOR: "One part of my body keeps doing more than its share.",
   OVERRIDER: "I notice how my body feels later, not while it's happening.",
 };
-
-const QUESTIONS: { id: number; prompt: string; answers: Record<Letter, string> }[] = [
-  {
-    id: 1,
-    prompt: "You're an hour into a long drive.",
-    answers: {
-      A: "I could not tell you the last time I let go of the wheel with either hand.",
-      B: "I've already decided I'm not stopping. Not for food, not for anything.",
-      C: "I keep shifting around to get comfortable and I always end up back on the same hip.",
-      D: "I don't pay attention to my body until the drive is over, then it's oh, that's sore.",
-    },
-  },
-  {
-    id: 2,
-    prompt: "It's eight at night and nothing is on the calendar.",
-    answers: {
-      A: "I sit down to relax and an hour later I'm still perched on the edge of the seat.",
-      B: "I'm tired and I find a project anyway. There is always a project.",
-      C: "I find the one position on the couch that works and I don't move from it.",
-      D: "About twenty minutes in it hits me how wrecked I actually am.",
-    },
-  },
-  {
-    id: 3,
-    prompt: "You're carrying the groceries in from the car.",
-    answers: {
-      A: "I set the bags down and my hands stay curled like claws for a second.",
-      B: "One trip. Always one trip. Going back out for a second load is losing.",
-      C: "Same shoulder, same arm, every single time, and I never decided that.",
-      D: "My arm goes dead about an hour later and I blame something else.",
-    },
-  },
-  {
-    id: 4,
-    prompt: "You've been at the desk for hours and you finally stand up.",
-    answers: {
-      A: "First thing I do is roll my shoulders and crack my neck before I feel normal again.",
-      B: "I stand up, walk around for ninety seconds, and sit right back down.",
-      C: "Whatever's stiff when I stand up, it's the same side it always is.",
-      D: "Something hurts and I've got no idea what I did to it.",
-    },
-  },
-];
 
 function tiedTopPatterns(answers: Letter[]): Pattern[] {
   const counts: Record<Pattern, number> = { HOLDER: 0, DRIVER: 0, COMPENSATOR: 0, OVERRIDER: 0 };
@@ -118,6 +66,7 @@ function isValidPhone(value: string): boolean {
 type Phase = "questions" | "tiebreak" | "contact";
 
 export default function BodyQuiz() {
+  const router = useRouter();
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Letter[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
@@ -214,7 +163,7 @@ export default function BodyQuiz() {
     const name = firstName.trim();
     if (name.length < 1 || name.length > 60) next.firstName = "Enter your first name.";
     if (!isValidPhone(phone)) next.phone = "Please enter a valid phone number.";
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Enter a valid email address.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "Enter a valid email address.";
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
@@ -256,7 +205,7 @@ export default function BodyQuiz() {
         setSubmitting(false);
         return;
       }
-      window.location.assign(`${BODY_SITE}/r/${lead.id}`);
+      router.push(`/body/r/${lead.id}`);
     } catch {
       setFormError("Something went wrong. Check your connection and try again.");
       setSubmitting(false);
@@ -292,7 +241,7 @@ export default function BodyQuiz() {
                 className={`${styles.answer} ${picked === letter ? styles.answerPicked : ""}`}
                 onClick={() => answer(letter)}
               >
-                {q.answers[letter]}
+                {q.answers[letter].text}
               </button>
             ))}
           </div>
@@ -320,7 +269,7 @@ export default function BodyQuiz() {
       {phase === "contact" && (
         <form onSubmit={submit} noValidate className={styles.form}>
           <h2 className={styles.prompt}>Your pattern is ready. Where should we send it?</h2>
-          <p className={styles.formNote}>It shows up on this screen the second you tap the button, and we text you the full report so you keep it.</p>
+          <p className={styles.formNote}>It shows up on this screen the second you tap the button, and we text and email you the full report so you keep it.</p>
 
           <label className={styles.label}>
             First Name
@@ -333,7 +282,7 @@ export default function BodyQuiz() {
             {errors.phone && <span className={styles.err}>{errors.phone}</span>}
           </label>
           <label className={styles.label}>
-            Email (optional)
+            Email
             <input className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} onFocus={onFieldFocus} type="email" inputMode="email" autoComplete="email" />
             {errors.email && <span className={styles.err}>{errors.email}</span>}
           </label>
