@@ -34,7 +34,7 @@ export default function BodyPage() {
 
         <div className={styles.byline}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/body/kegan.jpg" alt="Kegan Remmey" width={56} height={56} className={styles.avatar} />
+          <img src="https://vibecheck.wearemomentmakers.com/_next/image?url=%2Fimages%2Fkegan.jpg&w=128&q=75" alt="Kegan Remmey" width={56} height={56} className={styles.avatar} />
           <span className={styles.who}>
             <span className={styles.name}>Kegan Remmey</span>
             <span className={styles.creds}>300+ clients · Anatomy Trains · Somatic Experiencing</span>
