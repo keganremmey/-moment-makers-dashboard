@@ -49,6 +49,26 @@
   --font-mono: var(--font-jetbrains-mono);
 }
 
+/* Touch That Works palette for the /intro landing page, matched to
+   wearemomentmakers.com/touchthatworks: warm cream, charcoal, copper. */
+@theme {
+  --color-ttw-cream: #f5f1e6;
+  --color-ttw-cream-2: #ede7d6;
+  --color-ttw-line: #d6cfbd;
+  --color-ttw-charcoal: #1c1b18;
+  --color-ttw-muted: #514f49;
+  --color-ttw-copper: #b4522f;
+  --color-ttw-copper-dark: #93401f;
+  --color-ttw-copper-light: #cc6a45;
+}
+
+/* inline, so the font variables resolve on the /intro wrapper where
+   next/font defines them, not on :root where they don't exist. */
+@theme inline {
+  --font-ttw-serif: var(--font-fraunces), Georgia, serif;
+  --font-ttw-mono: var(--font-ibm-plex-mono), "Courier New", monospace;
+}
+
 html {
   background: var(--paper);
   color-scheme: light;
