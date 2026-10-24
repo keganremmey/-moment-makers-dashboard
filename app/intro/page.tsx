@@ -111,10 +111,10 @@ export default function IntroPage() {
         Skip to content
       </a>
 
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 pt-5 md:px-8">
-        <p className="font-ttw-serif text-xl font-semibold tracking-tight">Touch That Works</p>
-        <p className="font-ttw-mono text-[11px] uppercase tracking-[0.14em] text-ttw-muted">
-          Structural bodywork · Austin
+      <header className="mx-auto flex max-w-6xl items-baseline justify-between gap-4 px-4 pt-5 md:px-8">
+        <p className="font-ttw-serif text-lg font-semibold tracking-tight whitespace-nowrap md:text-xl">Touch That Works</p>
+        <p className="font-ttw-mono text-[11px] uppercase tracking-[0.14em] whitespace-nowrap text-ttw-muted">
+          <span className="hidden sm:inline">Structural bodywork · </span>Austin, TX
         </p>
       </header>
 
@@ -187,12 +187,14 @@ export default function IntroPage() {
             <ol className="mt-10 grid gap-5 md:grid-cols-4">
               {STEPS.map((step, i) => (
                 <li key={step.title} className="rounded-md border border-ttw-line bg-ttw-cream p-5">
-                  <span className="font-ttw-serif text-4xl font-semibold text-ttw-copper" aria-hidden="true">
-                    {i + 1}
-                  </span>
-                  <h3 className="mt-2 text-lg font-semibold">
-                    <span className="sr-only">Step {i + 1}: </span>
-                    {step.title}
+                  <h3 className="flex items-baseline gap-3 text-lg font-semibold md:flex-col md:gap-1">
+                    <span className="font-ttw-serif text-3xl font-semibold text-ttw-copper md:text-4xl" aria-hidden="true">
+                      {i + 1}
+                    </span>
+                    <span>
+                      <span className="sr-only">Step {i + 1}: </span>
+                      {step.title}
+                    </span>
                   </h3>
                   <p className="mt-2 leading-relaxed text-ttw-muted">{step.body}</p>
                 </li>

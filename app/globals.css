@@ -60,6 +60,11 @@
   --color-ttw-copper: #b4522f;
   --color-ttw-copper-dark: #93401f;
   --color-ttw-copper-light: #cc6a45;
+}
+
+/* inline, so the font variables resolve on the /intro wrapper where
+   next/font defines them, not on :root where they don't exist. */
+@theme inline {
   --font-ttw-serif: var(--font-fraunces), Georgia, serif;
   --font-ttw-mono: var(--font-ibm-plex-mono), "Courier New", monospace;
 }
