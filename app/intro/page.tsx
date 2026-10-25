@@ -16,7 +16,7 @@ import VideoFacade from "./_components/VideoFacade";
 
 const TITLE = "Free 20-minute bodywork session in Austin · Touch That Works";
 const DESCRIPTION =
-  "You point to the spot that hurts. Remmey works it for 20 minutes, free, at his studio on Winter Park Rd. Then you decide whether to book a full session.";
+  "You point to the spot that hurts. Remmey works it for 20 minutes, free, at his private studio in Rollingwood. Then you decide whether to book a full session.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_ORIGIN),
@@ -94,9 +94,9 @@ const TESTIMONIALS = [
 
 const AFTER_BOOKING = [
   "The calendar confirms your time and sends you the details.",
-  "Come to 1909 Winter Park Rd. Private studio, free parking on site.",
+  "The exact address comes by text once your appointment is booked. Private studio in Rollingwood, free parking on site.",
   "Wear athletic shorts, plus a sports bra or fitted tank if that suits you.",
-  "Want the sauna after? Bring a towel and tell him when you book, so he can get it hot.",
+  "Super tight muscles? Sauna before your session. Text him 45 minutes ahead so he can get it hot, bring a towel, and arrive 15 minutes early to feel the heat.",
   "Need to move it? Reschedule from your confirmation email with 24 hours' notice. Inside 24 hours, text him.",
 ];
 
@@ -114,7 +114,7 @@ export default function IntroPage() {
       <header className="mx-auto flex max-w-6xl items-baseline justify-between gap-4 px-4 pt-5 md:px-8">
         <p className="font-ttw-serif text-lg font-semibold tracking-tight whitespace-nowrap md:text-xl">Touch That Works</p>
         <p className="font-ttw-mono text-[11px] uppercase tracking-[0.14em] whitespace-nowrap text-ttw-muted">
-          <span className="hidden sm:inline">Structural bodywork · </span>Austin, TX
+          <span className="hidden sm:inline">Structural bodywork · </span>Rollingwood, TX
         </p>
       </header>
 
@@ -155,14 +155,14 @@ export default function IntroPage() {
               <li aria-hidden="true" className="text-ttw-copper">/</li>
               <li>No card required</li>
               <li aria-hidden="true" className="text-ttw-copper">/</li>
-              <li>1909 Winter Park Rd</li>
+              <li>Rollingwood, TX</li>
             </ul>
           </div>
 
           <div className="relative">
             <Image
               src={heroPhoto}
-              alt="Remmey working on a client's shoulder and arm on the table in his Austin studio"
+              alt="Remmey working on a client's shoulder and arm on the table in his studio"
               preload
               placeholder="blur"
               sizes="(min-width: 768px) 40vw, 100vw"
@@ -179,8 +179,8 @@ export default function IntroPage() {
               Here&apos;s exactly what happens.
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ttw-muted">
-              Remmey is Kegan Remmey, a structural bodyworker working out of a private studio on
-              Winter Park Rd. The free 20 minutes is how he lets new people feel his work before
+              Remmey is Kegan Remmey, a structural bodyworker working out of a private studio in
+              Rollingwood. The free 20 minutes is how he lets new people feel his work before
               they spend anything.
             </p>
 
@@ -310,16 +310,16 @@ export default function IntroPage() {
             20 minutes whether he found it.
           </p>
           <p className="mx-auto mt-4 max-w-xl leading-relaxed text-ttw-muted">
-            <strong className="text-ttw-charcoal">Real talk.</strong> Some of it gets intense,
-            because he&apos;s working the spot you&apos;ve been avoiding for years. But you get to
-            say how much, the whole time.
+            <strong className="text-ttw-charcoal">Real talk.</strong> Leave the spa expectations
+            at home. He holds steady, firm pressure while you move, and you say how much the whole
+            time.
           </p>
 
           <div id="final-cta" className="mt-8 flex flex-col items-center gap-3">
             <BookLink cta="final" className={BUTTON}>
               Book Your Free 20-Minute Session
             </BookLink>
-            <p className="text-sm text-ttw-muted">No card required. 1909 Winter Park Rd, Austin.</p>
+            <p className="text-sm text-ttw-muted">No card required. Rollingwood, TX.</p>
           </div>
 
           <div className="mx-auto mt-12 max-w-xl text-left">
@@ -338,7 +338,7 @@ export default function IntroPage() {
 
       <footer className="border-t border-ttw-line pb-28 md:pb-0">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-ttw-muted md:flex-row md:items-center md:justify-between md:px-8">
-          <p>Touch That Works · Kegan Remmey · 1909 Winter Park Rd, Austin, TX</p>
+          <p>Touch That Works · Kegan Remmey · Rollingwood, TX</p>
           <nav aria-label="Footer" className="flex gap-5">
             <Link href="/intro/privacy" className="underline underline-offset-4 hover:text-ttw-charcoal">
               Privacy
