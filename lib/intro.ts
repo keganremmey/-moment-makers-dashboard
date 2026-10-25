@@ -7,7 +7,10 @@
 export const FREE_20_BOOKING_URL =
   "https://book.wearemomentmakers.com/widget/booking/8GqdiM5N0ad9d59SFwGp";
 
-export const SITE_ORIGIN = "https://app.wearemomentmakers.com";
+// Vercel's production address for this project. app.wearemomentmakers.com
+// has no DNS record yet; this address keeps working after it does, so QR
+// codes printed against it never break.
+export const SITE_ORIGIN = "https://moment-makers-dashboard.vercel.app";
 export const INTRO_PATH = "/intro";
 export const INSTAGRAM_URL = "https://www.instagram.com/touchthatworks/";
 
