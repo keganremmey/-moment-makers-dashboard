@@ -18,7 +18,7 @@ export default function IntroPrivacyPage() {
       <div className="mt-6 space-y-5 text-ttw-muted">
         <p>
           This page belongs to Touch That Works, Kegan Remmey&apos;s structural bodywork practice
-          at 1909 Winter Park Rd, Austin, TX.
+          in Rollingwood, TX.
         </p>
 
         <h2 className="pt-2 text-lg font-semibold text-ttw-charcoal">What this page records</h2>
