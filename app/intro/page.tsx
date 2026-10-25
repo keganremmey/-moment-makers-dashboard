@@ -332,6 +332,22 @@ export default function IntroPage() {
                 </li>
               ))}
             </ul>
+
+            <figure className="mt-8">
+              <div className="aspect-[4/3] overflow-hidden rounded-md border border-ttw-line bg-ttw-cream-2 md:aspect-[16/9]">
+                <iframe
+                  src="https://maps.google.com/maps?q=Rollingwood,+TX&ll=30.2715,-97.7815&z=13&output=embed"
+                  title="Map of Rollingwood, TX, next to MoPac, Barton Springs Pool and Zilker Park"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="h-full w-full border-0"
+                />
+              </div>
+              <figcaption className="mt-3 text-sm leading-relaxed text-ttw-muted">
+                Rollingwood sits just west of MoPac, a few minutes from Barton Springs Pool and
+                Zilker Park.
+              </figcaption>
+            </figure>
           </div>
         </section>
       </main>

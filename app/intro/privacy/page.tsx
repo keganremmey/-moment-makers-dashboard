@@ -42,9 +42,10 @@ export default function IntroPrivacyPage() {
           can see which flyer a booking came from.
         </p>
 
-        <h2 className="pt-2 text-lg font-semibold text-ttw-charcoal">Videos</h2>
+        <h2 className="pt-2 text-lg font-semibold text-ttw-charcoal">Videos and map</h2>
         <p>
           Client videos load from YouTube in privacy-enhanced mode, and only after you tap play.
+          The map near the bottom of the page loads from Google Maps when you scroll to it.
         </p>
 
         <h2 className="pt-2 text-lg font-semibold text-ttw-charcoal">Questions</h2>
