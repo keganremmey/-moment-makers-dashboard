@@ -1,6 +1,7 @@
 # /intro: apartment-flyer landing page
 
-Live path: `app.wearemomentmakers.com/intro` (once this branch is merged to main).
+Live: `https://moment-makers-dashboard.vercel.app/intro`. `app.wearemomentmakers.com` has no DNS record yet
+(DNS is at Porkbun); QR codes use the vercel.app address, which keeps working either way.
 
 ## What's where
 
@@ -20,7 +21,7 @@ It's linked, not embedded: the GoHighLevel widget took about 9 seconds to load o
 ## QR code URLs
 
 ```
-https://app.wearemomentmakers.com/intro?utm_source=apartment_flyer&utm_medium=print&utm_campaign=bodywork_intro&utm_content=<property>
+https://moment-makers-dashboard.vercel.app/intro?utm_source=apartment_flyer&utm_medium=print&utm_campaign=bodywork_intro&utm_content=<property>
 ```
 
 Use `/intro/links/<token>` to make them: type the property name, download the SVG for print.
