@@ -105,6 +105,9 @@ export default async function AdminStatsPage(props: PageProps<"/admin/[token]">)
         <p className="mt-2 text-sm text-ink-dim">
           Private view. Not linked anywhere in the client-facing app.
         </p>
+        <a href={`/admin/${token}/texts`} className="btn btn-ghost mt-4">
+          Text drafts
+        </a>
       </div>
 
       {stats.length === 0 && (

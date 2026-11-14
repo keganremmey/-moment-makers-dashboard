@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Keeps the iMessage relay running whenever you're logged in to your Mac,
+  and restarts it if it crashes. Setup steps: docs/text-drafts.md.
+  Replace the three REPLACE_ME paths before installing.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.momentmakers.imessage-relay</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <!-- Output of `which node`, e.g. /opt/homebrew/bin/node -->
+    <string>REPLACE_ME_NODE_PATH</string>
+    <string>--env-file=REPLACE_ME_HOME/.moment-makers-relay/relay.env</string>
+    <!-- Full path to this repo's scripts/imessage-relay.mjs -->
+    <string>REPLACE_ME_REPO/scripts/imessage-relay.mjs</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/moment-makers-relay.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/moment-makers-relay.log</string>
+</dict>
+</plist>
