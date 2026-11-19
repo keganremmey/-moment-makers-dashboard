@@ -99,7 +99,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
             <img src={`${BODY_SITE}/_next/image?url=%2Fv2%2Fkegan-video-poster.jpg&w=384&q=75`} alt="Kegan Remmey" />
           </div>
           <div className={styles.readText}>
-            <p className={styles.readChip}>2 min read</p>
+            <p className={styles.readChip}>4 min read</p>
             <p className={styles.readHead}>{HOOKS[primary]}</p>
             <p className={styles.readName}>
               Kegan Remmey <span>Structural Bodywork</span>
