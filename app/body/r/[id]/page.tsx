@@ -18,6 +18,14 @@ const instrument = Instrument_Sans({
 });
 
 const BODY_SITE = "https://body.wearemomentmakers.com";
+
+// One pain-to-pleasure hook per pattern, built from lines already in each report.
+const HOOKS: Record<Pattern, string> = {
+  HOLDER: "The shoulders still clenched three hours after the meeting turn into a body that lets go when you do.",
+  DRIVER: "The heavy legs and short fuse at the end of a hard week turn into energy left over for the people you love.",
+  COMPENSATOR: "The same hip or shoulder that keeps coming back turns into both sides sharing the work, so you stay on the floor with your kid.",
+  OVERRIDER: "Finishing a hard session with no idea how it felt turns into feeling the good part while it is happening.",
+};
 const BOOKING_FALLBACK = "https://book.wearemomentmakers.com/widget/booking/8GqdiM5N0ad9d59SFwGp";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -85,16 +93,20 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
         <p className={styles.kicker}>{firstName}, your Body Under Pressure Pattern is:</p>
         <h1 className={styles.pattern}>{report.name}</h1>
         <p className={styles.tagline}>{report.tagline}</p>
-        <div className={styles.photo}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${BODY_SITE}/_next/image?url=%2Fv2%2Fkegan-video-poster.jpg&w=750&q=75`} alt="Kegan Remmey" />
-          <div className={styles.photoShade} />
-          <div className={styles.photoCaption}>
-            <p className={styles.photoName}>Kegan Remmey</p>
-            <p className={styles.photoRole}>Structural Bodywork</p>
+        <div className={styles.readRow}>
+          <div className={styles.photo}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`${BODY_SITE}/_next/image?url=%2Fv2%2Fkegan-video-poster.jpg&w=384&q=75`} alt="Kegan Remmey" />
+          </div>
+          <div className={styles.readText}>
+            <p className={styles.readChip}>4 min read</p>
+            <p className={styles.readHead}>{HOOKS[primary]}</p>
+            <p className={styles.readName}>
+              Kegan Remmey <span>Structural Bodywork</span>
+            </p>
           </div>
         </div>
-        <BookButton href={bookingUrl} resultId={id} />
+        <p className={styles.scrollCue}>Keep reading ↓</p>
       </header>
 
       <article className={styles.article}>
