@@ -44,14 +44,27 @@
   font-style: italic;
 }
 
+.readRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 460px;
+  margin: 28px auto 0;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(212, 168, 67, 0.35);
+  text-align: left;
+}
+
 .photo {
   position: relative;
-  margin: 32px auto 0;
-  max-width: 340px;
+  flex: 0 0 96px;
+  width: 96px;
   aspect-ratio: 4 / 5;
-  border-radius: 20px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 20px 50px -20px rgba(14, 34, 51, 0.55);
+  box-shadow: 0 12px 30px -14px rgba(0, 0, 0, 0.6);
 }
 
 .photo img {
@@ -63,31 +76,45 @@
   object-position: 50% 35%;
 }
 
-.photoShade {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 112px;
-  background: linear-gradient(to top, var(--navy), rgba(14, 34, 51, 0.55), transparent);
+.readText {
+  flex: 1;
+  min-width: 0;
 }
 
-.photoCaption {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 16px;
-  text-align: left;
-}
-
-.photoName {
+.readHead {
   margin: 0;
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--gold);
 }
 
-.photoRole {
-  margin: 2px 0 0;
-  font-size: 11px;
+.readBody {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.readName {
+  margin: 8px 0 0;
+  font-size: 13px;
   font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.readName span {
+  display: block;
+  font-size: 11px;
   letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.scrollCue {
+  margin: 18px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gold);
 }

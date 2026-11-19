@@ -85,16 +85,22 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
         <p className={styles.kicker}>{firstName}, your Body Under Pressure Pattern is:</p>
         <h1 className={styles.pattern}>{report.name}</h1>
         <p className={styles.tagline}>{report.tagline}</p>
-        <div className={styles.photo}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${BODY_SITE}/_next/image?url=%2Fv2%2Fkegan-video-poster.jpg&w=750&q=75`} alt="Kegan Remmey" />
-          <div className={styles.photoShade} />
-          <div className={styles.photoCaption}>
-            <p className={styles.photoName}>Kegan Remmey</p>
-            <p className={styles.photoRole}>Structural Bodywork</p>
+        <div className={styles.readRow}>
+          <div className={styles.photo}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`${BODY_SITE}/_next/image?url=%2Fv2%2Fkegan-video-poster.jpg&w=384&q=75`} alt="Kegan Remmey" />
+          </div>
+          <div className={styles.readText}>
+            <p className={styles.readHead}>This is your pattern.</p>
+            <p className={styles.readBody}>
+              Read the next 2 minutes. You will see why your body does this and what it has been costing you.
+            </p>
+            <p className={styles.readName}>
+              Kegan Remmey <span>Structural Bodywork</span>
+            </p>
           </div>
         </div>
-        <BookButton href={bookingUrl} resultId={id} />
+        <p className={styles.scrollCue}>Keep reading ↓</p>
       </header>
 
       <article className={styles.article}>
