@@ -2,7 +2,7 @@
 
 import styles from "./report.module.css";
 
-const LABEL = "Schedule My Session →";
+const LABEL = "Book My Fit Call →";
 
 // Booking CTA. Logs booking_clicked to the body site's event table (same
 // event the original report sends) before following the link.
