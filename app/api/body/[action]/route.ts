@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
+import { supabaseServer } from "@/lib/supabase-server";
 
 // Server-side relay to the Body Under Pressure site. Its API has no CORS
 // headers, so the /body event page posts here and this forwards the same
@@ -39,6 +40,21 @@ export async function POST(
       } catch {}
     }
     const text = await upstream.text();
+    // The body site stores first name only. Keep the last name on the row too.
+    if (action === "lead" && upstream.ok) {
+      try {
+        const sent = JSON.parse(body) as { lastName?: unknown };
+        const saved = JSON.parse(text) as { id?: unknown };
+        const lastName = typeof sent.lastName === "string" ? sent.lastName.trim().slice(0, 60) : "";
+        if (lastName && typeof saved.id === "string") {
+          after(async () => {
+            try {
+              await supabaseServer().from("bup_results").update({ last_name: lastName } as never).eq("id", saved.id as string);
+            } catch {}
+          });
+        }
+      } catch {}
+    }
     return new NextResponse(text || "{}", {
       status: upstream.status,
       headers: { "Content-Type": "application/json" },

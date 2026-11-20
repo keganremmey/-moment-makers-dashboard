@@ -1,5 +1,6 @@
 "use client";
 
+import { sendMetric } from "@/lib/body-metrics";
 import styles from "./report.module.css";
 
 const LABEL = "Book My Fit Call →";
@@ -16,6 +17,7 @@ export default function BookButton({ href, resultId }: { href: string; resultId:
     try {
       navigator.sendBeacon("/api/body/track", new Blob([body], { type: "application/json" }));
     } catch {}
+    sendMetric("results_cta_click", sessionId, resultId, { ms_since_load: Math.round(performance.now()), label: LABEL });
   }
 
   return (

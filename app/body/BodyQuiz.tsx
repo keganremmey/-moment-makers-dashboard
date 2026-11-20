@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import styles from "./body.module.css";
+import { nowMs, sendMetric } from "@/lib/body-metrics";
 import { LETTERS, PATTERN_BY_LETTER, QUESTIONS, type Letter, type Pattern } from "./questions";
 
 // Same 4 questions, letters, and scoring as the live event quiz (version
@@ -133,6 +134,10 @@ export default function BodyQuiz() {
   const finalAnswers = useRef<{ answers: Letter[]; tieBreak?: Pattern } | null>(null);
   const started = useRef(false);
   const contactStarted = useRef(false);
+  const formStartAt = useRef(0);
+  const quizStartAt = useRef(0);
+  const qShownAt = useRef(0);
+  const qTimes = useRef<number[]>([]);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const sessionRef = useRef("");
@@ -144,6 +149,7 @@ export default function BodyQuiz() {
     // Reading the URL and localStorage only works after mount, so the first
     // phase is decided here rather than during render.
     /* eslint-disable react-hooks/set-state-in-effect */
+    qShownAt.current = nowMs();
     if (existing) {
       setLead(existing);
       setPhase("questions");
@@ -160,6 +166,7 @@ export default function BodyQuiz() {
   function onFieldFocus() {
     if (!contactStarted.current) {
       contactStarted.current = true;
+      formStartAt.current = nowMs();
       track("contact_form_started", sid());
     }
   }
@@ -175,7 +182,10 @@ export default function BodyQuiz() {
     if (!isValidPhone(phone)) next.phone = "Enter a phone number so Kegan can text you when you're up.";
     if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "That email looks off. Fix it or leave it blank.";
     setErrors(next);
-    if (Object.keys(next).length > 0) return;
+    if (Object.keys(next).length > 0) {
+      sendMetric("contact_form_error", sid(), null, { fields: Object.keys(next).join(",") });
+      return;
+    }
 
     setSubmitting(true);
     setFormError(null);
@@ -199,6 +209,8 @@ export default function BodyQuiz() {
       saveLead(saved);
       setLead(saved);
       track("contact_form_completed", sid(), {}, saved.id);
+      if (formStartAt.current) sendMetric("contact_form_timing", sid(), saved.id, { ms: nowMs() - formStartAt.current });
+      qShownAt.current = nowMs();
       setJustJoined(true);
       setSubmitting(false);
       setPhase("questions");
@@ -212,6 +224,13 @@ export default function BodyQuiz() {
   async function finish(all: Letter[], tieBreak?: Pattern) {
     if (!lead) return;
     finalAnswers.current = { answers: all, tieBreak };
+    if (quizStartAt.current && !finishError) {
+      sendMetric("quiz_timing", sid(), lead.id, {
+        total_ms: nowMs() - quizStartAt.current,
+        q_ms: qTimes.current.slice(0, 10),
+        tiebreak: Boolean(tieBreak),
+      });
+    }
     setFinishError(null);
     setPhase("finishing");
     scrollToCard();
@@ -246,9 +265,13 @@ export default function BodyQuiz() {
     if (picked) return;
     if (!started.current) {
       started.current = true;
+      quizStartAt.current = qShownAt.current || nowMs();
       track("assessment_started", sid(), { leadId: lead?.id ?? null }, lead?.id ?? null);
     }
     track("question_answered", sid(), { question: QUESTIONS[index].id, letter }, lead?.id ?? null);
+    const tNow = nowMs();
+    qTimes.current[index] = tNow - (qShownAt.current || quizStartAt.current || tNow);
+    qShownAt.current = tNow;
     setPicked(letter);
     const next = [...answers.slice(0, index), letter];
     window.setTimeout(() => {
