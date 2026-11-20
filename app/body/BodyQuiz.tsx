@@ -103,6 +103,13 @@ function isValidPhone(value: string): boolean {
   return /^\d{10,15}$/.test(bare);
 }
 
+// A real name has at least two letters. Catches "J", "-", "12" and blanks.
+function isFullName(value: string): boolean {
+  const v = value.trim();
+  if (v.length > 60) return false;
+  return (v.match(/\p{L}/gu) ?? []).length >= 2;
+}
+
 type Phase = "loading" | "contact" | "questions" | "tiebreak" | "finishing";
 
 export default function BodyQuiz() {
@@ -115,6 +122,7 @@ export default function BodyQuiz() {
   const [picked, setPicked] = useState<string | null>(null);
   const [tied, setTied] = useState<Pattern[]>([]);
   const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
@@ -161,7 +169,9 @@ export default function BodyQuiz() {
     if (submitting) return;
     const next: Record<string, string> = {};
     const name = firstName.trim();
-    if (name.length < 1 || name.length > 60) next.firstName = "Enter your first name.";
+    const surname = lastName.trim();
+    if (!isFullName(name)) next.firstName = "Please enter your full first name.";
+    if (!isFullName(surname)) next.lastName = "Please enter your full last name.";
     if (!isValidPhone(phone)) next.phone = "Enter a phone number so Kegan can text you when you're up.";
     if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = "That email looks off. Fix it or leave it blank.";
     setErrors(next);
@@ -173,7 +183,7 @@ export default function BodyQuiz() {
       const res = await fetch("/api/body/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName: name, email: email.trim(), phone: phone.trim(), sessionId: sid(), company, version: VERSION }),
+        body: JSON.stringify({ firstName: name, lastName: surname, email: email.trim(), phone: phone.trim(), sessionId: sid(), company, version: VERSION }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.id) {
@@ -302,8 +312,13 @@ export default function BodyQuiz() {
 
             <label className={styles.label}>
               First Name
-              <input className={styles.input} value={firstName} onChange={(e) => setFirstName(e.target.value)} onFocus={onFieldFocus} autoComplete="given-name" />
+              <input className={styles.input} value={firstName} onChange={(e) => setFirstName(e.target.value)} onFocus={onFieldFocus} autoComplete="given-name" required aria-invalid={Boolean(errors.firstName)} />
               {errors.firstName && <span className={styles.err}>{errors.firstName}</span>}
+            </label>
+            <label className={styles.label}>
+              Last Name
+              <input className={styles.input} value={lastName} onChange={(e) => setLastName(e.target.value)} onFocus={onFieldFocus} autoComplete="family-name" required aria-invalid={Boolean(errors.lastName)} />
+              {errors.lastName && <span className={styles.err}>{errors.lastName}</span>}
             </label>
             <label className={styles.label}>
               Phone
