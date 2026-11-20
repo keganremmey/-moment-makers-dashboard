@@ -304,18 +304,59 @@
   min-height: 360px;
 }
 
-.inLine {
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* After joining the line: collapse the pitch so the screen holds one pill, one gold
+   instruction box and the question. */
+.page:has([data-joined="true"]) .topbar,
+.page:has([data-joined="true"]) .pill,
+.page:has([data-joined="true"]) .subhead,
+.page:has([data-joined="true"]) .creds {
+  display: none;
+}
+
+.page:has([data-joined="true"]) .hero {
+  padding: 18px 20px 48px;
+}
+
+.page:has([data-joined="true"]) .headline {
+  font-size: clamp(24px, 6.6vw, 34px);
+}
+
+.joinedBlock {
   margin: 0 0 14px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: #e6f1f0;
+  text-align: center;
+}
+
+.inLinePill {
+  display: inline-block;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #1f7a55;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sayHiBox {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 2px solid var(--gold);
+  background: #fff7e0;
   color: var(--navy);
   font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
+  text-align: left;
 }
 
-.optional {
-  font-weight: 400;
-  color: var(--muted);
+.sayHiBox b {
+  color: #9a6b00;
 }
