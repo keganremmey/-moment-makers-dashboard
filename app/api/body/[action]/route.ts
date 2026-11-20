@@ -24,12 +24,20 @@ export async function POST(
   if (userAgent) headers["User-Agent"] = userAgent;
 
   try {
-    const upstream = await fetch(`${BODY_SITE}/api/${action}`, {
-      method: "POST",
-      headers,
-      body,
-      cache: "no-store",
-    });
+    const send = (payload: string) =>
+      fetch(`${BODY_SITE}/api/${action}`, { method: "POST", headers, body: payload, cache: "no-store" });
+    let upstream = await send(body);
+    // The body site may not know about lastName yet. If it rejects the
+    // payload as invalid, retry once without it so event signups still work.
+    if (action === "lead" && (upstream.status === 400 || upstream.status === 422)) {
+      try {
+        const parsed = JSON.parse(body) as Record<string, unknown>;
+        if ("lastName" in parsed) {
+          delete parsed.lastName;
+          upstream = await send(JSON.stringify(parsed));
+        }
+      } catch {}
+    }
     const text = await upstream.text();
     return new NextResponse(text || "{}", {
       status: upstream.status,
