@@ -8,8 +8,8 @@ import BookButton from "./BookButton";
 import styles from "./report.module.css";
 
 // Results page for the 4-question event quiz. Mirrors the copy and order of
-// body.wearemomentmakers.com/r/{id}; the only change is the booking button
-// label. Reads the finished result through the same bup_get_report RPC the
+// body.wearemomentmakers.com/r/{id}; the changes are the Fit Call button and
+// the Fit Call copy in section 06. Reads the finished result through the same bup_get_report RPC the
 // body site uses.
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
@@ -26,7 +26,9 @@ const HOOKS: Record<Pattern, string> = {
   COMPENSATOR: "The same hip or shoulder that keeps coming back turns into both sides sharing the work, so you stay on the floor with your kid.",
   OVERRIDER: "Finishing a hard session with no idea how it felt turns into feeling the good part while it is happening.",
 };
-const BOOKING_FALLBACK = "https://book.wearemomentmakers.com/widget/booking/8GqdiM5N0ad9d59SFwGp";
+// The only next step for event takers: the Bodywork Fit Call calendar.
+// Hard-coded on purpose so no stored setting can swap in a session link.
+const FIT_CALL_URL = "https://wearemomentmakers.com/bodywork-book";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export const metadata: Metadata = {
@@ -72,13 +74,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
     redirect(`${BODY_SITE}/r/${id}`);
   }
 
-  // Same booking link the GoHighLevel text and email use for event takers.
-  const { data: setting } = await supabase
-    .from("bup_settings")
-    .select("value")
-    .eq("key", "event_booking_url")
-    .maybeSingle();
-  const bookingUrl = (setting as { value?: string } | null)?.value || BOOKING_FALLBACK;
+  const bookingUrl = FIT_CALL_URL;
 
   const primary = row.primary_pattern;
   const secondary = isPattern(row.secondary_pattern) ? row.secondary_pattern : null;
@@ -194,7 +190,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
           </ol>
         </Section>
 
-        <Section n="06" title="Come Get Your Hands On It">
+        <Section n="06" title="Book Your Fit Call">
           {report.cta.map((line, i) => (
             <p key={i} className={styles.para}>
               {line}

@@ -1,8 +1,8 @@
 // Report copy for the 4-question event quiz, copied verbatim from the live
 // results pages at body.wearemomentmakers.com/r/{id} (version "event-v1").
-// Differences: the booking button reads "Schedule My Session", and the
-// section 06 copy frames the full 75-minute session ("Within the first 20
-// minutes...") since event takers already had a free 20 minutes.
+// Differences: the booking button reads "Book My Fit Call", and the
+// section 06 copy sells the Bodywork Fit Call, the only next step for event
+// takers. No session, discount or 75-minute booking is offered here.
 import type { Pattern } from "../questions";
 
 export type ReportCopy = {
@@ -96,9 +96,10 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
       "ENERGY YOU GET TO SPEND"
     ],
     "cta": [
-      "Within the first 20 minutes of your session, we find the one place your body is working overtime. The spot that's tight every single day. The shoulder that stopped going overhead. The hip you've quietly started googling.",
-      "We change it while you're on the table, and you feel the difference before you put your shoes back on.",
-      "Then you drive home with the energy that used to go into holding, and you spend it on people you like."
+      "On a short call, we find the one place your body is working overtime. The spot that's tight every single day. The shoulder that stopped going overhead. The hip you've quietly started googling.",
+      "You hang up knowing what is holding it and what it would take to let go.",
+      "Then the energy that used to go into holding goes to people you like.",
+      "If I can help, I'll show you exactly how. If I can't, I'll tell you straight."
     ]
   },
   "DRIVER": {
@@ -185,9 +186,10 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
       "PRODUCE AGAIN"
     ],
     "cta": [
-      "Within the first 20 minutes on the table, you're with somebody whose entire job is getting your body to come down.",
-      "We find where the week is still stored. The neck that won't turn all the way. The hip flexors that never fully let go. The back that starts talking every Thursday. You feel it release while it's happening, which is a sensation most drivers have not had in years.",
-      "You leave with a body that believes the day is over. Then you sleep like it."
+      "On a short call, you talk with somebody whose entire job is getting your body to come down.",
+      "We find where the week is still stored. The neck that won't turn all the way. The hip flexors that never fully let go. The back that starts talking every Thursday. You hang up with a plan for the release most drivers have not felt in years.",
+      "Then you end the day in a body that believes the day is over, and you sleep like it.",
+      "If I can help, I'll show you exactly how. If I can't, I'll tell you straight."
     ]
   },
   "COMPENSATOR": {
@@ -270,8 +272,9 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
     ],
     "cta": [
       "You cannot see this one from the inside. That is the entire problem with it.",
-      "Within the first 20 minutes, I watch you move and tell you who has been covering for who. Then we hand some of the work back, and you feel the side that's been carrying you finally set it down.",
-      "The hip that aches every ride. The shoulder that won't press overhead. The thing four people have already looked at. We start where it actually starts, which is usually nowhere near where it hurts."
+      "On a short call, I ask where it started and tell you who has been covering for who. Then we map how to hand some of the work back, so the side that's been carrying you can finally set it down.",
+      "The hip that aches every ride. The shoulder that won't press overhead. The thing four people have already looked at. We start where it actually starts, which is usually nowhere near where it hurts.",
+      "If I can help, I'll show you exactly how. If I can't, I'll tell you straight."
     ]
   },
   "OVERRIDER": {
@@ -360,9 +363,10 @@ export const REPORTS: Record<Pattern, ReportCopy> = {
     ],
     "cta": [
       "You can practice most of this alone. The part you can't do alone is feel something you've spent twenty years training yourself to ignore.",
-      "That's what the session is for. Within the first 20 minutes, I put my hands on the place you've been overriding. The shoulder you've been managing. The hip that's been sending letters since spring. We slow it down until you can actually feel what's there.",
-      "Most people get surprised twice. First by how much was going on in there. Then by how good it feels when it finally lets go.",
-      "You spend a lot of your life inside that body. It's worth knowing what's happening in it."
+      "That's what the call is for. I ask about the place you've been overriding. The shoulder you've been managing. The hip that's been sending letters since spring. We slow it down until you can name what's actually there.",
+      "Most people get surprised on the call, by how much was going on in there and by how clear the next step is.",
+      "You spend a lot of your life inside that body. It's worth knowing what's happening in it.",
+      "If I can help, I'll show you exactly how. If I can't, I'll tell you straight."
     ]
   }
 };
