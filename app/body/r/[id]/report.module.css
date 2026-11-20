@@ -410,3 +410,14 @@
 .footer a {
   color: var(--muted);
 }
+
+.sayHi {
+  margin: 0;
+  padding: 12px 20px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}

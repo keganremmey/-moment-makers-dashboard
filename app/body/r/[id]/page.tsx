@@ -64,6 +64,10 @@ function strengthLine(answers: Letter[], primary: Pattern, secondary: Pattern | 
 
 export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
   const { id } = await props.params;
+  // Set by the quiz right after the last answer, so the "say hi" note only
+  // shows to people standing at the event, not to someone opening the text
+  // link the next day.
+  const live = (await props.searchParams).live === "1";
   if (!UUID.test(id)) notFound();
 
   const supabase = supabaseServer();
@@ -87,6 +91,11 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
   return (
     <div className={`${instrument.variable} ${styles.page}`}>
       <ResultsTracker resultId={id} />
+      {live && (
+        <p className={styles.sayHi}>
+          Done? Don&apos;t be shy. Walk up and say hi to Kegan, even while he&apos;s working on someone, to let him know you finished the quiz.
+        </p>
+      )}
       <header className={styles.hero}>
         <p className={styles.kicker}>{firstName}, your Body Under Pressure Pattern is:</p>
         <h1 className={styles.pattern}>{report.name}</h1>
