@@ -255,7 +255,7 @@ export default function BodyQuiz() {
         return;
       }
       clearLead();
-      router.push(`/body/r/${lead.id}`);
+      router.push(`/body/r/${lead.id}?live=1`);
     } catch {
       setFinishError("Something went wrong. Check your connection and try again.");
     }
@@ -373,7 +373,7 @@ export default function BodyQuiz() {
         {inQuiz && (
           <>
             {justJoined && lead?.firstName && (
-              <p className={styles.inLine}>You&apos;re in line, {lead.firstName}. Kegan will grab you. While you wait:</p>
+              <p className={styles.inLine}>You&apos;re in line, {lead.firstName}. Don&apos;t be shy. Say hi to Kegan while he&apos;s massaging to let him know you finished the quiz.</p>
             )}
             <div className={styles.progressRow}>
               <span>{phase === "tiebreak" ? "Last one" : `Question ${step} of ${QUESTIONS.length}`}</span>
