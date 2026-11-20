@@ -5,6 +5,7 @@ import { supabaseServer } from "@/lib/supabase-server";
 import { LETTERS, PATTERN_BY_LETTER, QUESTIONS, type Letter, type Pattern } from "../../questions";
 import { REPORTS } from "../report-data";
 import BookButton from "./BookButton";
+import ResultsTracker from "./ResultsTracker";
 import styles from "./report.module.css";
 
 // Results page for the 4-question event quiz. Mirrors the copy and order of
@@ -85,6 +86,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
 
   return (
     <div className={`${instrument.variable} ${styles.page}`}>
+      <ResultsTracker resultId={id} />
       <header className={styles.hero}>
         <p className={styles.kicker}>{firstName}, your Body Under Pressure Pattern is:</p>
         <h1 className={styles.pattern}>{report.name}</h1>
@@ -198,7 +200,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
           ))}
           <div className={styles.endCta}>
             <BookButton href={bookingUrl} resultId={id} />
-            <a className={styles.pdf} href={`${BODY_SITE}/r/${id}/pdf`}>
+            <a className={styles.pdf} data-track-pdf href={`${BODY_SITE}/r/${id}/pdf`}>
               Download My Report (PDF)
             </a>
           </div>
@@ -215,7 +217,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
 
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} data-track-section={n}>
       <div className={styles.sectionHead}>
         <span className={styles.sectionNum}>{n}</span>
         <h2 className={styles.sectionTitle}>{title}</h2>
