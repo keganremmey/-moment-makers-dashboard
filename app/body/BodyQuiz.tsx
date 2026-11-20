@@ -373,7 +373,12 @@ export default function BodyQuiz() {
         {inQuiz && (
           <>
             {justJoined && lead?.firstName && (
-              <p className={styles.inLine}>You&apos;re in line, {lead.firstName}. Don&apos;t be shy. Say hi to Kegan while he&apos;s massaging to let him know you finished the quiz.</p>
+              <div className={styles.joinedBlock} data-joined="true">
+                <p className={styles.inLinePill}>&#10003; You&apos;re in line, {lead.firstName}</p>
+                <p className={styles.sayHiBox}>
+                  <b>Done?</b> Don&apos;t be shy. Say hi to Kegan while he&apos;s massaging. Let him know you finished the quiz and find out what your number is in line.
+                </p>
+              </div>
             )}
             <div className={styles.progressRow}>
               <span>{phase === "tiebreak" ? "Last one" : `Question ${step} of ${QUESTIONS.length}`}</span>

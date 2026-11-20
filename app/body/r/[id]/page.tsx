@@ -93,7 +93,7 @@ export default async function BodyReportPage(props: PageProps<"/body/r/[id]">) {
       <ResultsTracker resultId={id} />
       {live && (
         <p className={styles.sayHi}>
-          Done? Don&apos;t be shy. Walk up and say hi to Kegan, even while he&apos;s working on someone, to let him know you finished the quiz.
+          Done? Don&apos;t be shy. Walk up and say hi to Kegan, even while he&apos;s working on someone. Let him know you finished the quiz and find out what your number is in line.
         </p>
       )}
       <header className={styles.hero}>
